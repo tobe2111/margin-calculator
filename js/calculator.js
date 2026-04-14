@@ -124,15 +124,6 @@ refreshExchangeRateBtn.addEventListener('click', async () => {
     setTimeout(() => icon.classList.remove('fa-spin'), 1000);
 });
 
-function shouldOpenCoupangLink() {
-    const lastOpenDate = localStorage.getItem('coupangLinkLastOpened');
-    const today = new Date().toDateString();
-    return lastOpenDate !== today;
-}
-
-function markCoupangLinkOpened() {
-    localStorage.setItem('coupangLinkLastOpened', new Date().toDateString());
-}
 
 function calculateMargin() {
     const productName = productNameInput.value.trim();
@@ -183,11 +174,9 @@ function calculateMargin() {
 
     addToHistory({ productName: productName || '상품명 없음', purchasePrice, currency: currentCurrency, sellingPrice, exchangeRate: currentExchangeRate, domesticShipping, intlShipping, platformFeeRate, fxSpreadRate, netProfit, marginRate, timestamp: new Date() });
 
-    if (shouldOpenCoupangLink()) {
-        window.open('https://link.coupang.com/a/dvxVJY', '_blank');
-        markCoupangLinkOpened();
-        if (typeof gtag !== 'undefined') { gtag('event', 'click_coupang', { 'event_category': 'affiliate', 'event_label': 'coupang_partners' }); }
-    }
+    const coupangBanner = document.getElementById('coupangBanner');
+    if (coupangBanner) coupangBanner.style.display = 'block';
+    if (typeof gtag !== 'undefined') { gtag('event', 'show_coupang_banner', { 'event_category': 'affiliate', 'event_label': 'coupang_partners' }); }
 }
 
 function addToHistory(data) {
@@ -259,11 +248,9 @@ function reverseCalculate() {
     const requiredRevenue = fixedCost / (1 - totalFeeRate / 100);
     const requiredSellingPrice = requiredRevenue / currentExchangeRate;
 
-    if (shouldOpenCoupangLink()) {
-        window.open('https://link.coupang.com/a/dvxVJY', '_blank');
-        markCoupangLinkOpened();
-        if (typeof gtag !== 'undefined') { gtag('event', 'click_coupang_reverse', { 'event_category': 'affiliate', 'event_label': 'coupang_partners_reverse' }); }
-    }
+    const coupangBanner = document.getElementById('coupangBanner');
+    if (coupangBanner) coupangBanner.style.display = 'block';
+    if (typeof gtag !== 'undefined') { gtag('event', 'show_coupang_banner_reverse', { 'event_category': 'affiliate', 'event_label': 'coupang_partners_reverse' }); }
 
     const symbol = currencyInfo[currentCurrency]?.symbol || '';
     recommendedPrice.textContent = `${symbol} ${requiredSellingPrice.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
