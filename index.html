@@ -58,6 +58,7 @@
     <link rel="stylesheet" href="css/language-selector.css">
     <link rel="stylesheet" href="css/mobile-optimization.css">
     <link rel="stylesheet" href="css/features.css">
+    <link rel="stylesheet" href="css/shared-nav.css">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -139,6 +140,13 @@
             <div class="calculator-container">
                 <section class="input-section" aria-label="상품 정보 입력">
                     <h2><i class="fas fa-edit"></i> 상품 정보 입력</h2>
+                    <div class="preset-section">
+                        <div class="preset-header">
+                            <h4><i class="fas fa-bookmark"></i> 저장된 프리셋</h4>
+                            <button class="preset-save-btn" onclick="savePreset()"><i class="fas fa-save"></i> 현재 설정 저장</button>
+                        </div>
+                        <div class="preset-list" id="presetList"><p class="no-presets">저장된 프리셋 없음</p></div>
+                    </div>
                     <div class="form-group">
                         <label for="productName" data-i18n="f.product">상품명</label>
                         <input type="text" id="productName" placeholder="상품명을 입력하세요" data-i18n-placeholder="f.product.ph">
@@ -198,12 +206,24 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <span class="platform-quick-label"><i class="fas fa-bolt" style="color:#f59e0b;"></i> 플랫폼 선택 <span style="font-size:11px;color:#9ca3af;font-weight:400;">(수수료 자동 입력)</span></span>
+                        <div class="platform-quick-select">
+                            <button class="platform-quick-btn" data-platform="lazada" onclick="selectPlatform('lazada')"><i class="fas fa-store"></i> Lazada</button>
+                            <button class="platform-quick-btn" data-platform="tiktok" onclick="selectPlatform('tiktok')"><i class="fab fa-tiktok"></i> TikTok</button>
+                            <button class="platform-quick-btn" data-platform="ebay" onclick="selectPlatform('ebay')"><i class="fab fa-ebay"></i> eBay</button>
+                            <button class="platform-quick-btn" data-platform="amazon" onclick="selectPlatform('amazon')"><i class="fab fa-amazon"></i> Amazon</button>
+                            <button class="platform-quick-btn" data-platform="shopee" onclick="selectPlatform('shopee')"><i class="fas fa-shopping-bag"></i> Shopee</button>
+                            <button class="platform-quick-btn" data-platform="qoo10" onclick="selectPlatform('qoo10')"><i class="fas fa-shopping-cart"></i> Qoo10</button>
+                            <button class="platform-quick-btn" data-platform="rakuten" onclick="selectPlatform('rakuten')"><i class="fas fa-gem"></i> Rakuten</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="platformFee">플랫폼 수수료</label>
                         <div class="input-with-unit">
                             <input type="number" id="platformFee" placeholder="0" min="0" max="100" step="0.1">
                             <span class="input-unit">%</span>
                         </div>
-                        <small class="help-text">플랫폼 판매 수수료를 입력하세요 (예: 15.5)</small>
+                        <small class="help-text" id="platformFeeHelp">플랫폼 판매 수수료를 입력하세요 (예: 15.5)</small>
                     </div>
                     <div class="form-group">
                         <label for="fxSpread">환전 수수료 (FX Spread) <i class="fas fa-info-circle" title="페이오니아, 월드퍼스트 등 결제 대금 수취 서비스 수수료"></i></label>
@@ -248,7 +268,11 @@
                             </div>
                         </div>
                     </div>
-                    <button class="calculate-btn" id="calculateBtn" data-i18n="b.calc"><i class="fas fa-calculator"></i> 마진 계산하기</button>
+                    <div class="calculate-row">
+                        <button class="calculate-btn" id="calculateBtn" data-i18n="b.calc"><i class="fas fa-calculator"></i> 마진 계산하기</button>
+                        <button class="btn-reset" onclick="resetForm()"><i class="fas fa-redo-alt"></i> 초기화</button>
+                    </div>
+                    <p class="coupang-disclosure">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
                 </section>
 
                 <section class="result-section" id="resultSection" aria-label="계산 결과">
@@ -286,6 +310,21 @@
                     <div class="result-summary">
                         <div class="summary-row"><span>ROI (투자 수익률)</span><strong id="roi">0 %</strong></div>
                         <div class="summary-row"><span>손익분기점 판매가</span><strong id="breakEvenPrice">0</strong></div>
+                    </div>
+                    <div class="chart-section" id="chartSection" style="display:none;">
+                        <p class="chart-title"><i class="fas fa-chart-pie" style="color:#0066FF;"></i> 비용 구성 비율</p>
+                        <div class="chart-canvas-wrapper"><canvas id="marginChart"></canvas></div>
+                    </div>
+                    <div class="share-section" id="shareSection" style="display:none;">
+                        <button class="share-btn url-btn" onclick="shareURL()"><i class="fas fa-link"></i> <span>URL 복사</span></button>
+                        <button class="share-btn share-native-btn" onclick="shareResult()"><i class="fas fa-share-alt"></i> <span>공유</span></button>
+                        <button class="share-btn image-btn" onclick="saveAsImage()"><i class="fas fa-image"></i> <span>이미지 저장</span></button>
+                    </div>
+                    <div class="coupang-banner" id="coupangBanner" style="display:none;">
+                        <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url">
+                            <img src="https://ads-partners.coupang.com/banners/958415?subId=&traceId=V0-301-879dd1202e5c73b2-I958415&w=728&h=90" alt="쿠팡 파트너스" style="max-width:100%;height:auto;display:block;border-radius:8px;">
+                        </a>
+                        <p class="coupang-disclosure-result">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
                     </div>
                     <div class="result-pro-cta">
                         <div class="result-pro-header">
@@ -353,120 +392,30 @@
                 </div>
             </aside>
 
-            <section class="info-section" id="platform-fees" aria-label="플랫폼별 수수료 정보">
-                <h2 data-i18n="p.title"><i class="fas fa-info-circle"></i> 플랫폼별 수수료 정보</h2>
-                <p class="section-intro"><strong>라자다 셀러</strong>, <strong>틱톡샵 셀러</strong>, <strong>이베이 셀러</strong>, <strong>아마존 셀러</strong>, <strong>쇼피 셀러</strong>, <strong>큐텐 셀러</strong>를 위한 정확한 해외판매 수익 계산과 수출 순마진 분석을 위해 각 플랫폼의 수수료 구조를 확인하세요.</p>
-                <div class="info-cards">
-                    <div class="info-card">
-                        <h3><i class="fas fa-store"></i> Lazada (라자다)</h3>
-                        <p class="platform-desc"><strong>라자다 셀러</strong>를 위한 마진 계산 필수 정보</p>
-                        <ul>
-                            <li><strong>커미션</strong>: 카테고리별 1-4%</li>
-                            <li><strong>결제 수수료</strong>: 2%</li>
-                            <li><strong>물류 수수료</strong>: 배송 방식별 차등</li>
-                        </ul>
-                        <a href="https://lazada.kr/university" target="_blank" rel="noopener noreferrer" class="platform-cta">라자다 수수료 정보 보기 →</a>
-                    </div>
-                    <div class="info-card">
-                        <h3><i class="fab fa-tiktok"></i> TikTok Shop (틱톡샵)</h3>
-                        <p class="platform-desc"><strong>틱톡샵 셀러</strong>를 위한 수익 계산 정보</p>
-                        <ul>
-                            <li><strong>플랫폼 수수료</strong>: 2-5%</li>
-                            <li><strong>결제 수수료</strong>: 약 2.9%</li>
-                            <li><strong>배송비</strong>: 지역별 차등</li>
-                        </ul>
-                        <a href="https://ecommercefastlane.com/ko/tiktok-shop-fees-101-your-sellers-guide-for-2025/" target="_blank" rel="noopener noreferrer" class="platform-cta">틱톡샵 수수료 정보 보기 →</a>
-                    </div>
-                    <div class="info-card">
-                        <h3><i class="fab fa-ebay"></i> eBay (이베이)</h3>
-                        <p class="platform-desc"><strong>이베이 셀러</strong>를 위한 마진 계산 정보</p>
-                        <ul>
-                            <li><strong>최종 가치 수수료</strong>: 카테고리별 12.9%</li>
-                            <li><strong>PayPal 수수료</strong>: 3.5% + 수수료</li>
-                            <li><strong>리스팅 수수료</strong>: 무료 한도 초과 시 부과</li>
-                        </ul>
-                        <a href="https://www.ebay.co.kr/knowledge/fee_ebayselling/" target="_blank" rel="noopener noreferrer" class="platform-cta">이베이 수수료 정보 보기 →</a>
-                    </div>
-                    <div class="info-card">
-                        <h3><i class="fab fa-amazon"></i> Amazon (아마존)</h3>
-                        <p class="platform-desc"><strong>아마존 셀러</strong>를 위한 수익 계산 정보</p>
-                        <ul>
-                            <li><strong>추천 수수료</strong>: 카테고리별 8-15%</li>
-                            <li><strong>결제 처리 수수료</strong>: 2.9% + $0.30</li>
-                            <li><strong>FBA 수수료</strong>: 상품 크기/무게별 차등</li>
-                        </ul>
-                        <a href="https://sell.amazon.co.kr/start/pricing" target="_blank" rel="noopener noreferrer" class="platform-cta">아마존 수수료 정보 보기 →</a>
-                    </div>
-                    <div class="info-card">
-                        <h3><i class="fas fa-shopping-bag"></i> Shopee (쇼피)</h3>
-                        <p class="platform-desc"><strong>쇼피 셀러</strong>를 위한 마진 계산 정보</p>
-                        <ul>
-                            <li><strong>판매 수수료</strong>: 국가별 2-5%</li>
-                            <li><strong>결제 수수료</strong>: 2%</li>
-                            <li><strong>배송 수수료</strong>: 지역별 차등</li>
-                        </ul>
-                        <a href="https://shopee.kr/edu/article/10624" target="_blank" rel="noopener noreferrer" class="platform-cta">쇼피 수수료 정보 보기 →</a>
-                    </div>
-                    <div class="info-card">
-                        <h3><i class="fas fa-shopping-cart"></i> Qoo10 (큐텐)</h3>
-                        <p class="platform-desc"><strong>큐텐 셀러</strong>를 위한 수익 계산 정보</p>
-                        <ul>
-                            <li><strong>판매 수수료</strong>: 6-12%</li>
-                            <li><strong>결제 수수료</strong>: 약 3%</li>
-                            <li><strong>국제배송</strong>: 국가별 차등 적용</li>
-                        </ul>
-                        <a href="https://article-university.qoo10.jp/entry/130" target="_blank" rel="noopener noreferrer" class="platform-cta">큐텐 수수료 정보 보기 →</a>
-                    </div>
-                    <div class="info-card">
-                        <h3><i class="fas fa-gem"></i> Rakuten (라쿠텐)</h3>
-                        <p class="platform-desc"><strong>라쿠텐 셀러</strong>를 위한 마진 계산 정보</p>
-                        <ul>
-                            <li><strong>거래 수수료</strong>: 카테고리별 6.5%</li>
-                            <li><strong>결제 수수료</strong>: 2.5%</li>
-                            <li><strong>월 이용료</strong>: 플랜별 차등</li>
-                        </ul>
-                        <a href="https://www.rakuten.co.jp/ec/sellinjapan/kr/" target="_blank" rel="noopener noreferrer" class="platform-cta">라쿠텐 수수료 정보 보기 →</a>
-                    </div>
-                </div>
-            </section>
-
-            <section class="faq-section expanded" id="faq" aria-label="자주 묻는 질문">
-                <div class="faq-section-header" onclick="toggleFAQSection()">
-                    <div class="faq-section-title">
-                        <i class="fas fa-question-circle"></i>
-                        <h2 data-i18n="faq.title">자주 묻는 질문 (FAQ)</h2>
-                    </div>
-                    <i class="fas fa-chevron-up faq-toggle-icon"></i>
-                </div>
-                <div class="faq-container">
-                    <div class="faq-item">
-                        <h3 class="faq-question"><div class="faq-question-text"><i class="fas fa-chevron-right chevron"></i><span>라자다 셀러의 마진은 어떻게 계산하나요?</span></div></h3>
-                        <div class="faq-answer"><p><strong>라자다 셀러</strong>의 마진은 판매가에서 매입가, 플랫폼 수수료(1-4%), 결제 수수료(2%), 국내/해외 배송비를 차감하여 계산합니다. 본 <a href="#calculator">마진 계산기</a>는 실시간 환율을 적용하여 정확한 순이익과 마진율을 자동 계산합니다.</p></div>
-                    </div>
-                    <div class="faq-item">
-                        <h3 class="faq-question"><div class="faq-question-text"><i class="fas fa-chevron-right chevron"></i><span>틱톡샵 셀러 수익 계산은 어떻게 하나요?</span></div></h3>
-                        <div class="faq-answer"><p><strong>틱톡샵 셀러</strong>의 수익은 판매가에서 플랫폼 수수료, 결제 수수료, 배송비를 제외한 순이익으로 계산됩니다. 본 계산기는 17개 통화를 지원하며, 환전 수수료(FX Spread)와 부가세 환급까지 반영하여 실제 정산액에 가장 근접한 <a href="#calculator">해외판매 수익</a>을 계산합니다.</p></div>
-                    </div>
-                    <div class="faq-item">
-                        <h3 class="faq-question"><div class="faq-question-text"><i class="fas fa-chevron-right chevron"></i><span>이베이 셀러 마진 계산 시 주의할 점은?</span></div></h3>
-                        <div class="faq-answer"><p><strong>이베이 셀러</strong>는 카테고리별 수수료(12.9%), PayPal 수수료(3.5%), 국제 배송비를 고려해야 합니다. 본 계산기는 이러한 모든 비용을 한 번에 입력하여 정확한 마진율과 ROI를 계산할 수 있습니다.</p></div>
-                    </div>
-                    <div class="faq-item">
-                        <h3 class="faq-question"><div class="faq-question-text"><i class="fas fa-chevron-right chevron"></i><span>아마존 셀러의 순이익은 어떻게 확인하나요?</span></div></h3>
-                        <div class="faq-answer"><p><strong>아마존 셀러</strong>의 순이익은 판매 수익에서 추천 수수료(8-15%), 결제 처리 수수료(2.9% + $0.30), FBA 수수료, 해외 배송비를 차감하여 계산합니다.</p></div>
-                    </div>
-                    <div class="faq-item">
-                        <h3 class="faq-question"><div class="faq-question-text"><i class="fas fa-chevron-right chevron"></i><span>쇼피 셀러가 목표 마진율을 달성하려면 판매가를 얼마로 설정해야 하나요?</span></div></h3>
-                        <div class="faq-answer"><p>본 마진 계산기의 <strong>'역산 계산'</strong> 기능을 사용하세요. 목표 마진율(예: 20%)을 입력하면 필요한 판매가를 자동으로 계산해줍니다.</p></div>
-                    </div>
-                    <div class="faq-item">
-                        <h3 class="faq-question"><div class="faq-question-text"><i class="fas fa-chevron-right chevron"></i><span>해외판매 수익 계산 시 환율은 어떻게 적용되나요?</span></div></h3>
-                        <div class="faq-answer"><p>본 계산기는 실시간 환율 API를 통해 USD, SGD, EUR, JPY 등 17개 주요 통화의 환율을 자동 업데이트합니다.</p></div>
-                    </div>
-                    <div class="faq-item">
-                        <h3 class="faq-question"><div class="faq-question-text"><i class="fas fa-chevron-right chevron"></i><span>수출 순마진 계산 시 부가세 환급은 어떻게 반영하나요?</span></div></h3>
-                        <div class="faq-answer"><p>국내 매입 시 지불한 <strong>부가세 10%</strong>는 수출 시 환급받을 수 있습니다. '부가세 환급 적용' 체크박스를 활성화하면 매입가의 10%가 자동으로 환급 처리되어 최종 순마진에 반영됩니다.</p></div>
-                    </div>
+            <!-- 서브페이지 탐색 안내 -->
+            <section style="margin-top:32px;">
+                <h2 style="font-size:18px;font-weight:700;color:#111827;margin:0 0 16px;padding-bottom:10px;border-bottom:2px solid #eff6ff;">
+                    <i class="fas fa-compass" style="color:#0066FF;"></i> 더 알아보기
+                </h2>
+                <div class="nav-teaser-grid">
+                    <a href="/platforms/" class="nav-teaser-card">
+                        <span class="teaser-icon">⚖️</span>
+                        <h3>플랫폼 비교</h3>
+                        <p>7개 플랫폼 수수료·정산·입점 조건을 한눈에 비교해보세요.</p>
+                        <span class="teaser-link">자세히 보기 →</span>
+                    </a>
+                    <a href="/tools/" class="nav-teaser-card">
+                        <span class="teaser-icon">🔧</span>
+                        <h3>도구 모음</h3>
+                        <p>환율 시뮬레이션, 관세 계산기, 멀티 플랫폼 마진 비교 도구.</p>
+                        <span class="teaser-link">도구 사용하기 →</span>
+                    </a>
+                    <a href="/guide/" class="nav-teaser-card">
+                        <span class="teaser-icon">📚</span>
+                        <h3>셀러 가이드</h3>
+                        <p>해외 판매 입문부터 FAQ까지. 시작 전 꼭 읽어보세요.</p>
+                        <span class="teaser-link">가이드 보기 →</span>
+                    </a>
                 </div>
             </section>
         </div>
@@ -477,17 +426,22 @@
             <p>&copy; <span id="copyright-year">2024</span> <strong>유어팀 글로벌 마진 계산기</strong> - <a href="#calculator" style="color:#0066FF;">라자다/틱톡샵/이베이/아마존/쇼피/큐텐 셀러</a>를 위한 무료 해외판매 수익 계산 도구. All rights reserved.</p>
             <p class="footer-note" data-i18n="ft.note">본 계산기는 참고용이며, 실제 수수료는 플랫폼 정책에 따라 달라질 수 있습니다.</p>
             <div class="footer-links">
-                <a href="#calculator">유어팀 마진 계산기</a> |
-                <a href="#platform-fees">플랫폼별 수수료</a> |
-                <a href="#faq">자주 묻는 질문</a>
+                <a href="/">마진 계산기</a> |
+                <a href="/platforms/">플랫폼 비교</a> |
+                <a href="/tools/">도구 모음</a> |
+                <a href="/guide/">셀러 가이드</a>
             </div>
             <p class="footer-contact" data-i18n="ft.contact">협업 및 제휴 문의 : <a href="mailto:contact@ur-team.com" style="color:#0066FF;text-decoration:none;font-weight:600;">contact@ur-team.com</a></p>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/language.js"></script>
     <script src="js/calculator.js"></script>
+    <script src="js/features.js"></script>
+    <script src="js/shared-nav.js"></script>
     <script>
     function closeBanner() {
         document.getElementById('topBanner').style.display = 'none';
@@ -519,5 +473,6 @@
         });
     });
     </script>
+    <div class="toast" id="toast"></div>
 </body>
 </html>
