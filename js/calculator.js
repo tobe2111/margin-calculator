@@ -111,19 +111,34 @@ function updateExchangeRateTimestamp(timestamp) {
     }
 }
 
-currencySelect.addEventListener('change', async () => {
-    currentCurrency = currencySelect.value;
-    if (sellingPriceCurrency) sellingPriceCurrency.textContent = currentCurrency;
-    await fetchRealTimeExchangeRates();
-});
+if (currencySelect) {
+    currencySelect.addEventListener('change', async () => {
+        currentCurrency = currencySelect.value;
+        if (sellingPriceCurrency) sellingPriceCurrency.textContent = currentCurrency;
+        await fetchRealTimeExchangeRates();
+    });
+}
 
-refreshExchangeRateBtn.addEventListener('click', async () => {
-    const icon = refreshExchangeRateBtn.querySelector('i');
-    icon.classList.add('fa-spin');
-    await fetchRealTimeExchangeRates();
-    setTimeout(() => icon.classList.remove('fa-spin'), 1000);
-});
+if (refreshExchangeRateBtn) {
+    refreshExchangeRateBtn.addEventListener('click', async () => {
+        const icon = refreshExchangeRateBtn.querySelector('i');
+        if (icon) icon.classList.add('fa-spin');
+        await fetchRealTimeExchangeRates();
+        setTimeout(() => { if (icon) icon.classList.remove('fa-spin'); }, 1000);
+    });
+}
 
+
+function setCalcBtnLoading(loading) {
+    if (!calculateBtn) return;
+    if (loading) {
+        calculateBtn.disabled = true;
+        calculateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 계산 중...';
+    } else {
+        calculateBtn.disabled = false;
+        calculateBtn.innerHTML = '<i class="fas fa-calculator"></i> 마진 계산하기';
+    }
+}
 
 function calculateMargin() {
     const productName = productNameInput.value.trim();
@@ -137,6 +152,7 @@ function calculateMargin() {
 
     if (sellingPrice <= 0) { alert('판매가를 입력해주세요.'); return; }
     if (currentExchangeRate <= 0) { alert('환율 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.'); return; }
+    setCalcBtnLoading(true);
 
     if (typeof gtag !== 'undefined') {
         gtag('event', 'calculate_margin', { 'event_category': 'calculator', 'event_label': 'margin_calculation', 'currency': currentCurrency, 'value': sellingPrice });
@@ -194,6 +210,14 @@ function calculateMargin() {
     if (typeof saveInputsToLocalStorage === 'function') saveInputsToLocalStorage();
 
     if (typeof gtag !== 'undefined') { gtag('event', 'show_coupang_banner', { 'event_category': 'affiliate', 'event_label': 'coupang_partners' }); }
+
+    setCalcBtnLoading(false);
+
+    // 결과 섹션으로 부드럽게 스크롤
+    const resultSection = document.getElementById('resultSection');
+    if (resultSection) {
+        setTimeout(() => resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
 }
 
 function addToHistory(data) {
@@ -265,13 +289,6 @@ function reverseCalculate() {
     const requiredRevenue = fixedCost / (1 - totalFeeRate / 100);
     const requiredSellingPrice = requiredRevenue / currentExchangeRate;
 
-    const coupangBanner = document.getElementById('coupangBanner');
-    if (coupangBanner) coupangBanner.style.display = 'block';
-    const shareSection = document.getElementById('shareSection');
-    if (shareSection) shareSection.style.display = 'flex';
-    if (typeof saveInputsToLocalStorage === 'function') saveInputsToLocalStorage();
-    if (typeof gtag !== 'undefined') { gtag('event', 'show_coupang_banner_reverse', { 'event_category': 'affiliate', 'event_label': 'coupang_partners_reverse' }); }
-
     const symbol = currencyInfo[currentCurrency]?.symbol || '';
     recommendedPrice.textContent = `${symbol} ${requiredSellingPrice.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     reverseResult.style.display = 'block';
@@ -280,12 +297,30 @@ function reverseCalculate() {
     if (typeof gtag !== 'undefined') { gtag('event', 'reverse_calculate', { 'event_category': 'calculator', 'event_label': 'reverse_margin', 'value': targetMarginRate }); }
 }
 
-calculateBtn.addEventListener('click', calculateMargin);
-reverseCalcBtn.addEventListener('click', reverseCalculate);
-excelDownloadBtn.addEventListener('click', downloadExcel);
+if (calculateBtn) calculateBtn.addEventListener('click', calculateMargin);
+if (reverseCalcBtn) reverseCalcBtn.addEventListener('click', reverseCalculate);
+if (excelDownloadBtn) excelDownloadBtn.addEventListener('click', downloadExcel);
 
 document.querySelectorAll('input[type="number"], input[type="text"]').forEach(input => {
     input.addEventListener('keypress', (e) => { if (e.key === 'Enter') calculateMargin(); });
+    // 콤마 포함 숫자 붙여넣기 처리
+    input.addEventListener('paste', (e) => {
+        const text = e.clipboardData.getData('text');
+        const cleaned = text.replace(/,/g, '').trim();
+        if (cleaned !== '' && !isNaN(cleaned)) {
+            e.preventDefault();
+            input.value = cleaned;
+            input.dispatchEvent(new Event('input'));
+        }
+    });
+});
+
+// Ctrl+Enter 단축키
+document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        calculateMargin();
+    }
 });
 
 document.addEventListener('DOMContentLoaded', async () => {

@@ -1,5 +1,0 @@
-name = "margin-calculator"
-compatibility_date = "2024-04-05"
-account_id = "1a2c006f0fb54894f81283a5ea787b83"
-
-assets = { directory = "./" }
