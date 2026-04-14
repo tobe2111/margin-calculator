@@ -56,6 +56,7 @@
     <link rel="stylesheet" href="css/header-faq-fix.css">
     <link rel="stylesheet" href="css/language-selector.css">
     <link rel="stylesheet" href="css/mobile-optimization.css">
+    <link rel="stylesheet" href="css/features.css">
 </head>
 <body>
     <div class="top-banner" id="topBanner">
@@ -106,6 +107,13 @@
             <div class="calculator-container">
                 <section class="input-section" aria-label="상품 정보 입력">
                     <h2><i class="fas fa-edit"></i> 상품 정보 입력</h2>
+                    <div class="preset-section">
+                        <div class="preset-header">
+                            <h4><i class="fas fa-bookmark"></i> 저장된 프리셋</h4>
+                            <button class="preset-save-btn" onclick="savePreset()"><i class="fas fa-save"></i> 현재 설정 저장</button>
+                        </div>
+                        <div class="preset-list" id="presetList"><p class="no-presets">저장된 프리셋 없음</p></div>
+                    </div>
                     <div class="form-group">
                         <label for="productName" data-i18n="f.product">상품명</label>
                         <input type="text" id="productName" placeholder="상품명을 입력하세요" data-i18n-placeholder="f.product.ph">
@@ -165,12 +173,24 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <span class="platform-quick-label"><i class="fas fa-bolt" style="color:#f59e0b;"></i> 플랫폼 선택 <span style="font-size:11px;color:#9ca3af;font-weight:400;">(수수료 자동 입력)</span></span>
+                        <div class="platform-quick-select">
+                            <button class="platform-quick-btn" data-platform="lazada" onclick="selectPlatform('lazada')"><i class="fas fa-store"></i> Lazada</button>
+                            <button class="platform-quick-btn" data-platform="tiktok" onclick="selectPlatform('tiktok')"><i class="fab fa-tiktok"></i> TikTok</button>
+                            <button class="platform-quick-btn" data-platform="ebay" onclick="selectPlatform('ebay')"><i class="fab fa-ebay"></i> eBay</button>
+                            <button class="platform-quick-btn" data-platform="amazon" onclick="selectPlatform('amazon')"><i class="fab fa-amazon"></i> Amazon</button>
+                            <button class="platform-quick-btn" data-platform="shopee" onclick="selectPlatform('shopee')"><i class="fas fa-shopping-bag"></i> Shopee</button>
+                            <button class="platform-quick-btn" data-platform="qoo10" onclick="selectPlatform('qoo10')"><i class="fas fa-shopping-cart"></i> Qoo10</button>
+                            <button class="platform-quick-btn" data-platform="rakuten" onclick="selectPlatform('rakuten')"><i class="fas fa-gem"></i> Rakuten</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="platformFee">플랫폼 수수료</label>
                         <div class="input-with-unit">
                             <input type="number" id="platformFee" placeholder="0" min="0" max="100" step="0.1">
                             <span class="input-unit">%</span>
                         </div>
-                        <small class="help-text">플랫폼 판매 수수료를 입력하세요 (예: 15.5)</small>
+                        <small class="help-text" id="platformFeeHelp">플랫폼 판매 수수료를 입력하세요 (예: 15.5)</small>
                     </div>
                     <div class="form-group">
                         <label for="fxSpread">환전 수수료 (FX Spread) <i class="fas fa-info-circle" title="페이오니아, 월드퍼스트 등 결제 대금 수취 서비스 수수료"></i></label>
@@ -215,7 +235,10 @@
                             </div>
                         </div>
                     </div>
-                    <button class="calculate-btn" id="calculateBtn" data-i18n="b.calc"><i class="fas fa-calculator"></i> 마진 계산하기</button>
+                    <div class="calculate-row">
+                        <button class="calculate-btn" id="calculateBtn" data-i18n="b.calc"><i class="fas fa-calculator"></i> 마진 계산하기</button>
+                        <button class="btn-reset" onclick="resetForm()"><i class="fas fa-redo-alt"></i> 초기화</button>
+                    </div>
                     <p class="coupang-disclosure">본 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
                 </section>
 
@@ -255,6 +278,15 @@
                         <div class="summary-row"><span>ROI (투자 수익률)</span><strong id="roi">0 %</strong></div>
                         <div class="summary-row"><span>손익분기점 판매가</span><strong id="breakEvenPrice">0</strong></div>
                     </div>
+                    <div class="chart-section" id="chartSection" style="display:none;">
+                        <p class="chart-title"><i class="fas fa-chart-pie" style="color:#0066FF;"></i> 비용 구성 비율</p>
+                        <div class="chart-canvas-wrapper"><canvas id="marginChart"></canvas></div>
+                    </div>
+                    <div class="share-section" id="shareSection">
+                        <button class="share-btn url-btn" onclick="shareURL()"><i class="fas fa-link"></i> <span>URL 복사</span></button>
+                        <button class="share-btn share-native-btn" onclick="shareResult()"><i class="fas fa-share-alt"></i> <span>공유</span></button>
+                        <button class="share-btn image-btn" onclick="saveAsImage()"><i class="fas fa-image"></i> <span>이미지 저장</span></button>
+                    </div>
                     <div class="coupang-banner" id="coupangBanner" style="display:none;">
                         <a href="https://link.coupang.com/a/dvxVJY" target="_blank" rel="noopener sponsored" id="coupangLink">
                             <div class="coupang-banner-inner">
@@ -293,6 +325,66 @@
                 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
             </div>
 
+            <!-- 플랫폼 비교 -->
+            <section class="comparison-section" id="comparisonSection" style="display:none;">
+                <h2><i class="fas fa-balance-scale" style="color:#0066FF;"></i> 플랫폼별 마진 비교</h2>
+                <p class="comparison-desc">동일 상품을 7개 플랫폼에서 판매했을 때 예상 수익 비교 (🏆 = 최고 수익)</p>
+                <div class="history-table-wrapper">
+                    <table class="comparison-table">
+                        <thead><tr><th>플랫폼</th><th>수수료</th><th>순이익 (원)</th><th>마진율</th></tr></thead>
+                        <tbody id="comparisonTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 환율 시뮬레이션 -->
+            <section class="sim-section">
+                <h2><i class="fas fa-sliders-h" style="color:#0066FF;"></i> 환율 변동 시뮬레이션</h2>
+                <p class="sim-desc">환율이 변동될 때 순이익이 어떻게 바뀌는지 확인하세요. 계산기에 판매가를 먼저 입력해주세요.</p>
+                <div class="sim-slider-wrapper">
+                    <input type="range" id="rateSimSlider" class="sim-slider" min="-30" max="30" value="0" oninput="updateRateSimulation()">
+                    <p class="sim-value" id="rateSimValue">±0% → 현재 환율 기준</p>
+                </div>
+                <div class="sim-result-grid" id="rateSimResultGrid">
+                    <div class="sim-result-item">
+                        <div class="sim-result-label">예상 순이익</div>
+                        <div class="sim-result-value" id="rateSimProfit">-</div>
+                    </div>
+                    <div class="sim-result-item">
+                        <div class="sim-result-label">예상 마진율</div>
+                        <div class="sim-result-value" id="rateSimMargin">-</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 수입 관세 계산기 -->
+            <section class="duty-section">
+                <h2><i class="fas fa-ship" style="color:#0066FF;"></i> 수입 관세 계산기</h2>
+                <p class="duty-desc">해외 구매자가 부담할 관세와 부가세를 예측합니다. (참고용 — 실제 세율은 국가·품목별로 다름)</p>
+                <div class="duty-inputs">
+                    <div class="form-group" style="margin:0;">
+                        <label style="font-size:13px;">관세율 (%)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="importDutyRate" placeholder="0" min="0" max="100" step="0.1" value="0">
+                            <span class="input-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label style="font-size:13px;">수입부가세율 (%)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="importVatRate" placeholder="10" min="0" max="100" step="1" value="10">
+                            <span class="input-unit">%</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="duty-calc-btn" onclick="calculateImportDuty()"><i class="fas fa-calculator"></i> 관세 계산하기</button>
+                <div id="importDutyResult" style="display:none;" class="duty-result">
+                    <div class="duty-result-row"><span>관세</span><strong id="dutyAmount">-</strong></div>
+                    <div class="duty-result-row"><span>수입부가세</span><strong id="importVatAmount">-</strong></div>
+                    <div class="duty-result-row duty-result-total"><span>총 수입세 부담</span><strong id="totalImportCost">-</strong></div>
+                </div>
+            </section>
+
             <section class="history-section" id="historySection" style="display:none;">
                 <div class="history-header">
                     <h2><i class="fas fa-history"></i> 계산 이력</h2>
@@ -310,6 +402,25 @@
                         <tbody id="historyTableBody"></tbody>
                     </table>
                 </div>
+            </section>
+
+            <!-- 쿠팡 파트너스 배너 (항상 노출) -->
+            <section class="coupang-section" aria-label="쿠팡 파트너스">
+                <p class="coupang-section-title">
+                    <i class="fas fa-shopping-cart" style="color:#e63946;"></i>
+                    해외판매 셀러를 위한 쿠팡 추천
+                    <span class="badge">광고</span>
+                </p>
+                <a href="https://link.coupang.com/a/dvxVJY" target="_blank" rel="noopener sponsored" class="coupang-banner-cta" onclick="if(typeof gtag!=='undefined')gtag('event','click_coupang_banner',{'event_category':'affiliate','event_label':'coupang_partners_permanent'});">
+                    <div class="coupang-banner-cta-text">
+                        <h3>🛍️ 쿠팡에서 사업용품 최저가로 구매하기</h3>
+                        <p>포장재 · 물류용품 · 사무용품 · 셀러 필수 아이템 모음</p>
+                    </div>
+                    <span class="coupang-banner-cta-arrow">→</span>
+                </a>
+                <p class="coupang-affiliate-notice">
+                    <strong>📢 광고 안내:</strong> 본 사이트는 <strong>쿠팡 파트너스</strong> 활동의 일환으로, 위 링크를 통해 구매 시 일정액의 수수료를 제공받습니다. 이는 구매자에게 추가 비용을 발생시키지 않습니다.
+                </p>
             </section>
 
             <aside class="middle-banner-full">
@@ -462,9 +573,13 @@
         </div>
     </footer>
 
+    <div class="toast" id="toast"></div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/language.js"></script>
     <script src="js/calculator.js"></script>
+    <script src="js/features.js"></script>
     <script>
     function closeBanner() {
         document.getElementById('topBanner').style.display = 'none';

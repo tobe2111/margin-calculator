@@ -174,8 +174,25 @@ function calculateMargin() {
 
     addToHistory({ productName: productName || '상품명 없음', purchasePrice, currency: currentCurrency, sellingPrice, exchangeRate: currentExchangeRate, domesticShipping, intlShipping, platformFeeRate, fxSpreadRate, netProfit, marginRate, timestamp: new Date() });
 
+    // 차트 업데이트
+    if (typeof updateChart === 'function') {
+        updateChart(revenue, purchasePrice, platformFee, fxSpread, domesticShipping, intlShipping, vatRefund, netProfit);
+    }
+
+    // 플랫폼 비교 업데이트
+    if (typeof calculateComparison === 'function') calculateComparison();
+
+    // 공유 버튼 노출
+    const shareSection = document.getElementById('shareSection');
+    if (shareSection) shareSection.style.display = 'flex';
+
+    // 쿠팡 배너 노출
     const coupangBanner = document.getElementById('coupangBanner');
     if (coupangBanner) coupangBanner.style.display = 'block';
+
+    // 입력값 자동 저장
+    if (typeof saveInputsToLocalStorage === 'function') saveInputsToLocalStorage();
+
     if (typeof gtag !== 'undefined') { gtag('event', 'show_coupang_banner', { 'event_category': 'affiliate', 'event_label': 'coupang_partners' }); }
 }
 
@@ -250,6 +267,9 @@ function reverseCalculate() {
 
     const coupangBanner = document.getElementById('coupangBanner');
     if (coupangBanner) coupangBanner.style.display = 'block';
+    const shareSection = document.getElementById('shareSection');
+    if (shareSection) shareSection.style.display = 'flex';
+    if (typeof saveInputsToLocalStorage === 'function') saveInputsToLocalStorage();
     if (typeof gtag !== 'undefined') { gtag('event', 'show_coupang_banner_reverse', { 'event_category': 'affiliate', 'event_label': 'coupang_partners_reverse' }); }
 
     const symbol = currencyInfo[currentCurrency]?.symbol || '';
