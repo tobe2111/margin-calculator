@@ -364,3 +364,41 @@ input[type="text"], input[type="number"], select { padding: 8px 12px !important;
     .fee-input-wrapper input { font-size: 18px; }
     .fee-link-box { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
+
+/* ===== Coupang Partners ===== */
+.coupang-disclosure {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 8px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.coupang-banner {
+    margin: 16px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeIn 0.4s ease;
+}
+
+.coupang-banner a {
+    display: block;
+    text-decoration: none;
+}
+
+.coupang-disclosure-result {
+    font-size: 11px;
+    color: #9ca3af;
+    text-align: center;
+    margin: 6px 0 0 0;
+    line-height: 1.5;
+}
+
+.footer-coupang-notice {
+    font-size: 11px !important;
+    color: #9ca3af !important;
+    margin-top: 12px !important;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 10px;
+    line-height: 1.6;
+}
