@@ -1,0 +1,119 @@
+/* ===== Design Override - Clean & Consistent Spacing ===== */
+
+section,
+.calculator-container,
+.input-section,
+.result-section,
+.info-section,
+.faq-section,
+.internal-links-nav {
+    margin-bottom: var(--spacing-xl, 48px) !important;
+}
+
+.calculator-container,
+.input-section,
+.result-section,
+.info-section,
+.faq-section {
+    padding: var(--spacing-lg, 32px) !important;
+}
+
+.form-group { margin-bottom: var(--spacing-md, 24px) !important; }
+h2 { margin-bottom: var(--spacing-md, 24px) !important; }
+h3 { margin-bottom: var(--spacing-sm, 16px) !important; }
+
+.platform-section {
+    padding: 0 !important;
+    margin-bottom: var(--spacing-xl, 48px) !important;
+}
+
+button, .btn { margin-top: var(--spacing-sm, 16px) !important; }
+
+#historySection {
+    margin-top: var(--spacing-xl, 48px) !important;
+    margin-bottom: var(--spacing-xl, 48px) !important;
+}
+
+.history-table-container { margin-bottom: var(--spacing-md, 24px) !important; }
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md, 24px) !important;
+    margin-bottom: var(--spacing-xl, 48px) !important;
+}
+
+.faq-item { margin-bottom: var(--spacing-sm, 16px) !important; }
+.faq-item:last-child { margin-bottom: 0 !important; }
+.info-cards { gap: var(--spacing-md, 24px) !important; }
+.quick-links { gap: var(--spacing-sm, 16px) !important; }
+.platform-badges { gap: var(--spacing-sm, 16px) !important; margin: var(--spacing-md, 24px) 0 !important; }
+.feature-highlights { gap: var(--spacing-lg, 32px) !important; margin-top: var(--spacing-md, 24px) !important; }
+
+.main-content {
+    padding-top: 16px !important;
+    padding-bottom: 48px !important;
+}
+
+.container {
+    padding-left: var(--spacing-md, 24px) !important;
+    padding-right: var(--spacing-md, 24px) !important;
+}
+
+.adsense-container {
+    margin: var(--spacing-xl, 48px) 0 !important;
+    padding: var(--spacing-md, 24px) !important;
+}
+
+.footer {
+    margin-top: var(--spacing-2xl, 64px) !important;
+    padding: var(--spacing-xl, 48px) 0 !important;
+}
+
+.info-icon, .checkbox-group { margin: var(--spacing-sm, 16px) 0 !important; }
+
+.input-with-unit { position: relative; }
+.input-unit { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] { -moz-appearance: textfield; }
+
+* {
+    transition: background-color 0.3s ease,
+                border-color 0.3s ease,
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .calculator-container,
+    .input-section,
+    .result-section,
+    .info-section,
+    .faq-section {
+        padding: var(--spacing-md, 24px) !important;
+    }
+
+    section,
+    .calculator-container,
+    .input-section,
+    .result-section,
+    .info-section,
+    .faq-section {
+        margin-bottom: var(--spacing-md, 24px) !important;
+    }
+
+    .main-content {
+        padding-top: var(--spacing-md, 24px) !important;
+        padding-bottom: var(--spacing-md, 24px) !important;
+    }
+
+    .container {
+        padding-left: var(--spacing-sm, 16px) !important;
+        padding-right: var(--spacing-sm, 16px) !important;
+    }
+}
