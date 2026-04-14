@@ -1,0 +1,149 @@
+/* ===== Mobile Optimization - Complete Version ===== */
+
+@media (max-width: 768px) {
+    .container { padding: 0 16px; max-width: 100%; }
+    .header { padding: 16px 0 12px 0; min-height: auto; }
+    .header-content { gap: 6px; }
+    .main-title { font-size: 22px !important; line-height: 1.3; padding: 0 40px; }
+    .platforms { font-size: 13px !important; line-height: 1.4; }
+    .subtitle { font-size: 12px !important; line-height: 1.5; padding: 0 10px; }
+    .platform-logos { gap: 8px; padding: 12px 8px; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); }
+    .platform-logo-item { padding: 10px 8px; font-size: 11px; }
+    .platform-logo-item i { font-size: 20px; }
+    .language-selector { top: 12px; right: 12px; }
+    .language-btn { padding: 8px 12px; font-size: 13px; }
+    .language-btn span#currentLang { display: none; }
+    .language-btn i.fa-globe { font-size: 18px; }
+    .calculator-section { padding: 20px 16px; }
+    .calculator-section h2 { font-size: 20px; margin-bottom: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { font-size: 14px; font-weight: 600; margin-bottom: 8px; display: block; }
+    .form-group input, .form-group select { font-size: 16px !important; padding: 14px 16px; height: 48px; border-radius: 8px; }
+    .input-with-unit { height: 48px; }
+    .input-with-unit input { height: 48px; font-size: 16px !important; }
+    .input-unit { font-size: 14px; padding: 0 12px; }
+    .currency-select { font-size: 15px !important; padding: 14px 16px; height: 48px; }
+    .calculate-btn, .reverse-calc-btn { font-size: 16px; padding: 16px 24px; height: 52px; width: 100%; margin-top: 20px; }
+    .refresh-btn { padding: 8px; width: 36px; height: 36px; }
+    .result-section { padding: 20px 16px; }
+    .result-section h2 { font-size: 20px; margin-bottom: 16px; }
+    .result-card { padding: 14px 16px; margin-bottom: 12px; border-radius: 10px; }
+    .result-label { font-size: 13px; margin-bottom: 6px; }
+    .result-value { font-size: 20px; }
+    .currency-dual { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .currency-local { font-size: 22px; }
+    .currency-krw { font-size: 16px; opacity: 0.8; }
+    .cost-item { padding: 10px 12px; font-size: 13px; }
+    .cost-label { font-size: 13px; }
+    .cost-value { font-size: 14px; font-weight: 600; }
+    .result-pro-cta { padding: 20px 16px; margin: 20px 0; }
+    .result-pro-header h3 { font-size: 18px; }
+    .result-pro-header p { font-size: 13px; }
+    .lifetime-badge { font-size: 12px; padding: 6px 12px; }
+    .result-pro-features { grid-template-columns: 1fr; gap: 10px; }
+    .result-pro-feature { padding: 10px 12px; font-size: 13px; }
+    .result-pro-price { flex-direction: column; gap: 16px; padding: 16px; }
+    .result-pro-btn { width: 100%; padding: 14px 20px; font-size: 16px; }
+    .reverse-result { padding: 16px; }
+    .reverse-result h3 { font-size: 18px; }
+    .recommended-price { font-size: 24px; }
+    .info-section { padding: 24px 16px; }
+    .info-section h2 { font-size: 20px; margin-bottom: 16px; }
+    .info-grid { grid-template-columns: 1fr; gap: 12px; }
+    .info-card { padding: 16px; }
+    .info-card h3 { font-size: 16px; margin-bottom: 10px; }
+    .info-card p { font-size: 13px; margin-bottom: 6px; }
+    .info-card a { font-size: 13px; }
+    .faq-section { margin: 24px 16px; padding: 0; }
+    .faq-section-header { padding: 20px 16px; border-radius: 12px; }
+    .faq-section-title h2 { font-size: 20px; }
+    .faq-items { padding: 12px; }
+    .faq-item { margin-bottom: 10px; border-radius: 10px; }
+    .faq-question { padding: 14px 16px; font-size: 14px; }
+    .faq-answer { padding: 12px 16px; font-size: 13px; line-height: 1.6; }
+    .history-section { padding: 24px 16px; }
+    .history-section h2 { font-size: 20px; margin-bottom: 16px; }
+    .history-table { font-size: 12px; }
+    .history-table th, .history-table td { padding: 10px 8px; }
+    #excelDownloadBtn { width: 100%; padding: 14px 20px; font-size: 15px; }
+    .footer { padding: 24px 16px; text-align: center; }
+    .footer p { font-size: 12px; line-height: 1.6; }
+    .footer-links { flex-direction: column; gap: 10px; margin: 16px 0; }
+    .footer-links a { font-size: 13px; }
+    .footer-contact { font-size: 13px; }
+}
+
+@media (max-width: 480px) {
+    .header { padding: 12px 0 10px 0; }
+    .main-title { font-size: 18px !important; padding: 0 35px; }
+    .platforms { font-size: 11px !important; }
+    .subtitle { font-size: 11px !important; }
+    .platform-logos { grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px 6px; }
+    .platform-logo-item { padding: 8px 6px; font-size: 10px; }
+    .platform-logo-item i { font-size: 18px; }
+    .language-selector { top: 10px; right: 10px; }
+    .language-btn { padding: 6px 10px; }
+    .language-btn i.fa-globe { font-size: 16px; }
+    .calculator-section { padding: 16px 12px; }
+    .calculator-section h2 { font-size: 18px; }
+    .form-group input, .form-group select { padding: 12px 14px; height: 46px; }
+    .input-with-unit { height: 46px; }
+    .input-with-unit input { height: 46px; padding: 12px 14px; }
+    .calculate-btn, .reverse-calc-btn { font-size: 15px; padding: 14px 20px; height: 50px; }
+    .result-section { padding: 16px 12px; }
+    .result-section h2 { font-size: 18px; }
+    .result-card { padding: 12px 14px; }
+    .result-label { font-size: 12px; }
+    .result-value { font-size: 18px; }
+    .currency-local { font-size: 20px; }
+    .currency-krw { font-size: 14px; }
+    .result-pro-cta { padding: 16px 12px; }
+    .result-pro-header h3 { font-size: 16px; }
+    .info-section { padding: 20px 12px; }
+    .info-section h2 { font-size: 18px; }
+    .info-card { padding: 14px 12px; }
+    .info-card h3 { font-size: 15px; }
+    .info-card p { font-size: 12px; }
+    .faq-section { margin: 20px 12px; }
+    .faq-section-header { padding: 16px 14px; }
+    .faq-section-title h2 { font-size: 18px; }
+    .faq-question { padding: 12px 14px; font-size: 13px; }
+    .faq-answer { padding: 10px 14px; font-size: 12px; }
+    .history-section { padding: 20px 12px; }
+    .history-table { font-size: 11px; }
+    .history-table th, .history-table td { padding: 8px 6px; }
+    .footer { padding: 20px 12px; }
+    .footer p { font-size: 11px; }
+    .footer-links a { font-size: 12px; }
+}
+
+@media (max-width: 375px) {
+    .main-title { font-size: 16px !important; padding: 0 32px; }
+    .platforms { font-size: 10px !important; }
+    .subtitle { font-size: 10px !important; }
+    .platform-logos { gap: 5px; padding: 8px 5px; }
+    .platform-logo-item { padding: 6px 4px; font-size: 9px; }
+    .platform-logo-item i { font-size: 16px; }
+    .form-group input, .form-group select { font-size: 15px !important; }
+    .calculate-btn, .reverse-calc-btn { font-size: 14px; padding: 12px 16px; height: 48px; }
+}
+
+@media (max-width: 768px) {
+    button, .btn, a.btn, .calculate-btn, .language-btn, .faq-question { min-height: 44px; min-width: 44px; }
+    input[type="text"], input[type="number"], input[type="email"], input[type="tel"], select, textarea { font-size: 16px !important; }
+    button:active, .btn:active, .calculate-btn:active { transform: scale(0.98); opacity: 0.9; }
+    body { -webkit-overflow-scrolling: touch; }
+    .platform-logo-item, .result-card, .info-card { -webkit-tap-highlight-color: transparent; user-select: none; }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .header { padding: 10px 0 8px 0; }
+    .main-title { font-size: 20px !important; }
+    .platform-logos { grid-template-columns: repeat(7, 1fr); padding: 8px; }
+    .result-section { padding: 16px; }
+}
+
+@media print {
+    .header, .language-selector, .calculate-btn, .reverse-calc-btn, .result-pro-cta, .footer { display: none; }
+    .result-section { page-break-inside: avoid; }
+}

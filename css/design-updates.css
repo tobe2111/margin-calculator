@@ -1,0 +1,366 @@
+/* Modern & Clean Design Updates - Clean White Background */
+
+/* Google AdSense Container */
+.adsense-container {
+    margin: 32px 0;
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.adsense-container .adsbygoogle {
+    display: block;
+    max-width: 100%;
+}
+
+/* Responsive AdSense */
+@media (max-width: 768px) {
+    .adsense-container {
+        margin: 24px 0;
+        padding: 12px;
+    }
+}
+
+/* Number Input Spin Buttons Remove */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Input with Unit */
+.input-with-unit {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-unit input {
+    flex: 1;
+    padding-right: 50px !important;
+}
+
+.input-unit {
+    position: absolute;
+    right: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+    pointer-events: none;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+    padding: 12px 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Form Divider */
+.form-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 24px 0;
+}
+
+/* Reverse Calc Section */
+.reverse-calc-section {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 24px;
+}
+
+.reverse-calc-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reverse-calc-section h3 i {
+    color: #0066FF;
+}
+
+.section-desc {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0 0 16px 0;
+    line-height: 1.5;
+}
+
+.calculate-btn.secondary {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    margin-top: 16px;
+}
+
+.calculate-btn.secondary:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+}
+
+.reverse-result {
+    margin-top: 16px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.reverse-result-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.reverse-result-label {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.reverse-result-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0066FF;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Calculation History Section */
+.history-section {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin: 32px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.history-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-header h2 i { color: #0066FF; }
+
+.excel-download-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.excel-download-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.history-table-wrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 1200px;
+}
+
+.history-table thead {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+
+.history-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 2px solid #d1d5db;
+    white-space: nowrap;
+}
+
+.history-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background 0.2s ease;
+}
+
+.history-table tbody tr:hover { background: #f9fafb; }
+
+.history-table td {
+    padding: 12px 16px;
+    color: #4b5563;
+    white-space: nowrap;
+}
+
+.history-table tbody tr:nth-child(odd) { background: #fafafa; }
+.history-table tbody tr:nth-child(odd):hover { background: #f3f4f6; }
+
+@media (max-width: 768px) {
+    .history-header { flex-direction: column; gap: 12px; align-items: stretch; }
+    .excel-download-btn { width: 100%; justify-content: center; }
+}
+
+.history-table td.negative-profit { color: #dc2626; font-weight: 700; }
+
+/* Premium Buy Button */
+.premium-buy-btn, .result-pro-btn {
+    background: linear-gradient(135deg, #0066FF 0%, #00A3FF 50%, #0066FF 100%);
+    background-size: 200% 100%;
+    animation: gradientShine 3s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-buy-btn::before, .result-pro-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+    animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes gradientShine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.premium-buy-btn:hover, .result-pro-btn:hover {
+    background: linear-gradient(135deg, #0052CC 0%, #0088DD 50%, #0052CC 100%);
+    background-size: 200% 100%;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,102,255,0.4);
+}
+
+label .fa-info-circle { font-size: 12px; color: #9ca3af; margin-left: 4px; cursor: help; }
+label .fa-info-circle:hover { color: #0066FF; }
+
+.breakdown-item.positive { color: #10b981; font-weight: 600; }
+.breakdown-item.positive span { color: #10b981; }
+
+.currency-dual { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.currency-local { font-size: 28px; font-weight: 700; color: #0066FF; }
+.currency-krw { font-size: 16px; font-weight: 500; color: #6b7280; }
+.result-value .currency-dual { width: 100%; }
+.result-value .currency-dual .currency-local,
+.result-value .currency-dual .currency-krw { text-align: right; width: 100%; }
+
+body { background: #ffffff !important; }
+.main-content { padding-top: 8px !important; background: #f8f9fa; }
+.platform-section { padding: 16px 0 12px !important; }
+.platform-section h2 { font-size: 18px !important; margin-bottom: 16px !important; color: #111827 !important; }
+.platform-section h2 i { color: #0066FF !important; }
+.top-banner { background: linear-gradient(135deg, #3b82f6, #2563eb) !important; }
+.banner-text { color: white !important; }
+
+.calculator-container { gap: 16px !important; margin-top: 12px !important; margin-bottom: 24px !important; }
+
+.input-section, .result-section {
+    padding: 20px !important; border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+    background: white !important; border: 1px solid #e5e7eb !important;
+}
+.input-section h2, .result-section h2 { font-size: 18px !important; margin-bottom: 16px !important; color: #111827 !important; }
+.input-section h2 i, .result-section h2 i { color: #0066FF !important; }
+.form-group { margin-bottom: 14px !important; }
+.form-group label { font-size: 13px !important; margin-bottom: 6px !important; color: #374151 !important; }
+input[type="text"], input[type="number"], select { padding: 8px 12px !important; font-size: 14px !important; border-radius: 8px !important; color: #111827 !important; }
+.help-text { color: #6b7280 !important; }
+.result-card { padding: 16px !important; margin-bottom: 8px !important; border-radius: 10px !important; }
+.result-label { font-size: 13px !important; color: #6b7280 !important; }
+.result-value { font-size: 20px !important; color: #111827 !important; }
+.result-card.highlight .result-value { font-size: 28px !important; }
+.result-breakdown { padding: 16px !important; margin-top: 16px !important; }
+.result-breakdown h3 { font-size: 15px !important; margin-bottom: 12px !important; color: #111827 !important; }
+.breakdown-item { padding: 8px 0 !important; font-size: 13px !important; }
+.breakdown-item span { color: #111827 !important; }
+.result-summary { margin-top: 16px !important; padding: 14px !important; }
+.summary-row { padding: 6px 0 !important; font-size: 13px !important; }
+.summary-row span { color: #374151 !important; }
+.summary-row strong { font-size: 16px !important; color: #111827 !important; }
+.result-pro-cta { margin-top: 20px !important; padding: 20px !important; }
+.result-pro-header h3 { font-size: 17px !important; margin-bottom: 6px !important; }
+.result-pro-header p { font-size: 12px !important; }
+.result-pro-features { gap: 8px !important; margin-bottom: 16px !important; }
+.result-pro-feature { padding: 8px !important; font-size: 12px !important; }
+.result-pro-price { padding: 14px !important; }
+.result-pro-current { font-size: 26px !important; }
+.middle-banner-full { margin: 24px 0 !important; }
+.banner-card-horizontal { padding: 20px 24px !important; }
+.banner-icon-large { font-size: 36px !important; }
+.banner-card-horizontal h3 { font-size: 18px !important; color: #111827 !important; }
+.banner-card-horizontal p { font-size: 13px !important; color: #374151 !important; }
+.info-section { padding: 40px 0 !important; background: white; }
+.info-section h2 { font-size: 20px !important; margin-bottom: 24px !important; color: #111827 !important; }
+.info-section h2 i { color: #0066FF !important; }
+.info-cards { gap: 16px !important; }
+.info-card { padding: 16px !important; background: white !important; color: #111827 !important; }
+.info-card h3 { font-size: 16px !important; margin-bottom: 12px !important; color: #111827 !important; }
+.info-card li { font-size: 12px !important; padding: 4px 0 !important; color: #374151 !important; }
+.footer { padding: 20px 0 !important; background: white !important; }
+.footer p { font-size: 11px !important; color: #6b7280 !important; }
+.calculate-btn { padding: 12px 24px !important; font-size: 15px !important; margin-top: 20px !important; }
+
+@media (max-width: 768px) {
+    .fee-simple-inputs { gap: 12px; }
+    .fee-input-wrapper input { font-size: 18px; }
+    .fee-link-box { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
