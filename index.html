@@ -38,6 +38,7 @@
     <meta property="twitter:title" content="유어팀 마진 계산기 | 라자다 틱톡샵 이베이 아마존 쇼피 셀러 수익 계산">
     <meta property="twitter:description" content="유어팀 마진 계산기 - 라자다/틱톡샵/이베이/아마존/쇼피 셀러 필수! 해외판매 수익 실시간 계산. 수출 순마진 분석.">
     <meta property="twitter:image" content="https://margin.ur-team.com/og-image.png">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/manifest.json">
@@ -56,6 +57,38 @@
     <link rel="stylesheet" href="css/header-faq-fix.css">
     <link rel="stylesheet" href="css/language-selector.css">
     <link rel="stylesheet" href="css/mobile-optimization.css">
+    <link rel="stylesheet" href="css/features.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "유어팀 글로벌 마진 계산기",
+      "url": "https://margin.ur-team.com/",
+      "description": "라자다, 틱톡샵, 이베이, 아마존, 쇼피, 큐텐 셀러를 위한 무료 해외판매 마진 계산기. 17개 통화 실시간 환율 적용, 순이익·ROI·손익분기 자동 계산.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "KRW"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "유어팀 (YourTeam)",
+        "url": "https://margin.ur-team.com/"
+      },
+      "inLanguage": "ko",
+      "featureList": [
+        "17개 통화 실시간 환율",
+        "플랫폼별 수수료 자동 입력",
+        "멀티 플랫폼 마진 비교",
+        "환율 시뮬레이션",
+        "수입 관세 계산기",
+        "이미지 내보내기",
+        "URL 공유"
+      ]
+    }
+    </script>
 </head>
 <body>
     <div class="top-banner" id="topBanner">
@@ -441,7 +474,7 @@
 
     <footer class="footer" role="contentinfo">
         <div class="container">
-            <p>&copy; 2024 <strong>유어팀 글로벌 마진 계산기</strong> - <a href="#calculator" style="color:#0066FF;">라자다/틱톡샵/이베이/아마존/쇼피/큐텐 셀러</a>를 위한 무료 해외판매 수익 계산 도구. All rights reserved.</p>
+            <p>&copy; <span id="copyright-year">2024</span> <strong>유어팀 글로벌 마진 계산기</strong> - <a href="#calculator" style="color:#0066FF;">라자다/틱톡샵/이베이/아마존/쇼피/큐텐 셀러</a>를 위한 무료 해외판매 수익 계산 도구. All rights reserved.</p>
             <p class="footer-note" data-i18n="ft.note">본 계산기는 참고용이며, 실제 수수료는 플랫폼 정책에 따라 달라질 수 있습니다.</p>
             <div class="footer-links">
                 <a href="#calculator">유어팀 마진 계산기</a> |
@@ -471,6 +504,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        // 저작권 연도 자동 업데이트
+        const yearEl = document.getElementById('copyright-year');
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
+
         const faqItems = document.querySelectorAll('.faq-item');
         if (faqItems.length > 0) faqItems[0].classList.add('active');
         faqItems.forEach(item => {

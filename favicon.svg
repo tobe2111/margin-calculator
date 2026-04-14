@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="20" fill="#0066FF"/>
+  <rect x="18" y="18" width="28" height="28" rx="4" fill="white"/>
+  <rect x="54" y="18" width="28" height="28" rx="4" fill="white"/>
+  <rect x="18" y="54" width="28" height="28" rx="4" fill="white"/>
+  <rect x="54" y="54" width="28" height="28" rx="4" fill="#00AAFF"/>
+  <text x="32" y="38" font-size="18" font-weight="bold" fill="#0066FF" text-anchor="middle">%</text>
+  <text x="68" y="38" font-size="18" font-weight="bold" fill="#0066FF" text-anchor="middle">₩</text>
+  <text x="32" y="74" font-size="18" font-weight="bold" fill="#0066FF" text-anchor="middle">+</text>
+  <text x="68" y="74" font-size="18" font-weight="bold" fill="white" text-anchor="middle">→</text>
+</svg>
