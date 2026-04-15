@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0066FF">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LFJX1XVFNZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LFJX1XVFNZ');
+    </script>
+    <title>대량 마진 계산기 | 여러 상품 마진 일괄 계산 | 유어팀</title>
+    <meta name="description" content="여러 상품을 한번에 마진 계산. 행 추가로 다수 상품 마진율·순이익 일괄 분석. CSV 다운로드 지원. 해외 셀러 대량 상품 관리 필수 도구.">
+    <meta name="keywords" content="대량 마진 계산기, 일괄 마진 계산, 여러 상품 마진, 벌크 마진 계산, 셀러 상품 관리">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://margin.ur-team.com/tools/bulk/">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="manifest" href="/manifest.json">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1598352332166062" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/shared-nav.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg, #f9fafb); color: var(--text, #1a202c); line-height: 1.6; }
+        a { color: inherit; text-decoration: none; }
+        .tool-card { background: var(--bg-card, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+        .btn { padding: 9px 16px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+        .btn-primary { background: #0066FF; color: #fff; }
+        .btn-primary:hover { background: #0047cc; }
+        .btn-success { background: #059669; color: #fff; }
+        .btn-success:hover { background: #047857; }
+        .btn-outline { background: #fff; color: #374151; border: 1.5px solid #d1d5db; }
+        .btn-outline:hover { border-color: #0066FF; color: #0066FF; }
+        .btn-danger { background: #fee2e2; color: #dc2626; }
+        .btn-danger:hover { background: #fecaca; }
+        .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+
+        .bulk-table-wrap { overflow-x: auto; }
+        .bulk-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
+        .bulk-table th { background: #0066FF; color: #fff; padding: 10px 8px; text-align: left; white-space: nowrap; font-size: 12px; }
+        .bulk-table td { padding: 6px 6px; border-bottom: 1px solid var(--border, #f3f4f6); vertical-align: middle; }
+        .bulk-table tr:hover td { background: var(--bg, #f9fafb); }
+        .bulk-table input[type="text"], .bulk-table input[type="number"] {
+            width: 100%; border: 1.5px solid var(--border, #e5e7eb); border-radius: 6px;
+            padding: 7px 8px; font-size: 13px; font-family: inherit; background: transparent;
+            color: var(--text, #1a202c); outline: none;
+        }
+        .bulk-table input:focus { border-color: #0066FF; }
+        .bulk-table .margin-cell { font-weight: 700; text-align: right; white-space: nowrap; }
+        .bulk-table .margin-cell.positive { color: #059669; }
+        .bulk-table .margin-cell.negative { color: #dc2626; }
+        .bulk-table .del-btn { background: none; border: none; cursor: pointer; color: #dc2626; font-size: 15px; padding: 4px 8px; border-radius: 4px; }
+        .bulk-table .del-btn:hover { background: #fee2e2; }
+
+        .summary-bar { display: flex; flex-wrap: wrap; gap: 16px; padding: 16px; background: var(--bg, #f3f4f6); border-radius: 10px; margin-top: 16px; }
+        .summary-stat { text-align: center; flex: 1; min-width: 100px; }
+        .summary-stat .s-label { font-size: 11px; color: var(--text-muted, #9ca3af); }
+        .summary-stat .s-value { font-size: 18px; font-weight: 800; color: var(--text, #111827); margin-top: 2px; }
+
+        .global-defaults { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .gd-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted, #374151); margin-bottom: 5px; }
+        .gd-group input, .gd-group select {
+            width: 100%; border: 1.5px solid var(--border, #e5e7eb); border-radius: 6px;
+            padding: 8px 10px; font-size: 13px; font-family: inherit; background: var(--input-bg, #fff);
+            color: var(--text, #1a202c); outline: none;
+        }
+        .gd-group input:focus, .gd-group select:focus { border-color: #0066FF; }
+        [data-theme="dark"] .bulk-table th { background: #1d4ed8; }
+        [data-theme="dark"] .bulk-table tr:hover td { background: #1a2744; }
+        [data-theme="dark"] .btn-outline { background: var(--bg-card); color: var(--text); border-color: var(--border); }
+    </style>
+</head>
+<body>
+    <header class="sub-header">
+        <h1><i class="fas fa-table"></i> 대량 마진 계산기</h1>
+        <p>여러 상품을 한번에 마진 분석 · CSV 다운로드</p>
+    </header>
+
+    <main class="subpage-main">
+        <!-- 공통 기본값 설정 -->
+        <div class="tool-card">
+            <h3 style="font-size:15px;font-weight:700;color:var(--text,#111827);margin-bottom:14px;"><i class="fas fa-sliders-h" style="color:#0066FF;"></i> 공통 기본값 설정</h3>
+            <p style="font-size:12px;color:var(--text-muted,#6b7280);margin-bottom:14px;">아래 값은 새 행 추가 시 기본으로 입력됩니다. 개별 행에서 수정 가능.</p>
+            <div class="global-defaults">
+                <div class="gd-group">
+                    <label>플랫폼 수수료 (%)</label>
+                    <input type="number" id="gdFee" value="15" min="0" max="100" step="0.1">
+                </div>
+                <div class="gd-group">
+                    <label>환전 수수료 (%)</label>
+                    <input type="number" id="gdFx" value="1" min="0" max="10" step="0.1">
+                </div>
+                <div class="gd-group">
+                    <label>국내배송비 (원)</label>
+                    <input type="number" id="gdDom" value="3000" min="0">
+                </div>
+                <div class="gd-group">
+                    <label>해외배송비 (원)</label>
+                    <input type="number" id="gdIntl" value="5000" min="0">
+                </div>
+                <div class="gd-group">
+                    <label>환율 (원/USD)</label>
+                    <input type="number" id="gdRate" value="1380" min="1">
+                </div>
+                <div class="gd-group">
+                    <label>부가세 환급</label>
+                    <select id="gdVat">
+                        <option value="1">적용 (10%)</option>
+                        <option value="0">미적용</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 테이블 -->
+        <div class="tool-card">
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="addRow()"><i class="fas fa-plus"></i> 행 추가</button>
+                <button class="btn btn-primary" onclick="calcAll()"><i class="fas fa-calculator"></i> 전체 계산</button>
+                <button class="btn btn-success" onclick="downloadCSV()"><i class="fas fa-file-csv"></i> CSV 다운로드</button>
+                <button class="btn btn-outline" onclick="clearAll()"><i class="fas fa-trash"></i> 초기화</button>
+                <span style="font-size:12px;color:var(--text-muted,#6b7280);margin-left:auto;" id="rowCount">0개 상품</span>
+            </div>
+            <div class="bulk-table-wrap">
+                <table class="bulk-table">
+                    <thead>
+                        <tr>
+                            <th style="width:30px;">#</th>
+                            <th style="min-width:140px;">상품명</th>
+                            <th style="min-width:100px;">매입가(원)</th>
+                            <th style="min-width:90px;">판매가(USD)</th>
+                            <th style="min-width:70px;">수수료(%)</th>
+                            <th style="min-width:70px;">FX(%)</th>
+                            <th style="min-width:80px;">국내배송(원)</th>
+                            <th style="min-width:80px;">해외배송(원)</th>
+                            <th style="min-width:80px;">환율(₩/USD)</th>
+                            <th style="min-width:80px;">순이익(원)</th>
+                            <th style="min-width:70px;">마진율</th>
+                            <th style="width:36px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bulkBody"></tbody>
+                </table>
+            </div>
+            <div class="summary-bar" id="summaryBar" style="display:none;">
+                <div class="summary-stat"><div class="s-label">상품 수</div><div class="s-value" id="sumCount">0</div></div>
+                <div class="summary-stat"><div class="s-label">평균 마진율</div><div class="s-value" id="sumAvgMargin">0%</div></div>
+                <div class="summary-stat"><div class="s-label">총 순이익 합계</div><div class="s-value" id="sumTotalProfit">0원</div></div>
+                <div class="summary-stat"><div class="s-label">마진율 50%+ 상품</div><div class="s-value" id="sumGoodProducts">0개</div></div>
+            </div>
+        </div>
+
+        <div style="margin-top:8px;text-align:center;">
+            <a href="/tools/" class="back-to-calc" style="background:#6b7280;margin-right:12px;"><i class="fas fa-arrow-left"></i> 도구 목록</a>
+            <a href="/" class="back-to-calc"><i class="fas fa-calculator"></i> 마진 계산기</a>
+        </div>
+    </main>
+
+    <footer class="sub-footer">
+        <div class="footer-links">
+            <a href="/">마진 계산기</a>
+            <a href="/platforms/">플랫폼 비교</a>
+            <a href="/tools/">도구 모음</a>
+            <a href="/market/">시장 정보</a>
+            <a href="/guide/">셀러 가이드</a>
+        </div>
+        <p>&copy; 2025 유어팀 글로벌 마진 계산기</p>
+        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </footer>
+    <script src="/js/shared-nav.js"></script>
+    <script>
+    let rowId = 0;
+
+    function getDefaults() {
+        return {
+            fee: document.getElementById('gdFee').value || 15,
+            fx: document.getElementById('gdFx').value || 1,
+            dom: document.getElementById('gdDom').value || 3000,
+            intl: document.getElementById('gdIntl').value || 5000,
+            rate: document.getElementById('gdRate').value || 1380,
+            vat: document.getElementById('gdVat').value
+        };
+    }
+
+    function addRow() {
+        const d = getDefaults();
+        rowId++;
+        const tbody = document.getElementById('bulkBody');
+        const tr = document.createElement('tr');
+        tr.id = 'row-' + rowId;
+        tr.dataset.id = rowId;
+        tr.innerHTML = `
+            <td style="text-align:center;color:var(--text-muted,#9ca3af);font-size:12px;">${rowId}</td>
+            <td><input type="text" placeholder="상품명" class="r-name"></td>
+            <td><input type="number" placeholder="0" min="0" step="100" class="r-purchase" oninput="calcRow(${rowId})"></td>
+            <td><input type="number" placeholder="0" min="0" step="0.01" class="r-sell" oninput="calcRow(${rowId})"></td>
+            <td><input type="number" value="${d.fee}" min="0" max="100" step="0.1" class="r-fee" oninput="calcRow(${rowId})"></td>
+            <td><input type="number" value="${d.fx}" min="0" max="100" step="0.1" class="r-fx" oninput="calcRow(${rowId})"></td>
+            <td><input type="number" value="${d.dom}" min="0" class="r-dom" oninput="calcRow(${rowId})"></td>
+            <td><input type="number" value="${d.intl}" min="0" class="r-intl" oninput="calcRow(${rowId})"></td>
+            <td><input type="number" value="${d.rate}" min="1" class="r-rate" oninput="calcRow(${rowId})"></td>
+            <td class="margin-cell r-profit">-</td>
+            <td class="margin-cell r-margin">-</td>
+            <td><button class="del-btn" onclick="delRow(${rowId})" title="삭제"><i class="fas fa-times"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+        updateRowCount();
+    }
+
+    function delRow(id) {
+        const tr = document.getElementById('row-' + id);
+        if (tr) tr.remove();
+        updateRowCount();
+    }
+
+    function calcRow(id) {
+        const tr = document.getElementById('row-' + id);
+        if (!tr) return;
+        const purchase = parseFloat(tr.querySelector('.r-purchase').value) || 0;
+        const sell = parseFloat(tr.querySelector('.r-sell').value) || 0;
+        const fee = parseFloat(tr.querySelector('.r-fee').value) || 0;
+        const fx = parseFloat(tr.querySelector('.r-fx').value) || 0;
+        const dom = parseFloat(tr.querySelector('.r-dom').value) || 0;
+        const intl = parseFloat(tr.querySelector('.r-intl').value) || 0;
+        const rate = parseFloat(tr.querySelector('.r-rate').value) || 1380;
+
+        if (sell <= 0 || purchase <= 0) {
+            tr.querySelector('.r-profit').textContent = '-';
+            tr.querySelector('.r-margin').textContent = '-';
+            return;
+        }
+
+        const revenueKRW = sell * rate;
+        const feeAmt = revenueKRW * (fee / 100);
+        const fxAmt = revenueKRW * (fx / 100);
+        const vatRefund = purchase * 0.1; // simplified
+        const totalCost = purchase + feeAmt + fxAmt + dom + intl - vatRefund;
+        const profit = revenueKRW - totalCost;
+        const margin = (profit / revenueKRW) * 100;
+
+        const pCell = tr.querySelector('.r-profit');
+        const mCell = tr.querySelector('.r-margin');
+        pCell.textContent = profit.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원';
+        pCell.className = 'margin-cell r-profit ' + (profit >= 0 ? 'positive' : 'negative');
+        mCell.textContent = margin.toFixed(1) + '%';
+        mCell.className = 'margin-cell r-margin ' + (margin >= 0 ? 'positive' : 'negative');
+    }
+
+    function calcAll() {
+        document.querySelectorAll('#bulkBody tr').forEach(tr => {
+            const id = parseInt(tr.dataset.id);
+            if (id) calcRow(id);
+        });
+        updateSummary();
+    }
+
+    function updateSummary() {
+        const rows = document.querySelectorAll('#bulkBody tr');
+        let totalProfit = 0, totalMargin = 0, count = 0, goodCount = 0;
+        rows.forEach(tr => {
+            const profitText = tr.querySelector('.r-profit')?.textContent;
+            const marginText = tr.querySelector('.r-margin')?.textContent;
+            if (profitText && profitText !== '-') {
+                const p = parseFloat(profitText.replace(/,/g, '').replace('원', ''));
+                const m = parseFloat(marginText);
+                if (!isNaN(p)) { totalProfit += p; count++; }
+                if (!isNaN(m)) { totalMargin += m; if (m >= 20) goodCount++; }
+            }
+        });
+        if (count > 0) {
+            document.getElementById('sumCount').textContent = count;
+            document.getElementById('sumAvgMargin').textContent = (totalMargin / count).toFixed(1) + '%';
+            document.getElementById('sumTotalProfit').textContent = totalProfit.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원';
+            document.getElementById('sumGoodProducts').textContent = goodCount + '개';
+            document.getElementById('summaryBar').style.display = 'flex';
+        }
+    }
+
+    function updateRowCount() {
+        const count = document.querySelectorAll('#bulkBody tr').length;
+        document.getElementById('rowCount').textContent = count + '개 상품';
+    }
+
+    function clearAll() {
+        if (!confirm('모든 행을 삭제하시겠습니까?')) return;
+        document.getElementById('bulkBody').innerHTML = '';
+        document.getElementById('summaryBar').style.display = 'none';
+        rowId = 0;
+        updateRowCount();
+    }
+
+    function downloadCSV() {
+        calcAll();
+        const rows = document.querySelectorAll('#bulkBody tr');
+        const headers = ['상품명', '매입가(원)', '판매가(USD)', '수수료(%)', 'FX(%)', '국내배송(원)', '해외배송(원)', '환율', '순이익(원)', '마진율'];
+        const csvRows = [headers.join(',')];
+        rows.forEach(tr => {
+            const name = tr.querySelector('.r-name')?.value || '';
+            const purchase = tr.querySelector('.r-purchase')?.value || '';
+            const sell = tr.querySelector('.r-sell')?.value || '';
+            const fee = tr.querySelector('.r-fee')?.value || '';
+            const fx = tr.querySelector('.r-fx')?.value || '';
+            const dom = tr.querySelector('.r-dom')?.value || '';
+            const intl = tr.querySelector('.r-intl')?.value || '';
+            const rate = tr.querySelector('.r-rate')?.value || '';
+            const profit = tr.querySelector('.r-profit')?.textContent || '';
+            const margin = tr.querySelector('.r-margin')?.textContent || '';
+            csvRows.push([`"${name}"`, purchase, sell, fee, fx, dom, intl, rate, `"${profit}"`, `"${margin}"`].join(','));
+        });
+        const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = '마진계산_' + new Date().toISOString().slice(0,10) + '.csv';
+        a.click();
+    }
+
+    // 초기 3행 추가
+    addRow(); addRow(); addRow();
+    </script>
+</body>
+</html>

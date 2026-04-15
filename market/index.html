@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0066FF">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LFJX1XVFNZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LFJX1XVFNZ');
+    </script>
+    <title>해외 시장 정보 | 미국·일본·동남아 전자상거래 시장 분석 | 유어팀</title>
+    <meta name="description" content="해외 셀러를 위한 시장 정보. 미국(Amazon/eBay), 일본(Rakuten/Qoo10), 동남아(Shopee/Lazada/TikTok) 플랫폼 특성과 진입 전략을 알아보세요.">
+    <meta name="keywords" content="해외 시장 정보, 미국 이커머스, 일본 이커머스, 동남아 이커머스, 아마존 판매, 라쿠텐 판매, 쇼피 판매, 해외직판">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://margin.ur-team.com/market/">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://margin.ur-team.com/market/">
+    <meta property="og:title" content="해외 시장 정보 | 미국·일본·동남아 전자상거래 분석 | 유어팀">
+    <meta property="og:description" content="미국, 일본, 동남아 해외 이커머스 시장 정보와 진입 전략. 셀러 필수 정보.">
+    <meta property="og:image" content="https://margin.ur-team.com/og-image.png">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1598352332166062" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/shared-nav.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "홈", "item": "https://margin.ur-team.com/"},
+        {"@type": "ListItem", "position": 2, "name": "시장 정보", "item": "https://margin.ur-team.com/market/"}
+      ]
+    }
+    </script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg, #f9fafb); color: var(--text, #1a202c); line-height: 1.6; }
+        a { color: inherit; text-decoration: none; }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; margin-top: 24px;
+        }
+        .market-card {
+            background: var(--bg-card, #fff);
+            border: 1px solid var(--border, #e5e7eb);
+            border-radius: 16px; padding: 28px 24px;
+            display: block; text-decoration: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+            position: relative; overflow: hidden;
+        }
+        .market-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+        }
+        .market-card.us::before { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+        .market-card.jp::before { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+        .market-card.sea::before { background: linear-gradient(90deg, #10b981, #047857); }
+        .market-card:hover { box-shadow: 0 8px 32px rgba(0,102,255,0.12); transform: translateY(-3px); }
+        .market-flag { font-size: 36px; margin-bottom: 12px; display: block; }
+        .market-card h2 { font-size: 20px; font-weight: 800; color: var(--text, #111827); margin-bottom: 6px; }
+        .market-card .market-sub { font-size: 13px; color: var(--text-muted, #6b7280); margin-bottom: 16px; }
+        .market-platforms { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+        .market-platform-tag {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: var(--bg, #f3f4f6); border: 1px solid var(--border, #e5e7eb);
+            border-radius: 20px; padding: 4px 10px; font-size: 12px; font-weight: 600;
+            color: var(--text, #374151);
+        }
+        .market-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+        .market-stat { background: var(--bg, #f9fafb); border-radius: 8px; padding: 10px 12px; }
+        .market-stat .stat-label { font-size: 11px; color: var(--text-muted, #9ca3af); margin-bottom: 2px; }
+        .market-stat .stat-value { font-size: 15px; font-weight: 700; color: var(--text, #111827); }
+        .market-cta {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 14px; font-weight: 700; color: #0066FF;
+        }
+
+        .tip-box {
+            background: #eff6ff; border-left: 4px solid #0066FF;
+            border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 16px;
+            font-size: 13px; color: #1e40af;
+        }
+        .tip-box strong { display: block; margin-bottom: 4px; font-size: 14px; }
+
+        .trend-section { margin-top: 48px; }
+        .trend-section h2 { font-size: 20px; font-weight: 700; color: var(--text, #111827); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #eff6ff; }
+        .trend-section h2 i { color: #0066FF; margin-right: 8px; }
+        .trend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+        .trend-item {
+            background: var(--bg-card, #fff); border: 1px solid var(--border, #e5e7eb);
+            border-radius: 12px; padding: 16px;
+        }
+        .trend-item .trend-rank { font-size: 11px; font-weight: 700; color: #0066FF; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .trend-item h3 { font-size: 15px; font-weight: 700; color: var(--text, #111827); margin-bottom: 4px; }
+        .trend-item p { font-size: 12px; color: var(--text-muted, #6b7280); line-height: 1.5; }
+        .trend-badge { display: inline-block; background: #fef3c7; color: #92400e; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 6px; }
+    </style>
+</head>
+<body>
+    <header class="sub-header">
+        <h1><i class="fas fa-globe-asia"></i> 해외 시장 정보</h1>
+        <p>미국·일본·동남아 이커머스 시장 분석 및 진입 전략</p>
+    </header>
+
+    <main class="subpage-main">
+        <div class="tip-box" style="margin-top:32px;">
+            <strong><i class="fas fa-lightbulb"></i> 시장 선택 가이드</strong>
+            입문자에게는 한국어 지원이 잘 되는 <strong>동남아(Shopee/Lazada)</strong>를 추천합니다. 수익 극대화를 원한다면 <strong>미국(Amazon)</strong>이 가장 큰 시장입니다.
+        </div>
+
+        <div class="market-grid">
+            <a href="/market/us/" class="market-card us">
+                <span class="market-flag">🇺🇸</span>
+                <h2>미국 시장</h2>
+                <p class="market-sub">세계 최대 이커머스 시장 — Amazon, eBay, Walmart</p>
+                <div class="market-platforms">
+                    <span class="market-platform-tag"><i class="fab fa-amazon"></i> Amazon</span>
+                    <span class="market-platform-tag"><i class="fab fa-ebay"></i> eBay</span>
+                    <span class="market-platform-tag">Walmart</span>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="stat-label">시장 규모</div>
+                        <div class="stat-value">$1.1조</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="stat-label">인터넷 인구</div>
+                        <div class="stat-value">3.3억 명</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="stat-label">Amazon 수수료</div>
+                        <div class="stat-value">8~20%</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="stat-label">권장 마진율</div>
+                        <div class="stat-value">30%+ 목표</div>
+                    </div>
+                </div>
+                <span class="market-cta">자세히 보기 <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <a href="/market/jp/" class="market-card jp">
+                <span class="market-flag">🇯🇵</span>
+                <h2>일본 시장</h2>
+                <p class="market-sub">아시아 최대 성숙 시장 — Rakuten, Qoo10, Amazon JP</p>
+                <div class="market-platforms">
+                    <span class="market-platform-tag"><i class="fas fa-gem"></i> Rakuten</span>
+                    <span class="market-platform-tag"><i class="fas fa-shopping-cart"></i> Qoo10</span>
+                    <span class="market-platform-tag"><i class="fab fa-amazon"></i> Amazon JP</span>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="stat-label">시장 규모</div>
+                        <div class="stat-value">$1,500억</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="stat-label">인터넷 쇼핑 인구</div>
+                        <div class="stat-value">1.2억 명</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="stat-label">Rakuten 수수료</div>
+                        <div class="stat-value">3.5~5%</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="stat-label">한국 상품 인기도</div>
+                        <div class="stat-value">매우 높음</div>
+                    </div>
+                </div>
+                <span class="market-cta">자세히 보기 <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <a href="/market/sea/" class="market-card sea">
+                <span class="market-flag">🌏</span>
+                <h2>동남아 시장</h2>
+                <p class="market-sub">고성장 신흥 시장 — Shopee, Lazada, TikTok Shop</p>
+                <div class="market-platforms">
+                    <span class="market-platform-tag"><i class="fas fa-shopping-bag"></i> Shopee</span>
+                    <span class="market-platform-tag"><i class="fas fa-store"></i> Lazada</span>
+                    <span class="market-platform-tag"><i class="fab fa-tiktok"></i> TikTok Shop</span>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="stat-label">시장 규모</div>
+                        <div class="stat-value">$2,180억</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="stat-label">연성장률</div>
+                        <div class="stat-value">+17% YoY</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="stat-label">Shopee 수수료</div>
+                        <div class="stat-value">1~5%</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="stat-label">입문 난이도</div>
+                        <div class="stat-value">쉬움 ★★☆</div>
+                    </div>
+                </div>
+                <span class="market-cta">자세히 보기 <i class="fas fa-arrow-right"></i></span>
+            </a>
+        </div>
+
+        <section class="trend-section">
+            <h2><i class="fas fa-fire"></i> 2025 해외 이커머스 트렌드</h2>
+            <div class="trend-grid">
+                <div class="trend-item">
+                    <div class="trend-rank">Trend #1</div>
+                    <h3>라이브커머스 폭발 성장</h3>
+                    <p>TikTok Shop을 중심으로 동남아 라이브커머스 시장이 연 40% 이상 성장 중</p>
+                    <span class="trend-badge">동남아 필수</span>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-rank">Trend #2</div>
+                    <h3>K-뷰티·K-푸드 인기 지속</h3>
+                    <p>한국 화장품·식품·패션에 대한 해외 수요가 전 지역에서 꾸준히 증가</p>
+                    <span class="trend-badge">전 지역</span>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-rank">Trend #3</div>
+                    <h3>AI 상품 추천·검색</h3>
+                    <p>Amazon·Shopee 모두 AI 기반 검색 강화로 상품 타이틀·키워드 최적화 중요성 ↑</p>
+                    <span class="trend-badge">SEO 중요</span>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-rank">Trend #4</div>
+                    <h3>친환경·지속가능 소비</h3>
+                    <p>미국·유럽 소비자 중심으로 친환경 포장·ESG 인증 제품 선호도 증가</p>
+                    <span class="trend-badge">미국·유럽</span>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-rank">Trend #5</div>
+                    <h3>D2C (직접 판매) 확대</h3>
+                    <p>중간 마진 절감을 위해 자사몰 + SNS 직판 방식으로 전환하는 브랜드 증가</p>
+                    <span class="trend-badge">전략 변화</span>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-rank">Trend #6</div>
+                    <h3>빠른 배송 인프라 경쟁</h3>
+                    <p>당일·익일 배송이 일본·동남아로 확대. FBA·FBL 활용 필수화 추세</p>
+                    <span class="trend-badge">물류 혁신</span>
+                </div>
+            </div>
+        </section>
+
+        <div style="margin-top:40px;text-align:center;">
+            <a href="/" class="back-to-calc"><i class="fas fa-calculator"></i> 마진 계산기로 돌아가기</a>
+        </div>
+    </main>
+
+    <footer class="sub-footer">
+        <div class="footer-links">
+            <a href="/">마진 계산기</a>
+            <a href="/platforms/">플랫폼 비교</a>
+            <a href="/tools/">도구 모음</a>
+            <a href="/market/">시장 정보</a>
+            <a href="/guide/">셀러 가이드</a>
+        </div>
+        <p>&copy; 2025 유어팀 글로벌 마진 계산기</p>
+        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </footer>
+    <script src="/js/shared-nav.js"></script>
+</body>
+</html>

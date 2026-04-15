@@ -157,6 +157,9 @@
                             <input type="number" id="purchasePrice" placeholder="0" min="0" step="100">
                             <span class="input-unit">원</span>
                         </div>
+                        <button type="button" class="cpq-search-trigger" onclick="openCoupangModal()">
+                            <i class="fas fa-search"></i> 쿠팡에서 매입가 검색
+                        </button>
                     </div>
                     <div class="form-group">
                         <label for="currency" data-i18n="f.currency">판매 타겟 통화 선택
@@ -474,5 +477,106 @@
     });
     </script>
     <div class="toast" id="toast"></div>
+
+    <!-- ===== Coupang Search Modal ===== -->
+    <div id="coupangSearchModal" class="cpq-modal-overlay" style="display:none;" onclick="handleCpqOverlayClick(event)">
+        <div class="cpq-modal" role="dialog" aria-modal="true" aria-label="쿠팡 상품 검색">
+            <div class="cpq-modal-header">
+                <div class="cpq-modal-title">
+                    <span class="cpq-logo">🛍</span>
+                    <div>
+                        <h3>쿠팡에서 매입가 검색</h3>
+                        <p>상품을 선택하면 매입가가 자동으로 입력됩니다</p>
+                    </div>
+                </div>
+                <button class="cpq-close" onclick="closeCoupangModal()" aria-label="닫기"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cpq-search-bar">
+                <input type="text" id="cpqSearchInput" placeholder="상품명을 입력하세요..." autocomplete="off" onkeydown="if(event.key==='Enter')searchCoupang()">
+                <button onclick="searchCoupang()" id="cpqSearchBtn"><i class="fas fa-search"></i> 검색</button>
+            </div>
+            <div id="cpqResults" class="cpq-results">
+                <div class="cpq-empty"><i class="fas fa-search" style="font-size:28px;margin-bottom:10px;display:block;opacity:0.3;"></i>위에서 상품명을 검색해보세요</div>
+            </div>
+            <p class="cpq-disclosure">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+        </div>
+    </div>
+    <script>
+    // ===== Coupang Search Modal =====
+    function openCoupangModal() {
+        const modal = document.getElementById('coupangSearchModal');
+        modal.style.display = 'flex';
+        const input = document.getElementById('cpqSearchInput');
+        const productName = (document.getElementById('productName').value || '').trim();
+        if (productName) {
+            input.value = productName;
+            searchCoupang();
+        } else {
+            input.value = '';
+            input.focus();
+        }
+    }
+    function closeCoupangModal() {
+        document.getElementById('coupangSearchModal').style.display = 'none';
+    }
+    function handleCpqOverlayClick(e) {
+        if (e.target === document.getElementById('coupangSearchModal')) closeCoupangModal();
+    }
+    async function searchCoupang() {
+        const input = document.getElementById('cpqSearchInput');
+        const q = input.value.trim();
+        if (!q) { input.focus(); return; }
+        const resultsEl = document.getElementById('cpqResults');
+        const btn = document.getElementById('cpqSearchBtn');
+        resultsEl.innerHTML = '<div class="cpq-loading"><i class="fas fa-spinner"></i>검색 중...</div>';
+        btn.disabled = true;
+        try {
+            const res = await fetch(`/api/coupang/search?q=${encodeURIComponent(q)}&limit=10`);
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || '검색 실패');
+            const products = (data.data && data.data.productData) || [];
+            if (!products.length) {
+                resultsEl.innerHTML = '<div class="cpq-empty">검색 결과가 없습니다.<br>다른 키워드로 시도해보세요.</div>';
+            } else {
+                resultsEl.innerHTML = products.map(p => {
+                    const price = p.productPrice ? parseInt(p.productPrice).toLocaleString() : '가격 없음';
+                    const img = p.productImage || p.thumbnailImage || '';
+                    const name = p.productName || p.title || '이름 없음';
+                    const rawPrice = p.productPrice ? parseInt(p.productPrice) : 0;
+                    return `<div class="cpq-product" onclick="selectCoupangProduct(${rawPrice}, ${JSON.stringify(name).replace(/"/g, '&quot;')})">
+                        <img src="${img}" alt="${name}" onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'56\\' height=\\'56\\'><rect fill=\\'%23f3f4f6\\' width=\\'56\\' height=\\'56\\'/></svg>'">
+                        <div class="cpq-product-info">
+                            <div class="cpq-product-name">${name}</div>
+                            <div class="cpq-product-price">₩${price}</div>
+                        </div>
+                        <button class="cpq-product-btn" type="button">선택</button>
+                    </div>`;
+                }).join('');
+            }
+        } catch (err) {
+            resultsEl.innerHTML = `<div class="cpq-error"><i class="fas fa-exclamation-circle"></i><br>${err.message || '오류가 발생했습니다.'}</div>`;
+        } finally {
+            btn.disabled = false;
+        }
+    }
+    function selectCoupangProduct(price, name) {
+        if (price > 0) {
+            document.getElementById('purchasePrice').value = price;
+        }
+        if (name && !document.getElementById('productName').value.trim()) {
+            document.getElementById('productName').value = name;
+        }
+        closeCoupangModal();
+        showToast('매입가가 입력되었습니다! 🛍');
+        // Trigger recalc if already calculated
+        if (document.getElementById('netProfit').textContent !== '0') {
+            document.getElementById('calculateBtn').click();
+        }
+    }
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeCoupangModal();
+    });
+    </script>
 </body>
 </html>

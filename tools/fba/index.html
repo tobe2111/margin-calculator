@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0066FF">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LFJX1XVFNZ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LFJX1XVFNZ');</script>
+    <title>아마존 FBA 수수료 계산기 | 풀필먼트 비용 자동 계산 | 유어팀</title>
+    <meta name="description" content="아마존 FBA 수수료 계산기. 상품 크기·무게·카테고리 입력으로 풀필먼트 수수료, 추천 수수료, 보관료를 자동 계산. 한국 셀러 전용 FBA 비용 분석.">
+    <meta name="keywords" content="아마존 FBA 수수료, FBA 계산기, amazon fba fee calculator, 아마존 수수료 계산, 풀필먼트 수수료">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://margin.ur-team.com/tools/fba/">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="manifest" href="/manifest.json">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1598352332166062" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/shared-nav.css">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+        body{font-family:'Noto Sans KR',sans-serif;background:var(--bg,#f9fafb);color:var(--text,#1a202c);line-height:1.6;}
+        a{color:#0066FF;}
+        .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:16px;}
+        .form-group label{display:block;font-size:13px;font-weight:600;color:var(--text,#374151);margin-bottom:6px;}
+        .form-group select,.form-group input{width:100%;border:1.5px solid var(--border,#d1d5db);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;background:var(--input-bg,#fff);color:var(--text,#1a202c);outline:none;}
+        .form-group select:focus,.form-group input:focus{border-color:#0066FF;}
+        .input-row{display:flex;gap:8px;}
+        .input-row input{flex:1;}
+        .input-row .unit{display:flex;align-items:center;padding:0 12px;background:var(--bg,#f3f4f6);border:1.5px solid var(--border,#d1d5db);border-radius:8px;font-size:13px;color:var(--text-muted,#6b7280);white-space:nowrap;}
+        .tool-card{background:var(--bg-card,#fff);border-radius:16px;border:1px solid var(--border,#e5e7eb);padding:28px;margin-bottom:24px;}
+        .tool-card h2{font-size:18px;font-weight:700;margin-bottom:6px;color:var(--text,#111827);}
+        .tool-card .desc{font-size:13px;color:var(--text-muted,#6b7280);margin-bottom:20px;}
+        .calc-btn{display:inline-flex;align-items:center;gap:8px;background:#0066FF;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}
+        .calc-btn:hover{background:#0047cc;}
+        .result-box{background:var(--bg-card2,#f0f7ff);border:1px solid #bfdbfe;border-radius:12px;padding:20px;margin-top:20px;display:none;}
+        .result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
+        .result-item{background:var(--bg-card,#fff);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border,#e5e7eb);}
+        .result-label{font-size:12px;color:var(--text-muted,#6b7280);margin-bottom:4px;}
+        .result-value{font-size:18px;font-weight:800;color:#0066FF;}
+        .result-value.warn{color:#dc2626;}
+        .fee-breakdown{background:var(--bg-card,#fff);border-radius:10px;border:1px solid var(--border,#e5e7eb);overflow:hidden;}
+        .fee-row{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border,#f3f4f6);font-size:14px;}
+        .fee-row:last-child{border-bottom:none;font-weight:700;background:var(--bg,#f8faff);}
+        .fee-row span:last-child{color:#0066FF;font-weight:600;}
+        .tier-info{background:#eff6ff;border-radius:10px;padding:14px 16px;margin-top:16px;font-size:13px;color:#1e40af;}
+        .tier-info strong{display:block;margin-bottom:4px;}
+        @media(max-width:600px){.form-row{grid-template-columns:1fr 1fr;}.tool-card{padding:20px 16px;}}
+    </style>
+</head>
+<body>
+<header class="sub-header">
+    <h1><i class="fab fa-amazon"></i> 아마존 FBA 수수료 계산기</h1>
+    <p>상품 크기·무게·카테고리로 FBA 풀필먼트 수수료를 자동 계산합니다</p>
+</header>
+<main class="subpage-main">
+    <div style="margin-top:24px;text-align:center;">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1598352332166062" data-ad-slot="6633334217" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+    </div>
+
+    <section class="subpage-section">
+        <div class="tool-card">
+            <h2><i class="fas fa-box" style="color:#0066FF;margin-right:8px;"></i> 상품 정보 입력</h2>
+            <p class="desc">아마존 미국(US) 마켓 기준 2024년 수수료 테이블을 적용합니다.</p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>카테고리</label>
+                    <select id="fbaCategory">
+                        <option value="15">일반 (15%)</option>
+                        <option value="8">전자제품 (8%)</option>
+                        <option value="8">뷰티/헬스 (8%)</option>
+                        <option value="17">의류/신발 (17%)</option>
+                        <option value="15">홈/주방 (15%)</option>
+                        <option value="15">스포츠/아웃도어 (15%)</option>
+                        <option value="15">완구/게임 (15%)</option>
+                        <option value="15">도서 (15%)</option>
+                        <option value="6">컴퓨터 (6%)</option>
+                        <option value="45">주얼리 (20%~45%)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>판매가 (USD)</label>
+                    <div class="input-row">
+                        <input type="number" id="fbaPrice" placeholder="29.99" min="0" step="0.01">
+                        <span class="unit">$</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>무게 (그램)</label>
+                    <div class="input-row">
+                        <input type="number" id="fbaWeight" placeholder="200" min="1">
+                        <span class="unit">g</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>가로 (cm)</label>
+                    <div class="input-row"><input type="number" id="fbaL" placeholder="20" min="0"><span class="unit">cm</span></div>
+                </div>
+                <div class="form-group">
+                    <label>세로 (cm)</label>
+                    <div class="input-row"><input type="number" id="fbaW" placeholder="15" min="0"><span class="unit">cm</span></div>
+                </div>
+                <div class="form-group">
+                    <label>높이 (cm)</label>
+                    <div class="input-row"><input type="number" id="fbaH" placeholder="5" min="0"><span class="unit">cm</span></div>
+                </div>
+                <div class="form-group">
+                    <label>보관 기간 (개월)</label>
+                    <div class="input-row"><input type="number" id="fbaStorage" placeholder="1" min="0" max="12" value="1"><span class="unit">개월</span></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>매입가 (원)</label>
+                    <div class="input-row"><input type="number" id="fbaPurchase" placeholder="15000" min="0"><span class="unit">₩</span></div>
+                </div>
+                <div class="form-group">
+                    <label>환율 (원/달러)</label>
+                    <div class="input-row"><input type="number" id="fbaRate" placeholder="1350" min="1" value="1350"><span class="unit">원</span></div>
+                </div>
+            </div>
+            <button class="calc-btn" onclick="calcFBA()"><i class="fas fa-calculator"></i> FBA 수수료 계산</button>
+            <div class="result-box" id="fbaResult">
+                <div class="result-grid">
+                    <div class="result-item"><div class="result-label">사이즈 티어</div><div class="result-value" id="fbaTier" style="font-size:14px;"></div></div>
+                    <div class="result-item"><div class="result-label">추천 수수료</div><div class="result-value" id="fbaReferral"></div></div>
+                    <div class="result-item"><div class="result-label">풀필먼트 수수료</div><div class="result-value" id="fbaFulfillment"></div></div>
+                    <div class="result-item"><div class="result-label">보관료 (월)</div><div class="result-value" id="fbaStorage2"></div></div>
+                    <div class="result-item"><div class="result-label">총 FBA 비용</div><div class="result-value warn" id="fbaTotalFee"></div></div>
+                    <div class="result-item"><div class="result-label">예상 순이익</div><div class="result-value" id="fbaNetProfit"></div></div>
+                </div>
+                <h3 style="font-size:14px;font-weight:700;margin:16px 0 8px;color:var(--text,#111827);">비용 상세</h3>
+                <div class="fee-breakdown" id="fbaBreakdown"></div>
+                <div class="tier-info" id="fbaTierInfo"></div>
+            </div>
+        </div>
+        <div style="background:var(--bg-card,#fff);border-radius:14px;border:1px solid var(--border,#e5e7eb);padding:22px;margin-top:16px;">
+            <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--text,#111827);"><i class="fas fa-info-circle" style="color:#0066FF;margin-right:6px;"></i>FBA 사이즈 티어 기준 (미국)</h3>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:500px;">
+                    <thead><tr style="background:#0066FF;color:#fff;"><th style="padding:8px 12px;text-align:left;">티어</th><th style="padding:8px 12px;">최대 무게</th><th style="padding:8px 12px;">최대 크기</th><th style="padding:8px 12px;">수수료 범위</th></tr></thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid var(--border,#f3f4f6);"><td style="padding:8px 12px;">Small Standard</td><td style="padding:8px 12px;text-align:center;">450g</td><td style="padding:8px 12px;text-align:center;">33×23×4 cm</td><td style="padding:8px 12px;text-align:center;">$3.22–$3.77</td></tr>
+                        <tr style="border-bottom:1px solid var(--border,#f3f4f6);"><td style="padding:8px 12px;">Large Standard</td><td style="padding:8px 12px;text-align:center;">12 kg</td><td style="padding:8px 12px;text-align:center;">46×36×20 cm</td><td style="padding:8px 12px;text-align:center;">$3.86–$7.17+</td></tr>
+                        <tr style="border-bottom:1px solid var(--border,#f3f4f6);"><td style="padding:8px 12px;">Small Oversize</td><td style="padding:8px 12px;text-align:center;">32 kg</td><td style="padding:8px 12px;text-align:center;">최장변 76 cm</td><td style="padding:8px 12px;text-align:center;">$9.73+</td></tr>
+                        <tr><td style="padding:8px 12px;">Medium Oversize</td><td style="padding:8px 12px;text-align:center;">68 kg</td><td style="padding:8px 12px;text-align:center;">최장변 107 cm</td><td style="padding:8px 12px;text-align:center;">$19.05+</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <div style="text-align:center;margin-top:32px;">
+        <a href="/tools/" class="back-to-calc"><i class="fas fa-arrow-left"></i> 도구 모음으로</a>
+        <a href="/" class="back-to-calc" style="margin-left:10px;background:#059669;"><i class="fas fa-calculator"></i> 마진 계산기</a>
+    </div>
+</main>
+<footer class="sub-footer">
+    <div class="container">
+        <p>&copy; <span id="cy">2024</span> <strong>유어팀 글로벌 마진 계산기</strong></p>
+        <div class="footer-links"><a href="/">마진 계산기</a><a href="/platforms/">플랫폼 비교</a><a href="/tools/">도구 모음</a><a href="/market/">시장 정보</a><a href="/guide/">셀러 가이드</a></div>
+        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </div>
+</footer>
+<script src="/js/shared-nav.js"></script>
+<script>
+document.getElementById('cy').textContent = new Date().getFullYear();
+
+const FBA_TIERS = [
+    { name: 'Small Standard', maxWeightG: 450, maxL: 33, maxW: 23, maxH: 4, fees: [
+        {maxG:113,fee:3.22},{maxG:227,fee:3.40},{maxG:340,fee:3.58},{maxG:450,fee:3.77}
+    ]},
+    { name: 'Large Standard', maxWeightG: 12000, maxL: 46, maxW: 36, maxH: 20, fees: [
+        {maxG:113,fee:3.86},{maxG:227,fee:4.08},{maxG:340,fee:4.24},{maxG:454,fee:4.75},
+        {maxG:680,fee:5.40},{maxG:907,fee:5.69},{maxG:1134,fee:6.10},{maxG:1361,fee:6.39},
+        {maxG:1814,fee:6.96},{maxG:2268,fee:7.17},{maxG:12000,fee:7.17,perKg:0.16}
+    ]},
+    { name: 'Small Oversize', maxWeightG: 32000, fees:[{maxG:32000,fee:9.73,perKg:0.93}]},
+    { name: 'Medium Oversize', maxWeightG: 68000, fees:[{maxG:68000,fee:19.05,perKg:0.93}]},
+    { name: 'Large Oversize', maxWeightG: 68001, fees:[{maxG:999999,fee:89.98,perKg:1.83}]},
+];
+
+function calcFBA() {
+    const price = parseFloat(document.getElementById('fbaPrice').value) || 0;
+    const weightG = parseFloat(document.getElementById('fbaWeight').value) || 0;
+    const L = parseFloat(document.getElementById('fbaL').value) || 0;
+    const W = parseFloat(document.getElementById('fbaW').value) || 0;
+    const H = parseFloat(document.getElementById('fbaH').value) || 0;
+    const storageMonths = parseFloat(document.getElementById('fbaStorage').value) || 1;
+    const catRate = parseFloat(document.getElementById('fbaCategory').value) || 15;
+    const purchase = parseFloat(document.getElementById('fbaPurchase').value) || 0;
+    const rate = parseFloat(document.getElementById('fbaRate').value) || 1350;
+
+    if (!price || !weightG) { alert('판매가와 무게를 입력해주세요.'); return; }
+
+    // Determine size tier
+    const dims = [L, W, H].sort((a,b) => b-a);
+    let tier = FBA_TIERS[4]; // default large oversize
+    if (weightG <= 450 && dims[0] <= 33 && dims[1] <= 23 && dims[2] <= 4) tier = FBA_TIERS[0];
+    else if (weightG <= 12000 && dims[0] <= 46 && dims[1] <= 36 && dims[2] <= 20) tier = FBA_TIERS[1];
+    else if (weightG <= 32000) tier = FBA_TIERS[2];
+    else if (weightG <= 68000) tier = FBA_TIERS[3];
+
+    // Fulfillment fee
+    let fulfillFee = 0;
+    for (const f of tier.fees) {
+        if (weightG <= f.maxG) {
+            fulfillFee = f.fee;
+            if (f.perKg && weightG > 1000) fulfillFee += ((weightG - 1000) / 1000) * f.perKg;
+            break;
+        }
+    }
+
+    // Referral fee
+    const referralFee = price * (catRate / 100);
+
+    // Storage fee: ~$0.87/cubic foot/month (Jan-Sep), $2.40 Oct-Dec
+    const cubicFt = (L * W * H) / 28316.8; // cm³ to ft³
+    const storageFeePerMonth = cubicFt * 0.87;
+    const totalStorageFee = storageFeePerMonth * storageMonths;
+
+    const totalFBA = referralFee + fulfillFee + totalStorageFee;
+    const revenueKRW = price * rate;
+    const totalFBAKRW = totalFBA * rate;
+    const netProfit = revenueKRW - purchase - totalFBAKRW;
+    const marginRate = revenueKRW > 0 ? (netProfit / revenueKRW * 100) : 0;
+
+    document.getElementById('fbaTier').textContent = tier.name;
+    document.getElementById('fbaReferral').textContent = `$${referralFee.toFixed(2)}`;
+    document.getElementById('fbaFulfillment').textContent = `$${fulfillFee.toFixed(2)}`;
+    document.getElementById('fbaStorage2').textContent = `$${storageFeePerMonth.toFixed(2)}`;
+    document.getElementById('fbaTotalFee').textContent = `$${totalFBA.toFixed(2)}`;
+    const profitEl = document.getElementById('fbaNetProfit');
+    profitEl.textContent = `₩${Math.round(netProfit).toLocaleString('ko-KR')}`;
+    profitEl.className = 'result-value ' + (netProfit >= 0 ? '' : 'warn');
+
+    document.getElementById('fbaBreakdown').innerHTML = `
+        <div class="fee-row"><span>판매가</span><span>$${price.toFixed(2)} (₩${Math.round(revenueKRW).toLocaleString('ko-KR')})</span></div>
+        <div class="fee-row"><span>추천 수수료 (${catRate}%)</span><span>-$${referralFee.toFixed(2)}</span></div>
+        <div class="fee-row"><span>FBA 풀필먼트 수수료</span><span>-$${fulfillFee.toFixed(2)}</span></div>
+        <div class="fee-row"><span>보관료 (${storageMonths}개월)</span><span>-$${totalStorageFee.toFixed(2)}</span></div>
+        ${purchase > 0 ? `<div class="fee-row"><span>매입가</span><span>-₩${purchase.toLocaleString('ko-KR')}</span></div>` : ''}
+        <div class="fee-row"><span>순이익</span><span style="color:${netProfit>=0?'#059669':'#dc2626'}">₩${Math.round(netProfit).toLocaleString('ko-KR')} (마진율 ${marginRate.toFixed(1)}%)</span></div>
+    `;
+    document.getElementById('fbaTierInfo').innerHTML = `<strong>📦 ${tier.name} 티어 적용</strong>상품 무게 ${weightG}g / 크기 ${L}×${W}×${H}cm 기준으로 분류됩니다.`;
+    document.getElementById('fbaResult').style.display = 'block';
+    document.getElementById('fbaResult').scrollIntoView({behavior:'smooth',block:'nearest'});
+    if(typeof gtag!=='undefined') gtag('event','fba_calculate',{event_category:'tools'});
+}
+</script>
+</body>
+</html>

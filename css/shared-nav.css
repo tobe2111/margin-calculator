@@ -1,3 +1,78 @@
+/* ===== Dark Mode Variables ===== */
+:root {
+    --bg: #f9fafb;
+    --bg-card: #ffffff;
+    --bg-card2: #f8faff;
+    --text: #1a202c;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --nav-bg: #ffffff;
+    --nav-border: #e5e7eb;
+    --header-bg: linear-gradient(135deg, #0066FF 0%, #0047cc 100%);
+    --input-bg: #ffffff;
+    --shadow: rgba(0,0,0,0.06);
+}
+
+[data-theme="dark"] {
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --bg-card2: #1a2744;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --nav-bg: #1e293b;
+    --nav-border: #334155;
+    --header-bg: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
+    --input-bg: #1e293b;
+    --shadow: rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+[data-theme="dark"] .tool-card,
+[data-theme="dark"] .platform-card,
+[data-theme="dark"] .qs-card,
+[data-theme="dark"] .step-card,
+[data-theme="dark"] .checklist,
+[data-theme="dark"] .faq-item,
+[data-theme="dark"] .result-item,
+[data-theme="dark"] .compare-table-wrap,
+[data-theme="dark"] .comp-table-wrap,
+[data-theme="dark"] .nav-teaser-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+
+[data-theme="dark"] .compare-table th,
+[data-theme="dark"] .comp-table th { background: #1d4ed8; }
+[data-theme="dark"] .compare-table td,
+[data-theme="dark"] .comp-table td { color: var(--text); border-color: var(--border); }
+[data-theme="dark"] .compare-table tr:hover td,
+[data-theme="dark"] .comp-table tr:hover td { background: #1a2744; }
+
+[data-theme="dark"] .tip-box { background: #1a2744; border-color: #3b82f6; }
+[data-theme="dark"] .warn-box { background: #2d1f00; border-color: #f59e0b; }
+[data-theme="dark"] .faq-question { color: var(--text); }
+[data-theme="dark"] .faq-answer { color: var(--text-muted); border-color: var(--border); }
+[data-theme="dark"] .faq-item.open .faq-question { background: var(--bg); }
+[data-theme="dark"] .faq-question:hover { background: #1a2744; }
+
+[data-theme="dark"] .input-with-unit { background: var(--input-bg); border-color: var(--border); }
+[data-theme="dark"] .input-with-unit input { background: var(--input-bg); color: var(--text); }
+[data-theme="dark"] .input-with-unit .unit { background: #0f172a; color: var(--text-muted); border-color: var(--border); }
+[data-theme="dark"] select { background: var(--input-bg); color: var(--text); border-color: var(--border); }
+
+[data-theme="dark"] .sub-header { background: var(--header-bg); }
+[data-theme="dark"] .sub-footer { background: #0a0f1e; }
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 { color: var(--text); }
+[data-theme="dark"] p { color: var(--text-muted); }
+[data-theme="dark"] strong { color: var(--text); }
+[data-theme="dark"] .subpage-section h2 { color: var(--text); border-color: #1d4ed8; }
+
 /* ===== Shared Navigation Bar ===== */
 .site-nav {
     background: #fff;
@@ -64,6 +139,45 @@
     color: #0066FF;
     font-weight: 700;
 }
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.nav-dark-toggle {
+    background: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #374151;
+    cursor: pointer;
+    padding: 6px 9px;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s;
+}
+
+.nav-dark-toggle:hover {
+    background: #f3f4f6;
+    color: #0066FF;
+}
+
+[data-theme="dark"] .nav-dark-toggle {
+    border-color: #334155;
+    color: #e2e8f0;
+    background: #1e293b;
+}
+[data-theme="dark"] .nav-dark-toggle:hover { background: #0f172a; }
+[data-theme="dark"] .site-nav {
+    background: #1e293b;
+    border-color: #334155;
+}
+[data-theme="dark"] .nav-link { color: #cbd5e1; }
+[data-theme="dark"] .nav-link:hover { background: #0f172a; color: #60a5fa; }
+[data-theme="dark"] .nav-link.active { background: #1e3a8a; color: #93c5fd; }
+[data-theme="dark"] .nav-brand { color: #60a5fa; }
 
 .nav-toggle {
     display: none;

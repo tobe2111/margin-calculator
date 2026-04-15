@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0066FF">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LFJX1XVFNZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LFJX1XVFNZ');
+    </script>
+    <title>손익분기 수량 계산기 | 해외 셀러 BEP 계산 | 유어팀</title>
+    <meta name="description" content="손익분기점(BEP) 수량 계산기. 고정비·변동비·판매가를 입력하면 몇 개를 팔아야 손익분기가 되는지 즉시 계산. 해외 셀러 필수 도구.">
+    <meta name="keywords" content="손익분기점 계산기, BEP 계산, 손익분기 수량, 해외판매 손익분기, 셀러 손익분기">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://margin.ur-team.com/tools/breakeven/">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="manifest" href="/manifest.json">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1598352332166062" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/shared-nav.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg, #f9fafb); color: var(--text, #1a202c); line-height: 1.6; }
+        a { color: inherit; text-decoration: none; }
+        .tool-card { background: var(--bg-card, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 16px; padding: 28px; margin-bottom: 24px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text, #374151); margin-bottom: 6px; }
+        .form-group small { display: block; font-size: 11px; color: var(--text-muted, #9ca3af); margin-top: 4px; }
+        .input-with-unit { display: flex; align-items: center; border: 1.5px solid var(--border, #d1d5db); border-radius: 8px; overflow: hidden; background: var(--input-bg, #fff); }
+        .input-with-unit input { flex: 1; border: none; outline: none; padding: 10px 12px; font-size: 15px; font-family: inherit; min-width: 0; background: transparent; color: var(--text, #1a202c); }
+        .input-with-unit .unit { padding: 0 12px; background: var(--bg, #f3f4f6); color: var(--text-muted, #6b7280); font-size: 13px; white-space: nowrap; align-self: stretch; display: flex; align-items: center; border-left: 1px solid var(--border, #e5e7eb); }
+        .input-with-unit:focus-within { border-color: #0066FF; }
+        .calc-btn { background: linear-gradient(135deg, #0066FF, #0047cc); color: #fff; border: none; border-radius: 10px; padding: 14px 32px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 8px; font-family: inherit; transition: opacity 0.15s; }
+        .calc-btn:hover { opacity: 0.9; }
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 20px; }
+        .result-box { background: var(--bg, #f9fafb); border-radius: 12px; padding: 18px; text-align: center; border: 2px solid transparent; }
+        .result-box.highlight { background: #eff6ff; border-color: #0066FF; }
+        .result-box .r-label { font-size: 12px; color: var(--text-muted, #6b7280); margin-bottom: 6px; }
+        .result-box .r-value { font-size: 24px; font-weight: 800; color: var(--text, #111827); }
+        .result-box.highlight .r-value { color: #0066FF; }
+        .result-box .r-unit { font-size: 13px; font-weight: 600; color: var(--text-muted, #6b7280); margin-top: 2px; }
+        .bep-visual { margin-top: 20px; }
+        .bep-bar-wrap { background: var(--border, #e5e7eb); border-radius: 8px; height: 20px; overflow: hidden; margin-top: 8px; }
+        .bep-bar { height: 100%; background: linear-gradient(90deg, #0066FF, #0047cc); border-radius: 8px; transition: width 0.5s ease; min-width: 4px; }
+        .bep-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted, #9ca3af); margin-top: 4px; }
+        .scenario-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+        .scenario-table th { background: #0066FF; color: #fff; padding: 10px 12px; text-align: right; }
+        .scenario-table th:first-child { text-align: left; }
+        .scenario-table td { padding: 9px 12px; border-bottom: 1px solid var(--border, #f3f4f6); text-align: right; color: var(--text, #374151); }
+        .scenario-table td:first-child { text-align: left; font-weight: 600; }
+        .scenario-table tr.bep-row td { background: #eff6ff; font-weight: 700; color: #0066FF; }
+        .tip-box { background: #eff6ff; border-left: 4px solid #0066FF; border-radius: 0 8px 8px 0; padding: 14px 16px; font-size: 13px; color: #1e40af; }
+        .tip-box strong { display: block; margin-bottom: 4px; }
+        [data-theme="dark"] .result-box { background: #1a2744; }
+        [data-theme="dark"] .result-box.highlight { background: #1e3a8a; border-color: #3b82f6; }
+        [data-theme="dark"] .result-box .r-value { color: #e2e8f0; }
+        [data-theme="dark"] .scenario-table th { background: #1d4ed8; }
+        [data-theme="dark"] .scenario-table td { color: var(--text); border-color: var(--border); }
+        [data-theme="dark"] .scenario-table tr.bep-row td { background: #1e3a8a; }
+    </style>
+</head>
+<body>
+    <header class="sub-header">
+        <h1><i class="fas fa-balance-scale"></i> 손익분기 수량 계산기</h1>
+        <p>몇 개를 팔아야 본전인지 즉시 계산 — 해외 셀러 필수 BEP 분석</p>
+    </header>
+
+    <main class="subpage-main">
+        <div class="tool-card">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:40px;height:40px;border-radius:10px;background:#eff6ff;display:flex;align-items:center;justify-content:center;color:#0066FF;font-size:18px;flex-shrink:0;"><i class="fas fa-balance-scale"></i></div>
+                <div>
+                    <h2 style="font-size:17px;font-weight:700;color:var(--text,#111827);">손익분기점(BEP) 수량 계산</h2>
+                    <p style="font-size:12px;color:var(--text-muted,#6b7280);">고정비 ÷ (판매가 - 단위 변동비) = 손익분기 수량</p>
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-top:20px;">
+                <div class="form-group">
+                    <label><i class="fas fa-lock" style="color:#6b7280;"></i> 월 고정비 합계</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="fixedCost" placeholder="0" min="0" step="1000">
+                        <span class="unit">원</span>
+                    </div>
+                    <small>임대료, 인건비, 구독 서비스 등 판매량과 무관한 비용</small>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-box" style="color:#6b7280;"></i> 단위당 변동비</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="varCost" placeholder="0" min="0" step="100">
+                        <span class="unit">원</span>
+                    </div>
+                    <small>매입가 + 포장재 + 배송비 + 수수료 등 1개당 비용</small>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tag" style="color:#6b7280;"></i> 단위당 판매가 (원화)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="sellPrice" placeholder="0" min="0" step="100">
+                        <span class="unit">원</span>
+                    </div>
+                    <small>환율 적용 후 원화 환산 판매가</small>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-alt" style="color:#6b7280;"></i> 계산 기간</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="calcPeriod" value="1" min="1" max="12" step="1">
+                        <span class="unit">개월</span>
+                    </div>
+                    <small>몇 개월치 BEP를 계산할지 선택</small>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-chart-line" style="color:#6b7280;"></i> 목표 이익</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="targetProfit" placeholder="0" min="0" step="10000">
+                        <span class="unit">원</span>
+                    </div>
+                    <small>BEP 이후 추가로 달성할 목표 이익 (선택)</small>
+                </div>
+            </div>
+            <button class="calc-btn" onclick="calcBEP()"><i class="fas fa-calculator"></i> 손익분기 계산하기</button>
+        </div>
+
+        <div id="resultSection" style="display:none;">
+            <div class="tool-card">
+                <h3 style="font-size:16px;font-weight:700;color:var(--text,#111827);margin-bottom:16px;"><i class="fas fa-chart-line" style="color:#0066FF;"></i> 계산 결과</h3>
+                <div class="result-grid">
+                    <div class="result-box highlight">
+                        <div class="r-label">손익분기 수량</div>
+                        <div class="r-value" id="bepQty">0</div>
+                        <div class="r-unit">개</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="r-label">단위 공헌이익</div>
+                        <div class="r-value" id="contriMargin">0</div>
+                        <div class="r-unit">원/개</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="r-label">공헌이익률</div>
+                        <div class="r-value" id="contriRate">0</div>
+                        <div class="r-unit">%</div>
+                    </div>
+                    <div class="result-box" id="targetQtyBox" style="display:none;">
+                        <div class="r-label">목표이익 달성 수량</div>
+                        <div class="r-value" id="targetQty">0</div>
+                        <div class="r-unit">개</div>
+                    </div>
+                </div>
+
+                <div class="bep-visual" id="bepVisual">
+                    <p style="font-size:13px;font-weight:600;color:var(--text,#374151);margin-bottom:6px;">목표 대비 BEP 수량 비율</p>
+                    <div class="bep-bar-wrap"><div class="bep-bar" id="bepBar" style="width:0%"></div></div>
+                    <div class="bep-bar-label"><span id="bepBarLeft">BEP: 0개</span><span id="bepBarRight">목표: 0개</span></div>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <h3 style="font-size:16px;font-weight:700;color:var(--text,#111827);margin-bottom:12px;"><i class="fas fa-table" style="color:#0066FF;"></i> 수량별 손익 시나리오</h3>
+                <div style="overflow-x:auto;">
+                    <table class="scenario-table" id="scenarioTable">
+                        <thead><tr><th>판매 수량</th><th>매출</th><th>변동비</th><th>고정비</th><th>순이익</th></tr></thead>
+                        <tbody id="scenarioBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="tool-card">
+            <div class="tip-box">
+                <strong><i class="fas fa-lightbulb"></i> 손익분기점 활용 팁</strong>
+                BEP = 고정비 ÷ 공헌이익 (판매가 - 단위변동비)<br><br>
+                <strong>공헌이익률이 낮을수록</strong> 더 많이 팔아야 BEP에 도달합니다. 수수료·배송비 등 변동비를 줄이거나 판매가를 올리는 것이 마진 개선의 핵심입니다.
+            </div>
+        </div>
+
+        <div style="margin-top:16px;text-align:center;">
+            <a href="/tools/" class="back-to-calc" style="background:#6b7280;margin-right:12px;"><i class="fas fa-arrow-left"></i> 도구 목록</a>
+            <a href="/" class="back-to-calc"><i class="fas fa-calculator"></i> 마진 계산기</a>
+        </div>
+    </main>
+
+    <footer class="sub-footer">
+        <div class="footer-links">
+            <a href="/">마진 계산기</a>
+            <a href="/platforms/">플랫폼 비교</a>
+            <a href="/tools/">도구 모음</a>
+            <a href="/market/">시장 정보</a>
+            <a href="/guide/">셀러 가이드</a>
+        </div>
+        <p>&copy; 2025 유어팀 글로벌 마진 계산기</p>
+        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </footer>
+    <script src="/js/shared-nav.js"></script>
+    <script>
+    function calcBEP() {
+        const fixedCost = parseFloat(document.getElementById('fixedCost').value) || 0;
+        const varCost = parseFloat(document.getElementById('varCost').value) || 0;
+        const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
+        const period = parseInt(document.getElementById('calcPeriod').value) || 1;
+        const targetProfit = parseFloat(document.getElementById('targetProfit').value) || 0;
+
+        if (sellPrice <= varCost) {
+            alert('판매가가 변동비보다 높아야 합니다.');
+            return;
+        }
+        if (sellPrice <= 0) {
+            alert('판매가를 입력해주세요.');
+            return;
+        }
+
+        const totalFixed = fixedCost * period;
+        const contriMargin = sellPrice - varCost;
+        const contriRate = (contriMargin / sellPrice) * 100;
+        const bepQty = Math.ceil(totalFixed / contriMargin);
+        const targetQty = targetProfit > 0 ? Math.ceil((totalFixed + targetProfit) / contriMargin) : 0;
+
+        document.getElementById('bepQty').textContent = bepQty.toLocaleString();
+        document.getElementById('contriMargin').textContent = contriMargin.toLocaleString();
+        document.getElementById('contriRate').textContent = contriRate.toFixed(1);
+
+        if (targetProfit > 0 && targetQty > 0) {
+            document.getElementById('targetQty').textContent = targetQty.toLocaleString();
+            document.getElementById('targetQtyBox').style.display = 'block';
+            const pct = Math.min((bepQty / targetQty) * 100, 100);
+            document.getElementById('bepBar').style.width = pct + '%';
+            document.getElementById('bepBarLeft').textContent = 'BEP: ' + bepQty.toLocaleString() + '개';
+            document.getElementById('bepBarRight').textContent = '목표: ' + targetQty.toLocaleString() + '개';
+        } else {
+            document.getElementById('targetQtyBox').style.display = 'none';
+            document.getElementById('bepBar').style.width = '50%';
+            document.getElementById('bepBarLeft').textContent = 'BEP: ' + bepQty.toLocaleString() + '개';
+            document.getElementById('bepBarRight').textContent = '2× BEP: ' + (bepQty * 2).toLocaleString() + '개';
+        }
+
+        // Scenario table
+        const scenarios = [];
+        const base = bepQty;
+        const steps = [
+            Math.max(1, Math.floor(base * 0.25)),
+            Math.max(1, Math.floor(base * 0.5)),
+            Math.max(1, Math.floor(base * 0.75)),
+            base,
+            Math.ceil(base * 1.25),
+            Math.ceil(base * 1.5),
+            Math.ceil(base * 2)
+        ];
+        const uniqueSteps = [...new Set(steps)];
+        let tbody = '';
+        uniqueSteps.forEach(qty => {
+            const revenue = qty * sellPrice;
+            const varTotal = qty * varCost;
+            const profit = revenue - varTotal - totalFixed;
+            const isBep = qty === base;
+            const cls = isBep ? ' class="bep-row"' : '';
+            tbody += `<tr${cls}>
+                <td>${qty.toLocaleString()}개${isBep ? ' 🎯 BEP' : ''}</td>
+                <td>${(revenue).toLocaleString()}원</td>
+                <td>${varTotal.toLocaleString()}원</td>
+                <td>${totalFixed.toLocaleString()}원</td>
+                <td style="color:${profit >= 0 ? '#059669' : '#ef4444'};font-weight:700;">${profit >= 0 ? '+' : ''}${profit.toLocaleString()}원</td>
+            </tr>`;
+        });
+        document.getElementById('scenarioBody').innerHTML = tbody;
+        document.getElementById('resultSection').style.display = 'block';
+        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    </script>
+</body>
+</html>

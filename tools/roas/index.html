@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0066FF">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LFJX1XVFNZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LFJX1XVFNZ');
+    </script>
+    <title>ROAS 계산기 | 광고 수익률·목표 ROAS 역산 | 유어팀</title>
+    <meta name="description" content="ROAS(광고비 대비 매출) 계산기. 광고비와 매출을 입력하면 ROAS를 즉시 계산. 목표 ROAS 달성에 필요한 매출·광고비 역산도 가능.">
+    <meta name="keywords" content="ROAS 계산기, 광고 수익률, 광고비 대비 매출, CPA 계산, 해외 광고비 계산">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://margin.ur-team.com/tools/roas/">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="manifest" href="/manifest.json">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1598352332166062" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/shared-nav.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg, #f9fafb); color: var(--text, #1a202c); line-height: 1.6; }
+        a { color: inherit; text-decoration: none; }
+        .tool-card { background: var(--bg-card, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 16px; padding: 28px; margin-bottom: 24px; }
+        .tabs { display: flex; gap: 4px; margin-bottom: 20px; background: var(--bg, #f3f4f6); border-radius: 10px; padding: 4px; }
+        .tab-btn { flex: 1; padding: 9px; border: none; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted, #6b7280); font-family: inherit; transition: all 0.15s; }
+        .tab-btn.active { background: #fff; color: #0066FF; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        [data-theme="dark"] .tabs { background: #0f172a; }
+        [data-theme="dark"] .tab-btn.active { background: #1e293b; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text, #374151); margin-bottom: 6px; }
+        .form-group small { display: block; font-size: 11px; color: var(--text-muted, #9ca3af); margin-top: 4px; }
+        .input-with-unit { display: flex; align-items: center; border: 1.5px solid var(--border, #d1d5db); border-radius: 8px; overflow: hidden; background: var(--input-bg, #fff); }
+        .input-with-unit input { flex: 1; border: none; outline: none; padding: 10px 12px; font-size: 15px; font-family: inherit; min-width: 0; background: transparent; color: var(--text, #1a202c); }
+        .input-with-unit .unit { padding: 0 12px; background: var(--bg, #f3f4f6); color: var(--text-muted, #6b7280); font-size: 13px; white-space: nowrap; align-self: stretch; display: flex; align-items: center; border-left: 1px solid var(--border, #e5e7eb); }
+        .input-with-unit:focus-within { border-color: #0066FF; }
+        .calc-btn { background: linear-gradient(135deg, #0066FF, #0047cc); color: #fff; border: none; border-radius: 10px; padding: 14px 32px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 8px; font-family: inherit; transition: opacity 0.15s; }
+        .calc-btn:hover { opacity: 0.9; }
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
+        .result-box { background: var(--bg, #f9fafb); border-radius: 12px; padding: 18px; text-align: center; border: 2px solid transparent; }
+        .result-box.highlight { border-color: #0066FF; background: #eff6ff; }
+        .result-box.good { border-color: #10b981; background: #ecfdf5; }
+        .result-box.bad { border-color: #ef4444; background: #fef2f2; }
+        .result-box .r-label { font-size: 12px; color: var(--text-muted, #6b7280); margin-bottom: 6px; }
+        .result-box .r-value { font-size: 26px; font-weight: 800; }
+        .result-box.highlight .r-value { color: #0066FF; }
+        .result-box.good .r-value { color: #059669; }
+        .result-box.bad .r-value { color: #dc2626; }
+        .result-box .r-unit { font-size: 13px; color: var(--text-muted, #6b7280); margin-top: 2px; }
+        .roas-gauge { margin-top: 20px; }
+        .gauge-label { font-size: 13px; font-weight: 600; color: var(--text, #374151); margin-bottom: 8px; }
+        .gauge-wrap { position: relative; height: 24px; border-radius: 12px; overflow: hidden; background: linear-gradient(90deg, #ef4444 0%, #f59e0b 33%, #eab308 50%, #22c55e 100%); }
+        .gauge-pointer { position: absolute; top: 0; bottom: 0; width: 3px; background: #111; transition: left 0.5s ease; }
+        .gauge-marks { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted, #9ca3af); margin-top: 4px; }
+        .benchmark-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+        .benchmark-table th { background: #0066FF; color: #fff; padding: 9px 12px; text-align: left; }
+        .benchmark-table td { padding: 9px 12px; border-bottom: 1px solid var(--border, #f3f4f6); color: var(--text, #374151); }
+        .benchmark-table tr:last-child td { border-bottom: none; }
+        .bm-good { color: #059669; font-weight: 700; }
+        .bm-ok { color: #d97706; font-weight: 700; }
+        .bm-bad { color: #dc2626; font-weight: 700; }
+        [data-theme="dark"] .result-box { background: #1a2744; }
+        [data-theme="dark"] .result-box.highlight { background: #1e3a8a; }
+        [data-theme="dark"] .result-box.good { background: #064e3b; }
+        [data-theme="dark"] .result-box.bad { background: #7f1d1d; }
+    </style>
+</head>
+<body>
+    <header class="sub-header">
+        <h1><i class="fas fa-chart-bar"></i> ROAS 계산기</h1>
+        <p>광고 수익률 분석 · 목표 ROAS 역산 · 플랫폼별 기준 비교</p>
+    </header>
+
+    <main class="subpage-main">
+        <div class="tool-card">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('calc')">ROAS 계산</button>
+                <button class="tab-btn" onclick="switchTab('target')">목표 ROAS 역산</button>
+                <button class="tab-btn" onclick="switchTab('bench')">플랫폼 기준</button>
+            </div>
+
+            <!-- Tab 1: ROAS 계산 -->
+            <div class="tab-pane active" id="tabCalc">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-bullhorn" style="color:#6b7280;"></i> 광고비 지출</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="adSpend" placeholder="0" min="0" step="1000">
+                            <span class="unit">원</span>
+                        </div>
+                        <small>PPC, SNS 광고 등 총 광고비</small>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-won-sign" style="color:#6b7280;"></i> 광고로 발생한 매출</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="adRevenue" placeholder="0" min="0" step="1000">
+                            <span class="unit">원</span>
+                        </div>
+                        <small>광고 클릭으로 발생한 총 매출</small>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-percent" style="color:#6b7280;"></i> 마진율 (선택)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="marginRate" placeholder="30" min="0" max="100" step="1">
+                            <span class="unit">%</span>
+                        </div>
+                        <small>입력 시 실질 광고 ROI도 계산</small>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-mouse-pointer" style="color:#6b7280;"></i> 클릭 수 (선택)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="clicks" placeholder="0" min="0" step="1">
+                            <span class="unit">회</span>
+                        </div>
+                        <small>CPC, CTR 계산에 사용</small>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-shopping-cart" style="color:#6b7280;"></i> 전환 수 (선택)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="conversions" placeholder="0" min="0" step="1">
+                            <span class="unit">건</span>
+                        </div>
+                        <small>CPA, CVR 계산에 사용</small>
+                    </div>
+                </div>
+                <button class="calc-btn" onclick="calcROAS()"><i class="fas fa-calculator"></i> ROAS 계산하기</button>
+                <div id="roasResult" style="display:none;margin-top:20px;">
+                    <div class="result-grid" id="roasResultGrid"></div>
+                    <div class="roas-gauge" id="roasGauge">
+                        <p class="gauge-label">ROAS 수준 (녹색일수록 좋음)</p>
+                        <div class="gauge-wrap"><div class="gauge-pointer" id="gaugePtr"></div></div>
+                        <div class="gauge-marks"><span>0</span><span>100%</span><span>200%</span><span>300%</span><span>400%+</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: 목표 역산 -->
+            <div class="tab-pane" id="tabTarget">
+                <p style="font-size:13px;color:var(--text-muted,#6b7280);margin-bottom:16px;">목표 ROAS를 설정하면, 현재 광고비 기준으로 달성해야 할 매출을 역산합니다.</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>목표 ROAS</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="targetRoas" placeholder="300" min="1" step="10">
+                            <span class="unit">%</span>
+                        </div>
+                        <small>예: 300% = 광고비의 3배 매출</small>
+                    </div>
+                    <div class="form-group">
+                        <label>월 광고 예산</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="adBudget" placeholder="0" min="0" step="1000">
+                            <span class="unit">원</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>평균 주문 금액 (AOV)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="avgOrderVal" placeholder="0" min="0" step="1000">
+                            <span class="unit">원</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="calc-btn" onclick="calcTargetROAS()"><i class="fas fa-bullseye"></i> 목표 역산하기</button>
+                <div id="targetResult" style="display:none;margin-top:20px;">
+                    <div class="result-grid" id="targetResultGrid"></div>
+                </div>
+            </div>
+
+            <!-- Tab 3: 벤치마크 -->
+            <div class="tab-pane" id="tabBench">
+                <p style="font-size:13px;color:var(--text-muted,#6b7280);margin-bottom:14px;">플랫폼별 일반적인 ROAS 기준입니다. 업종·상품에 따라 다를 수 있습니다.</p>
+                <table class="benchmark-table">
+                    <thead><tr><th>플랫폼</th><th>최소 목표</th><th>양호</th><th>우수</th><th>비고</th></tr></thead>
+                    <tbody>
+                        <tr><td>Amazon (Sponsored Products)</td><td class="bm-ok">200%</td><td class="bm-ok">300%</td><td class="bm-good">400%+</td><td>ACoS 25% 이하 목표</td></tr>
+                        <tr><td>Shopee 광고</td><td class="bm-ok">150%</td><td class="bm-ok">250%</td><td class="bm-good">350%+</td><td>신규 셀러는 초기 낮을 수 있음</td></tr>
+                        <tr><td>TikTok Shop 광고</td><td class="bm-ok">180%</td><td class="bm-ok">280%</td><td class="bm-good">400%+</td><td>라이브 병행 시 효율 ↑</td></tr>
+                        <tr><td>Lazada 광고</td><td class="bm-ok">150%</td><td class="bm-ok">250%</td><td class="bm-good">350%+</td><td>프로모션 기간 활용 권장</td></tr>
+                        <tr><td>Google/Meta (해외)</td><td class="bm-ok">150%</td><td class="bm-ok">300%</td><td class="bm-good">500%+</td><td>리타게팅이 신규보다 높음</td></tr>
+                        <tr><td>네이버 쇼핑 광고</td><td class="bm-ok">200%</td><td class="bm-ok">350%</td><td class="bm-good">500%+</td><td>브랜드 검색광고는 더 높음</td></tr>
+                    </tbody>
+                </table>
+                <p style="font-size:11px;color:var(--text-muted,#9ca3af);margin-top:10px;">* 위 수치는 참고용 산업 평균이며, 실제 성과는 상품·카테고리에 따라 크게 다를 수 있습니다.</p>
+            </div>
+        </div>
+
+        <div style="margin-top:8px;text-align:center;">
+            <a href="/tools/" class="back-to-calc" style="background:#6b7280;margin-right:12px;"><i class="fas fa-arrow-left"></i> 도구 목록</a>
+            <a href="/" class="back-to-calc"><i class="fas fa-calculator"></i> 마진 계산기</a>
+        </div>
+    </main>
+
+    <footer class="sub-footer">
+        <div class="footer-links">
+            <a href="/">마진 계산기</a>
+            <a href="/platforms/">플랫폼 비교</a>
+            <a href="/tools/">도구 모음</a>
+            <a href="/market/">시장 정보</a>
+            <a href="/guide/">셀러 가이드</a>
+        </div>
+        <p>&copy; 2025 유어팀 글로벌 마진 계산기</p>
+        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </footer>
+    <script src="/js/shared-nav.js"></script>
+    <script>
+    function switchTab(t) {
+        document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', ['calc','target','bench'][i] === t));
+        document.querySelectorAll('.tab-pane').forEach((p,i) => p.classList.toggle('active', ['tabCalc','tabTarget','tabBench'][i] === 'tab' + t.charAt(0).toUpperCase() + t.slice(1)));
+    }
+
+    function calcROAS() {
+        const adSpend = parseFloat(document.getElementById('adSpend').value) || 0;
+        const adRevenue = parseFloat(document.getElementById('adRevenue').value) || 0;
+        const marginRate = parseFloat(document.getElementById('marginRate').value) || 0;
+        const clicks = parseInt(document.getElementById('clicks').value) || 0;
+        const conversions = parseInt(document.getElementById('conversions').value) || 0;
+
+        if (adSpend <= 0 || adRevenue <= 0) { alert('광고비와 매출을 입력해주세요.'); return; }
+
+        const roas = (adRevenue / adSpend) * 100;
+        const roasClass = roas >= 300 ? 'good' : (roas >= 150 ? 'highlight' : 'bad');
+
+        let html = `
+            <div class="result-box ${roasClass}">
+                <div class="r-label">ROAS</div>
+                <div class="r-value">${roas.toFixed(0)}</div>
+                <div class="r-unit">%</div>
+            </div>
+            <div class="result-box">
+                <div class="r-label">광고비 회수율</div>
+                <div class="r-value">${(adRevenue / adSpend).toFixed(2)}</div>
+                <div class="r-unit">배</div>
+            </div>`;
+
+        if (marginRate > 0) {
+            const grossProfit = adRevenue * (marginRate / 100);
+            const adROI = ((grossProfit - adSpend) / adSpend) * 100;
+            const adRoiClass = adROI >= 0 ? 'good' : 'bad';
+            html += `<div class="result-box ${adRoiClass}">
+                <div class="r-label">광고 ROI</div>
+                <div class="r-value">${adROI.toFixed(0)}</div>
+                <div class="r-unit">%</div>
+            </div>`;
+        }
+
+        if (clicks > 0) {
+            const cpc = adSpend / clicks;
+            html += `<div class="result-box">
+                <div class="r-label">CPC (클릭당 비용)</div>
+                <div class="r-value">${cpc.toFixed(0)}</div>
+                <div class="r-unit">원</div>
+            </div>`;
+        }
+
+        if (conversions > 0 && adSpend > 0) {
+            const cpa = adSpend / conversions;
+            html += `<div class="result-box">
+                <div class="r-label">CPA (전환당 비용)</div>
+                <div class="r-value">${cpa.toFixed(0)}</div>
+                <div class="r-unit">원</div>
+            </div>`;
+            if (clicks > 0) {
+                const cvr = (conversions / clicks) * 100;
+                html += `<div class="result-box">
+                    <div class="r-label">CVR (전환율)</div>
+                    <div class="r-value">${cvr.toFixed(1)}</div>
+                    <div class="r-unit">%</div>
+                </div>`;
+            }
+        }
+
+        document.getElementById('roasResultGrid').innerHTML = html;
+        const pct = Math.min(roas / 400, 1) * 100;
+        document.getElementById('gaugePtr').style.left = pct + '%';
+        document.getElementById('roasResult').style.display = 'block';
+    }
+
+    function calcTargetROAS() {
+        const targetRoas = parseFloat(document.getElementById('targetRoas').value) || 0;
+        const adBudget = parseFloat(document.getElementById('adBudget').value) || 0;
+        const aov = parseFloat(document.getElementById('avgOrderVal').value) || 0;
+
+        if (targetRoas <= 0 || adBudget <= 0) { alert('목표 ROAS와 광고 예산을 입력해주세요.'); return; }
+
+        const reqRevenue = adBudget * (targetRoas / 100);
+        const reqOrders = aov > 0 ? Math.ceil(reqRevenue / aov) : 0;
+        const dailyRevenue = reqRevenue / 30;
+
+        let html = `
+            <div class="result-box highlight">
+                <div class="r-label">달성 필요 월 매출</div>
+                <div class="r-value">${(reqRevenue / 10000).toFixed(0)}</div>
+                <div class="r-unit">만원</div>
+            </div>
+            <div class="result-box">
+                <div class="r-label">일 평균 필요 매출</div>
+                <div class="r-value">${(dailyRevenue / 10000).toFixed(1)}</div>
+                <div class="r-unit">만원</div>
+            </div>`;
+        if (reqOrders > 0) {
+            html += `<div class="result-box good">
+                <div class="r-label">필요 월 주문 수</div>
+                <div class="r-value">${reqOrders.toLocaleString()}</div>
+                <div class="r-unit">건</div>
+            </div>
+            <div class="result-box">
+                <div class="r-label">일 평균 주문 수</div>
+                <div class="r-value">${Math.ceil(reqOrders / 30)}</div>
+                <div class="r-unit">건</div>
+            </div>`;
+        }
+        document.getElementById('targetResultGrid').innerHTML = html;
+        document.getElementById('targetResult').style.display = 'block';
+    }
+    </script>
+</body>
+</html>
