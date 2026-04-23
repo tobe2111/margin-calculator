@@ -188,6 +188,9 @@ function calculateMargin() {
     document.getElementById('breakEvenPrice').textContent = `${symbol} ${breakEvenPrice.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     document.getElementById('resultSection').style.display = 'block';
 
+    // 마진율 시각화 (색상 + 게이지)
+    updateMarginVisual(marginRate, netProfit);
+
     addToHistory({ productName: productName || '상품명 없음', purchasePrice, currency: currentCurrency, sellingPrice, exchangeRate: currentExchangeRate, domesticShipping, intlShipping, platformFeeRate, fxSpreadRate, netProfit, marginRate, timestamp: new Date() });
 
     // 차트 업데이트
@@ -202,14 +205,10 @@ function calculateMargin() {
     const shareSection = document.getElementById('shareSection');
     if (shareSection) shareSection.style.display = 'flex';
 
-    // 쿠팡 배너 노출
-    const coupangBanner = document.getElementById('coupangBanner');
-    if (coupangBanner) coupangBanner.style.display = 'block';
-
     // 입력값 자동 저장
     if (typeof saveInputsToLocalStorage === 'function') saveInputsToLocalStorage();
 
-    if (typeof gtag !== 'undefined') { gtag('event', 'show_coupang_banner', { 'event_category': 'affiliate', 'event_label': 'coupang_partners' }); }
+    if (typeof gtag !== 'undefined') { gtag('event', 'calculate_complete', { 'event_category': 'calculator', 'event_label': 'margin_calculated', 'value': Math.round(marginRate) }); }
 
     setCalcBtnLoading(false);
 
@@ -217,6 +216,43 @@ function calculateMargin() {
     const resultSection = document.getElementById('resultSection');
     if (resultSection) {
         setTimeout(() => resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
+}
+
+function updateMarginVisual(marginRate, netProfit) {
+    const gradeMap = {
+        excellent: { label: '우수', cls: 'margin-grade-excellent', fill: 'fill-excellent' },
+        good:      { label: '양호', cls: 'margin-grade-good',      fill: 'fill-good' },
+        warning:   { label: '주의', cls: 'margin-grade-warning',    fill: 'fill-warning' },
+        danger:    { label: '위험', cls: 'margin-grade-danger',     fill: 'fill-danger' },
+    };
+    let grade = 'danger';
+    if (marginRate >= 20) grade = 'excellent';
+    else if (marginRate >= 12) grade = 'good';
+    else if (marginRate >= 0) grade = 'warning';
+
+    const { label, cls, fill } = gradeMap[grade];
+
+    const badge = document.getElementById('marginGradeBadge');
+    if (badge) {
+        badge.textContent = label;
+        badge.className = `margin-grade-badge ${cls}`;
+    }
+
+    const bar = document.getElementById('marginBarFill');
+    if (bar) {
+        const pct = Math.min(Math.max(marginRate, 0), 50);
+        bar.style.width = `${(pct / 50) * 100}%`;
+        bar.className = `margin-bar-fill ${fill}`;
+    }
+
+    const profitCard = document.querySelector('#resultSection .result-card:first-child');
+    if (profitCard) {
+        profitCard.className = `result-card profit-${grade}`;
+    }
+    const marginCard = document.getElementById('marginRateCard');
+    if (marginCard) {
+        marginCard.className = `result-card profit-${grade}`;
     }
 }
 
@@ -245,6 +281,24 @@ function addToHistory(data) {
     `;
     historyTableBody.appendChild(row);
     if (historySection) historySection.style.display = 'block';
+    saveHistoryToLocalStorage();
+}
+
+function saveHistoryToLocalStorage() {
+    try {
+        const toSave = calculationHistory.slice(-50).map(d => ({ ...d, timestamp: d.timestamp.toISOString() }));
+        localStorage.setItem('marginCalcHistory', JSON.stringify(toSave));
+    } catch(e) {}
+}
+
+function loadHistoryFromLocalStorage() {
+    try {
+        const raw = localStorage.getItem('marginCalcHistory');
+        if (!raw) return;
+        const items = JSON.parse(raw);
+        if (!Array.isArray(items) || items.length === 0) return;
+        items.forEach(d => addToHistory({ ...d, timestamp: new Date(d.timestamp) }));
+    } catch(e) {}
 }
 
 function downloadExcel() {
@@ -328,4 +382,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentExchangeRate = defaultExchangeRates[currentCurrency];
     if (sellingPriceCurrency) sellingPriceCurrency.textContent = currentCurrency;
     await fetchRealTimeExchangeRates();
+    loadHistoryFromLocalStorage();
 });

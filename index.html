@@ -64,29 +64,97 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "유어팀 글로벌 마진 계산기",
+      "alternateName": ["해외판매 마진 계산기", "라자다 마진 계산기", "쇼피 마진 계산기", "아마존 마진 계산기"],
       "url": "https://margin.ur-team.com/",
       "description": "라자다, 틱톡샵, 이베이, 아마존, 쇼피, 큐텐 셀러를 위한 무료 해외판매 마진 계산기. 17개 통화 실시간 환율 적용, 순이익·ROI·손익분기 자동 계산.",
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript",
       "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "KRW"
+        "priceCurrency": "KRW",
+        "availability": "https://schema.org/InStock"
       },
       "author": {
         "@type": "Organization",
         "name": "유어팀 (YourTeam)",
         "url": "https://margin.ur-team.com/"
       },
-      "inLanguage": "ko",
+      "inLanguage": ["ko", "en", "zh", "ja", "vi"],
       "featureList": [
-        "17개 통화 실시간 환율",
-        "플랫폼별 수수료 자동 입력",
+        "17개 통화 실시간 환율 자동 적용",
+        "라자다·틱톡샵·이베이·아마존·쇼피·큐텐·라쿠텐 수수료 자동 입력",
+        "순이익·마진율·ROI 동시 계산",
         "멀티 플랫폼 마진 비교",
-        "환율 시뮬레이션",
+        "환율 시뮬레이션 (±30%)",
         "수입 관세 계산기",
-        "이미지 내보내기",
-        "URL 공유"
+        "역산 계산 (목표 마진 → 판매가)",
+        "계산 이력 저장 및 CSV 내보내기",
+        "이미지 내보내기 및 URL 공유"
+      ],
+      "screenshot": "https://margin.ur-team.com/og-image.png"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "해외판매 마진 계산기 사용법은?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "매입가(원화), 판매 통화, 해외 판매가를 입력하고 플랫폼을 선택하면 환율이 자동 적용되어 순이익·마진율·ROI가 즉시 계산됩니다. 라자다·쇼피·이베이·아마존·틱톡샵·큐텐·라쿠텐 수수료가 자동 입력됩니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "라자다 셀러 수수료는 얼마인가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "라자다 셀러 수수료는 커미션 2.5% + 결제 수수료 2%로 총 4.5%입니다. 카테고리에 따라 다를 수 있으며, 본 계산기에서 자동으로 입력됩니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "쇼피(Shopee) 수수료 계산은?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "쇼피 판매 수수료는 판매 수수료 3% + 결제 수수료 2%로 총 5%입니다. 마진 계산기에서 '쇼피' 버튼을 클릭하면 자동으로 입력됩니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "해외판매 마진율은 몇 %가 적당한가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "해외판매 순마진율은 최소 15~20% 이상을 목표로 해야 합니다. 아마존·이베이처럼 수수료가 높은 플랫폼은 25% 이상을 권장합니다. 환율 변동·반품·불량 리스크를 흡수하려면 충분한 마진 확보가 중요합니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "부가세 환급(매입세액 공제)이란?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "수출 재화는 영세율이 적용되어 국내에서 매입 시 지불한 부가세 10%를 환급받을 수 있습니다. 본 계산기에서 '매입세액 10% 공제 적용' 체크박스를 선택하면 자동으로 반영됩니다."
+          }
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "마진 계산기",
+          "item": "https://margin.ur-team.com/"
+        }
       ]
     }
     </script>
@@ -286,7 +354,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="result-card"><div class="result-label">마진율</div><div class="result-value" id="marginRate">0 %</div></div>
+                    <div class="result-card" id="marginRateCard">
+                        <div class="result-label">마진율 <span class="margin-grade-badge" id="marginGradeBadge"></span></div>
+                        <div class="result-value" id="marginRate">0 %</div>
+                        <div class="margin-bar-wrap">
+                            <div class="margin-bar-bg"><div class="margin-bar-fill" id="marginBarFill" style="width:0%"></div></div>
+                        </div>
+                    </div>
                     <div class="result-divider"></div>
                     <div class="result-card">
                         <div class="result-label">판매 수익</div>
@@ -320,9 +394,9 @@
                         <button class="share-btn share-native-btn" onclick="shareResult()"><i class="fas fa-share-alt"></i> <span>공유</span></button>
                         <button class="share-btn image-btn" onclick="saveAsImage()"><i class="fas fa-image"></i> <span>이미지 저장</span></button>
                     </div>
-                    <div class="coupang-banner" id="coupangBanner" style="display:none;">
-                        <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url">
-                            <img src="https://ads-partners.coupang.com/banners/958415?subId=&traceId=V0-301-879dd1202e5c73b2-I958415&w=728&h=90" alt="쿠팡 파트너스" style="max-width:100%;height:auto;display:block;border-radius:8px;">
+                    <div class="coupang-banner" id="coupangBanner">
+                        <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'result_banner'})">
+                            <img src="https://ads-partners.coupang.com/banners/958415?subId=result&traceId=V0-301-879dd1202e5c73b2-I958415&w=728&h=90" alt="쿠팡 파트너스 - 해외판매 셀러 추천 상품" style="max-width:100%;height:auto;display:block;border-radius:8px;">
                         </a>
                         <p class="coupang-disclosure-result">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
                     </div>
@@ -351,6 +425,17 @@
                 </section>
             </div>
 
+            <!-- 항상 노출: 쿠팡파트너스 배너 -->
+            <div style="margin:24px 0;text-align:center;">
+                <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url"
+                   onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'main_banner'})">
+                    <img src="https://ads-partners.coupang.com/banners/958415?subId=main&traceId=V0-301-879dd1202e5c73b2-I958415&w=728&h=90"
+                         alt="쿠팡 파트너스 - 해외판매 셀러 필수 상품"
+                         style="max-width:100%;height:auto;display:inline-block;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                </a>
+                <p style="font-size:11px;color:#9ca3af;margin-top:6px;">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+            </div>
+
             <div class="adsense-container">
                 <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1598352332166062" data-ad-slot="6633334217" data-ad-format="auto" data-full-width-responsive="true"></ins>
                 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -375,22 +460,57 @@
                 </div>
             </section>
 
-            <aside class="middle-banner-full">
-                <div class="banner-card-horizontal">
-                    <div class="banner-content-wrap">
-                        <div class="banner-icon-large">📊</div>
-                        <div class="banner-text-wrap">
-                            <h3>유어팀 마진 계산기 - 해외판매 셀러 필수 도구!</h3>
-                            <p>쇼피 셀러, 이베이 셀러, 아마존 셀러, 라자다 셀러, 틱톡샵 셀러, 큐텐 셀러, 라쿠텐 셀러 모두가 사용하는 유어팀 마진계산기</p>
-                        </div>
-                    </div>
-                    <ul class="banner-features-horizontal">
-                        <li><i class="fas fa-check-circle"></i> 실시간 수수료 계산</li>
-                        <li><i class="fas fa-check-circle"></i> 환율 자동 적용</li>
-                        <li><i class="fas fa-check-circle"></i> ROI 분석 지원</li>
-                    </ul>
+            <!-- 해외판매 셀러 필수 도구 (쿠팡파트너스) -->
+            <section class="seller-tools-section" aria-label="해외판매 셀러 추천 상품">
+                <h2><i class="fab fa-shopify" style="color:#C00;"></i> 해외판매 셀러 필수 도구 모음</h2>
+                <p class="seller-tools-subtitle">해외 이커머스 셀러라면 꼭 필요한 포장재·업무 장비를 쿠팡에서 빠르게 구매하세요.</p>
+                <div class="seller-tools-grid">
+                    <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" class="seller-tool-card"
+                       onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'tool_airbubble'})">
+                        <span class="seller-tool-icon">📦</span>
+                        <span class="seller-tool-name">에어캡 포장재</span>
+                        <span class="seller-tool-desc">상품 파손 방지 필수</span>
+                    </a>
+                    <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" class="seller-tool-card"
+                       onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'tool_label_printer'})">
+                        <span class="seller-tool-icon">🖨️</span>
+                        <span class="seller-tool-name">라벨 프린터</span>
+                        <span class="seller-tool-desc">배송 라벨 자동 출력</span>
+                    </a>
+                    <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" class="seller-tool-card"
+                       onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'tool_scale'})">
+                        <span class="seller-tool-icon">⚖️</span>
+                        <span class="seller-tool-name">전자 저울</span>
+                        <span class="seller-tool-desc">정확한 무게 측정</span>
+                    </a>
+                    <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" class="seller-tool-card"
+                       onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'tool_opp'})">
+                        <span class="seller-tool-icon">🛍️</span>
+                        <span class="seller-tool-name">OPP 봉투</span>
+                        <span class="seller-tool-desc">소형 상품 포장용</span>
+                    </a>
+                    <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" class="seller-tool-card"
+                       onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'tool_barcode'})">
+                        <span class="seller-tool-icon">🔍</span>
+                        <span class="seller-tool-name">바코드 스캐너</span>
+                        <span class="seller-tool-desc">재고 관리 효율화</span>
+                    </a>
+                    <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" class="seller-tool-card"
+                       onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'tool_tape'})">
+                        <span class="seller-tool-icon">📏</span>
+                        <span class="seller-tool-name">포장 테이프</span>
+                        <span class="seller-tool-desc">배송박스 봉인용</span>
+                    </a>
                 </div>
-            </aside>
+                <div class="seller-tools-main-cta">
+                    <p>📦 해외판매 셀러를 위한 더 많은 상품 보기</p>
+                    <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" class="coupang-cta-btn"
+                       onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'seller_tools_cta'})">
+                        <i class="fas fa-external-link-alt"></i> 쿠팡에서 모두 보기
+                    </a>
+                </div>
+                <p class="seller-tools-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+            </section>
 
             <!-- 서브페이지 탐색 안내 -->
             <section style="margin-top:32px;">
