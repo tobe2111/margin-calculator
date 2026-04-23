@@ -394,9 +394,11 @@
                         <button class="share-btn share-native-btn" onclick="shareResult()"><i class="fas fa-share-alt"></i> <span>공유</span></button>
                         <button class="share-btn image-btn" onclick="saveAsImage()"><i class="fas fa-image"></i> <span>이미지 저장</span></button>
                     </div>
-                    <div class="coupang-banner" id="coupangBanner">
-                        <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'result_banner'})">
-                            <img src="https://ads-partners.coupang.com/banners/958415?subId=result&traceId=V0-301-879dd1202e5c73b2-I958415&w=728&h=90" alt="쿠팡 파트너스 - 해외판매 셀러 추천 상품" style="max-width:100%;height:auto;display:block;border-radius:8px;">
+                    <div class="coupang-banner" id="coupangBanner" style="display:none;">
+                        <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url"
+                           class="coupang-cta-btn" style="display:flex;justify-content:center;width:100%;"
+                           onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'result_cta'})">
+                            <i class="fas fa-shopping-cart"></i> 해외판매 셀러 필수 도구 — 쿠팡에서 바로 구매
                         </a>
                         <p class="coupang-disclosure-result">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
                     </div>
@@ -423,17 +425,6 @@
                         </div>
                     </div>
                 </section>
-            </div>
-
-            <!-- 항상 노출: 쿠팡파트너스 배너 -->
-            <div style="margin:24px 0;text-align:center;">
-                <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url"
-                   onclick="if(typeof gtag!=='undefined')gtag('event','coupang_click',{event_category:'affiliate',event_label:'main_banner'})">
-                    <img src="https://ads-partners.coupang.com/banners/958415?subId=main&traceId=V0-301-879dd1202e5c73b2-I958415&w=728&h=90"
-                         alt="쿠팡 파트너스 - 해외판매 셀러 필수 상품"
-                         style="max-width:100%;height:auto;display:inline-block;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-                </a>
-                <p style="font-size:11px;color:#9ca3af;margin-top:6px;">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
             </div>
 
             <div class="adsense-container">
