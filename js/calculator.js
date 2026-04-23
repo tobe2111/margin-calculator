@@ -201,9 +201,11 @@ function calculateMargin() {
     // 플랫폼 비교 업데이트
     if (typeof calculateComparison === 'function') calculateComparison();
 
-    // 공유 버튼 노출
+    // 공유 버튼 + 프로젝트 저장 UI 노출
     const shareSection = document.getElementById('shareSection');
     if (shareSection) shareSection.style.display = 'flex';
+    const projectSaveRow = document.getElementById('projectSaveRow');
+    if (projectSaveRow) projectSaveRow.style.display = 'flex';
 
     // 입력값 자동 저장
     if (typeof saveInputsToLocalStorage === 'function') saveInputsToLocalStorage();
@@ -351,6 +353,185 @@ function reverseCalculate() {
     if (typeof gtag !== 'undefined') { gtag('event', 'reverse_calculate', { 'event_category': 'calculator', 'event_label': 'reverse_margin', 'value': targetMarginRate }); }
 }
 
+// ===== 프로젝트 관리 =====
+function getProjects() {
+    try { return JSON.parse(localStorage.getItem('marginProjects') || '[]'); } catch(e) { return []; }
+}
+
+function saveProject() {
+    const name = document.getElementById('projectNameInput')?.value.trim();
+    if (!name) { showToast('프로젝트 이름을 입력해주세요.'); return; }
+
+    const revenue = (parseFloat(sellingPriceInput.value) || 0) * currentExchangeRate;
+    const purchase = parseFloat(purchasePriceInput.value) || 0;
+    const fee = revenue * ((parseFloat(platformFeeInput.value) || 0) / 100);
+    const fx  = revenue * ((parseFloat(fxSpreadInput.value) || 0) / 100);
+    const dom = parseFloat(domesticShippingInput.value) || 0;
+    const intl = parseFloat(intlShippingInput.value) || 0;
+    const vat = vatRefundCheckbox.checked ? purchase * 0.1 : 0;
+    const netProfit  = revenue - purchase - fee - fx - dom - intl + vat;
+    const marginRate = revenue > 0 ? (netProfit / revenue * 100) : 0;
+
+    const data = {
+        id: Date.now(),
+        name,
+        purchasePrice: purchase,
+        currency: currentCurrency,
+        sellingPrice: parseFloat(sellingPriceInput.value) || 0,
+        exchangeRate: currentExchangeRate,
+        domesticShipping: dom,
+        intlShipping: intl,
+        platformFeeRate: parseFloat(platformFeeInput.value) || 0,
+        fxSpreadRate: parseFloat(fxSpreadInput.value) || 0,
+        vatRefund: vatRefundCheckbox.checked,
+        netProfit,
+        marginRate,
+        savedAt: new Date().toISOString(),
+    };
+
+    const projects = getProjects();
+    projects.unshift(data);
+    localStorage.setItem('marginProjects', JSON.stringify(projects.slice(0, 20)));
+    document.getElementById('projectNameInput').value = '';
+    renderProjects();
+    showToast(`"${name}" 저장 완료!`);
+    if (typeof gtag !== 'undefined') gtag('event', 'save_project', { event_category: 'projects' });
+}
+
+function renderProjects() {
+    const projects = getProjects();
+    const section = document.getElementById('projectsSection');
+    const grid    = document.getElementById('projectsGrid');
+    if (!section || !grid) return;
+    section.style.display = 'block';
+
+    if (!projects.length) {
+        grid.innerHTML = '<p class="no-projects">저장된 프로젝트가 없습니다. 계산 후 이름을 입력하고 저장해보세요.</p>';
+        return;
+    }
+
+    grid.innerHTML = projects.map(p => `
+        <div class="project-card" onclick="loadProject(${p.id})">
+            <div class="project-card-name">${p.name}</div>
+            <div class="project-card-meta">${p.currency} · 수수료 ${p.platformFeeRate}% · ${new Date(p.savedAt).toLocaleDateString('ko-KR')}</div>
+            <div class="project-card-profit ${p.netProfit >= 0 ? 'pos' : 'neg'}">
+                ${p.netProfit >= 0 ? '+' : ''}₩${Math.round(p.netProfit).toLocaleString('ko-KR')} (${p.marginRate.toFixed(1)}%)
+            </div>
+        </div>
+    `).join('') + `<div class="project-card project-card-delete" onclick="clearAllProjects()"><i class="fas fa-trash"></i> 전체 삭제</div>`;
+}
+
+function loadProject(id) {
+    const p = getProjects().find(x => x.id === id);
+    if (!p) return;
+    purchasePriceInput.value    = p.purchasePrice;
+    currencySelect.value        = p.currency;
+    sellingPriceInput.value     = p.sellingPrice;
+    platformFeeInput.value      = p.platformFeeRate;
+    fxSpreadInput.value         = p.fxSpreadRate;
+    domesticShippingInput.value = p.domesticShipping;
+    intlShippingInput.value     = p.intlShipping;
+    vatRefundCheckbox.checked   = p.vatRefund;
+    currentCurrency             = p.currency;
+    currentExchangeRate         = p.exchangeRate;
+    if (sellingPriceCurrency) sellingPriceCurrency.textContent = p.currency;
+    updateExchangeRateDisplay();
+    showToast(`"${p.name}" 불러오기 완료`);
+    document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function clearAllProjects() {
+    if (!confirm('저장된 프로젝트를 모두 삭제할까요?')) return;
+    localStorage.removeItem('marginProjects');
+    renderProjects();
+}
+
+function showToast(msg) {
+    const el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ===== 실시간 환율 알림 =====
+let rateAlertActive = false;
+let rateAlertInterval = null;
+
+function toggleRateAlert() {
+    const panel = document.getElementById('rateAlertPanel');
+    if (!panel) return;
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function saveAlertSettings() {
+    const target = parseFloat(document.getElementById('alertTargetRate')?.value) || 0;
+    if (!target) { showToast('목표 환율을 입력해주세요.'); return; }
+
+    if (!('Notification' in window)) {
+        document.getElementById('alertStatusText').textContent = '이 브라우저는 알림을 지원하지 않습니다.';
+        return;
+    }
+
+    Notification.requestPermission().then(perm => {
+        if (perm !== 'granted') {
+            document.getElementById('alertStatusText').textContent = '알림 권한이 거부되었습니다. 브라우저 설정에서 허용해주세요.';
+            return;
+        }
+        localStorage.setItem('rateAlertTarget', String(target));
+        rateAlertActive = true;
+        document.getElementById('alertStatusText').textContent = `✅ 환율 ₩${target.toLocaleString('ko-KR')} 도달 시 알림 발송`;
+        document.getElementById('rateAlertTrigger').classList.add('active');
+        startRateAlertCheck(target);
+    });
+}
+
+function cancelRateAlert() {
+    rateAlertActive = false;
+    if (rateAlertInterval) { clearInterval(rateAlertInterval); rateAlertInterval = null; }
+    localStorage.removeItem('rateAlertTarget');
+    const statusEl = document.getElementById('alertStatusText');
+    if (statusEl) statusEl.textContent = '알림이 해제되었습니다.';
+    document.getElementById('rateAlertTrigger')?.classList.remove('active');
+}
+
+function startRateAlertCheck(target) {
+    if (rateAlertInterval) clearInterval(rateAlertInterval);
+    rateAlertInterval = setInterval(async () => {
+        if (!rateAlertActive) { clearInterval(rateAlertInterval); return; }
+        try {
+            const res = await fetch('https://open.er-api.com/v6/latest/KRW');
+            const d   = await res.json();
+            if (d.result === 'success' && d.rates?.USD) {
+                const current = Math.round(1 / d.rates.USD);
+                if (current >= target) {
+                    new Notification('환율 알림 — 유어팀 마진 계산기', {
+                        body: `현재 환율 ₩${current.toLocaleString('ko-KR')}이 목표(₩${target.toLocaleString('ko-KR')})에 도달했습니다!`,
+                        icon: '/favicon.ico'
+                    });
+                    cancelRateAlert();
+                }
+            }
+        } catch(e) {}
+    }, 5 * 60 * 1000);
+}
+
+function loadAlertSettings() {
+    const stored = localStorage.getItem('rateAlertTarget');
+    if (!stored) return;
+    const target = parseFloat(stored);
+    if (!target) return;
+    const inp = document.getElementById('alertTargetRate');
+    if (inp) inp.value = target;
+    const statusEl = document.getElementById('alertStatusText');
+    if (statusEl) statusEl.textContent = `⏰ 환율 ₩${target.toLocaleString('ko-KR')} 알림 대기 중`;
+    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+        rateAlertActive = true;
+        document.getElementById('rateAlertTrigger')?.classList.add('active');
+        startRateAlertCheck(target);
+    }
+}
+
 if (calculateBtn) calculateBtn.addEventListener('click', calculateMargin);
 if (reverseCalcBtn) reverseCalcBtn.addEventListener('click', reverseCalculate);
 if (excelDownloadBtn) excelDownloadBtn.addEventListener('click', downloadExcel);
@@ -383,4 +564,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (sellingPriceCurrency) sellingPriceCurrency.textContent = currentCurrency;
     await fetchRealTimeExchangeRates();
     loadHistoryFromLocalStorage();
+    renderProjects();
+    loadAlertSettings();
 });
