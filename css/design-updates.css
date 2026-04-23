@@ -976,3 +976,79 @@ body { background: #f1f5f9 !important; }
     .project-save-row { flex-direction: column; align-items: stretch; }
     .project-save-btn { width: 100%; justify-content: center; }
 }
+
+/* ===== 숫자 천단위 힌트 ===== */
+.num-format-hint {
+    display: block;
+    font-size: 11px;
+    color: #0066FF;
+    font-weight: 600;
+    margin-top: 3px;
+    min-height: 16px;
+    transition: opacity 0.2s;
+}
+
+/* ===== 환율 추이 차트 섹션 ===== */
+.rate-history-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+}
+.rate-history-section h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.rate-history-section h3 i { color: #0066FF; }
+.rate-history-chart-wrap {
+    position: relative;
+    height: 160px;
+    width: 100%;
+}
+
+/* ===== 모바일 고정 계산 버튼 ===== */
+.mobile-calc-fixed {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    padding: 12px 16px env(safe-area-inset-bottom, 0);
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+}
+.mobile-calc-fixed-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #0066FF 0%, #0047cc 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.1s ease;
+}
+.mobile-calc-fixed-btn:active { transform: scale(0.98); }
+
+@media (max-width: 768px) {
+    .mobile-calc-fixed { display: block; }
+    body { padding-bottom: 80px; }
+    .rate-history-section { padding: 16px; }
+    .rate-history-chart-wrap { height: 130px; }
+}

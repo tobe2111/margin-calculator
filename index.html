@@ -31,6 +31,9 @@
     <meta property="og:title" content="유어팀 마진 계산기 | 라자다 틱톡샵 이베이 아마존 쇼피 셀러 수익 계산">
     <meta property="og:description" content="유어팀 마진 계산기 - 라자다/틱톡샵/이베이/아마존/쇼피 셀러 필수! 해외판매 수익 실시간 계산. 수출 순마진, 판매 수익률 분석. 17개 통화 지원.">
     <meta property="og:image" content="https://margin.ur-team.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="유어팀 글로벌 마진 계산기">
     <meta property="twitter:card" content="summary_large_image">
@@ -377,7 +380,7 @@
                     <p class="coupang-disclosure">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
                 </section>
 
-                <section class="result-section" id="resultSection" aria-label="계산 결과">
+                <section class="result-section" id="resultSection" aria-label="계산 결과" aria-live="polite">
                     <h2 data-i18n="r.title"><i class="fas fa-chart-line"></i> 계산 결과</h2>
                     <div class="result-card">
                         <div class="result-label" data-i18n="r.profit">순이익 (마진)</div>
@@ -469,6 +472,14 @@
                 <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1598352332166062" data-ad-slot="6633334217" data-ad-format="auto" data-full-width-responsive="true"></ins>
                 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
             </div>
+
+            <!-- 환율 30일 추이 차트 -->
+            <section class="rate-history-section" id="rateHistorySection" style="display:none;" aria-label="USD/KRW 환율 30일 추이">
+                <h3><i class="fas fa-chart-area"></i> USD/KRW 환율 30일 추이</h3>
+                <div class="rate-history-chart-wrap">
+                    <canvas id="rateHistoryChart" role="img" aria-label="최근 30일 USD/KRW 환율 차트"></canvas>
+                </div>
+            </section>
 
             <section class="history-section" id="historySection" style="display:none;">
                 <div class="history-header">
@@ -630,5 +641,12 @@
     });
     </script>
     <div class="toast" id="toast"></div>
+
+    <!-- 모바일 고정 계산 버튼 -->
+    <div class="mobile-calc-fixed" id="mobileCalcFixed">
+        <button class="mobile-calc-fixed-btn" onclick="calculateMargin()" aria-label="마진 계산하기">
+            <i class="fas fa-calculator"></i> 마진 계산하기
+        </button>
+    </div>
 </body>
 </html>

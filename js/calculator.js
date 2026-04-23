@@ -18,6 +18,8 @@ const currencyInfo = {
 };
 
 const EXCHANGE_RATE_API = 'https://open.er-api.com/v6/latest/KRW';
+const RATE_CACHE_KEY = 'marginRateCache';
+const RATE_CACHE_TTL = 60 * 60 * 1000; // 1시간
 let currentCurrency = 'USD';
 let currentExchangeRate = 1300;
 let calculationHistory = [];
@@ -43,7 +45,28 @@ const reverseCalcBtn = document.getElementById('reverseCalcBtn');
 const reverseResult = document.getElementById('reverseResult');
 const recommendedPrice = document.getElementById('recommendedPrice');
 
+function loadCachedRates() {
+    try {
+        const raw = localStorage.getItem(RATE_CACHE_KEY);
+        if (!raw) return false;
+        const { rates, ts } = JSON.parse(raw);
+        if (Date.now() - ts > RATE_CACHE_TTL) return false;
+        defaultExchangeRates = rates;
+        currentExchangeRate = defaultExchangeRates[currentCurrency];
+        updateExchangeRateDisplay();
+        return true;
+    } catch(e) { return false; }
+}
+
+function saveCachedRates() {
+    try {
+        localStorage.setItem(RATE_CACHE_KEY, JSON.stringify({ rates: defaultExchangeRates, ts: Date.now() }));
+    } catch(e) {}
+}
+
 async function fetchRealTimeExchangeRates() {
+    // 캐시 히트 시 API 호출 생략 (수동 새로고침 제외)
+    if (loadCachedRates()) return true;
     try {
         if (exchangeRateDisplay) exchangeRateDisplay.value = '업데이트 중...';
         const response = await fetch(EXCHANGE_RATE_API);
@@ -74,6 +97,7 @@ async function fetchRealTimeExchangeRates() {
             currentExchangeRate = defaultExchangeRates[currentCurrency];
             updateExchangeRateDisplay();
             updateExchangeRateTimestamp(data.time_last_update_utc);
+            saveCachedRates();
             return true;
         } else {
             throw new Error('잘못된 API 응답');
@@ -123,6 +147,8 @@ if (refreshExchangeRateBtn) {
     refreshExchangeRateBtn.addEventListener('click', async () => {
         const icon = refreshExchangeRateBtn.querySelector('i');
         if (icon) icon.classList.add('fa-spin');
+        // 강제 새로고침: 캐시 무효화 후 API 호출
+        localStorage.removeItem(RATE_CACHE_KEY);
         await fetchRealTimeExchangeRates();
         setTimeout(() => { if (icon) icon.classList.remove('fa-spin'); }, 1000);
     });
@@ -206,6 +232,8 @@ function calculateMargin() {
     if (shareSection) shareSection.style.display = 'flex';
     const projectSaveRow = document.getElementById('projectSaveRow');
     if (projectSaveRow) projectSaveRow.style.display = 'flex';
+    const coupangBanner = document.getElementById('coupangBanner');
+    if (coupangBanner) coupangBanner.style.display = 'block';
 
     // 입력값 자동 저장
     if (typeof saveInputsToLocalStorage === 'function') saveInputsToLocalStorage();
