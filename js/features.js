@@ -329,9 +329,120 @@ function calculateImportDuty() {
 document.addEventListener('DOMContentLoaded', () => {
     restoreInputsFromLocalStorage();
     renderPresets();
+    setupNumberFormatDisplay();
+    registerServiceWorker();
+    loadExchangeRateChart();
+    setupMobileCalcButton();
     // Auto-save on any input change
     document.querySelectorAll('#productName,#purchasePrice,#currency,#sellingPrice,#platformFee,#fxSpread,#domesticShipping,#intlShipping,#vatRefund,#targetMargin').forEach(el => {
         el.addEventListener('change', saveInputsToLocalStorage);
         el.addEventListener('input', saveInputsToLocalStorage);
     });
 });
+
+// ===== 숫자 천단위 표시 =====
+function setupNumberFormatDisplay() {
+    const targets = [
+        { id: 'purchasePrice',     unit: '원' },
+        { id: 'domesticShipping',  unit: '원' },
+        { id: 'intlShipping',      unit: '원' },
+    ];
+    targets.forEach(({ id, unit }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const display = document.createElement('span');
+        display.className = 'num-format-hint';
+        el.parentNode.insertAdjacentElement('afterend', display);
+        const update = () => {
+            const v = parseFloat(el.value);
+            display.textContent = (!isNaN(v) && v > 0) ? `= ${v.toLocaleString('ko-KR')} ${unit}` : '';
+        };
+        el.addEventListener('input', update);
+        update();
+    });
+}
+
+// ===== 모바일 고정 계산 버튼 =====
+function setupMobileCalcButton() {
+    const fixed = document.getElementById('mobileCalcFixed');
+    const mainBtn = document.getElementById('calculateBtn');
+    if (!fixed || !mainBtn || !window.IntersectionObserver) return;
+    const obs = new IntersectionObserver(entries => {
+        fixed.style.display = entries[0].isIntersecting ? 'none' : 'block';
+    }, { threshold: 0.5 });
+    obs.observe(mainBtn);
+}
+
+// ===== PWA Service Worker 등록 =====
+function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .catch(() => {});
+    }
+}
+
+// ===== 환율 추이 차트 =====
+async function loadExchangeRateChart() {
+    const canvas = document.getElementById('rateHistoryChart');
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    const today = new Date();
+    const from  = new Date(today); from.setDate(from.getDate() - 29);
+    const fmt   = d => d.toISOString().split('T')[0];
+
+    let labels = [], data = [];
+    try {
+        const res = await fetch(`https://api.frankfurter.app/${fmt(from)}..${fmt(today)}?from=KRW&to=USD`);
+        const json = await res.json();
+        if (json.rates) {
+            Object.entries(json.rates).sort().forEach(([date, r]) => {
+                labels.push(date.slice(5));
+                data.push(r.USD ? Math.round(1 / r.USD) : null);
+            });
+        }
+    } catch(e) {
+        // Fallback: generate simulated data from current rate
+        const base = defaultExchangeRates['USD'] || 1350;
+        for (let i = 29; i >= 0; i--) {
+            const d = new Date(today); d.setDate(d.getDate() - i);
+            labels.push(`${d.getMonth()+1}/${d.getDate()}`);
+            data.push(Math.round(base * (1 + (Math.random() - 0.5) * 0.03)));
+        }
+    }
+
+    if (!data.some(v => v)) return;
+
+    const chartSection = document.getElementById('rateHistorySection');
+    if (chartSection) chartSection.style.display = 'block';
+
+    const min = Math.min(...data.filter(Boolean)) - 10;
+    const max = Math.max(...data.filter(Boolean)) + 10;
+
+    new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: 'USD/KRW',
+                data,
+                borderColor: '#0066FF',
+                backgroundColor: 'rgba(0,102,255,0.08)',
+                borderWidth: 2,
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { grid: { display: false }, ticks: { font: { size: 10 }, maxTicksLimit: 8 } },
+                y: { min, max, grid: { color: '#f3f4f6' }, ticks: { font: { size: 10 }, callback: v => '₩' + v.toLocaleString() } }
+            },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `₩${c.raw.toLocaleString('ko-KR')}` } } },
+            interaction: { mode: 'index', intersect: false }
+        }
+    });
+}

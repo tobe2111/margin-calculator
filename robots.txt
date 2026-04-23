@@ -1,4 +1,22 @@
 User-agent: *
 Allow: /
+Crawl-delay: 1
+
+Disallow: /cdn-cgi/
+
+# Google: no crawl delay
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Naver: Korean search
+User-agent: Yeti
+Allow: /
+Crawl-delay: 1
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
 
 Sitemap: https://margin.ur-team.com/sitemap.xml
