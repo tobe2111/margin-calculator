@@ -4,6 +4,7 @@
         { href: '/',           label: '마진 계산기', icon: 'fa-calculator' },
         { href: '/platforms/', label: '플랫폼 비교',  icon: 'fa-balance-scale' },
         { href: '/tools/',     label: '도구 모음',    icon: 'fa-tools' },
+        { href: '/dashboard/', label: '셀러 대시보드', icon: 'fa-chart-pie' },
         { href: '/guide/',     label: '셀러 가이드',  icon: 'fa-book-open' },
     ];
 
