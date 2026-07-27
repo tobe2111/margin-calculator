@@ -38,10 +38,15 @@
     siteNav.className = 'site-nav';
     siteNav.innerHTML = navHTML;
 
-    // Insert after header or top-banner, before main content
-    const insertAfter = document.querySelector('.header, header, #topBanner');
-    if (insertAfter) {
-        insertAfter.after(siteNav);
+    // 상단 고지 바가 있으면 그 아래, 없으면 문서 맨 위에 놓는다.
+    //
+    // 이전에는 '.header, header, #topBanner' 를 querySelector 로 찾았는데,
+    // querySelector 는 셀렉터 순서가 아니라 '문서 순서상 첫 요소' 를 돌려준다.
+    // 그래서 서브페이지에서는 <header class="sub-header"> 가 먼저 걸려
+    // 내비게이션이 페이지 제목 아래로 밀려났다.
+    const banner = document.getElementById('topBanner');
+    if (banner) {
+        banner.after(siteNav);
     } else {
         document.body.insertBefore(siteNav, document.body.firstChild);
     }

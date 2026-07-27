@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="format-detection" content="telephone=no">
-    <meta name="theme-color" content="#0066FF">
+    <meta name="theme-color" content="#0F1115">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LFJX1XVFNZ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -356,7 +356,7 @@
                                 <button class="rate-alert-close" onclick="document.getElementById('rateAlertPanel').style.display='none';">&times;</button>
                             </div>
                             <div class="form-group" style="margin-bottom:10px;">
-                                <label style="font-size:13px;margin-bottom:6px;display:block;">목표 환율 (원/USD)</label>
+                                <label for="alertTargetRate" style="font-size:13px;margin-bottom:6px;display:block;">목표 환율 (원/USD)</label>
                                 <div class="input-with-unit">
                                     <input type="number" id="alertTargetRate" placeholder="1400" min="1">
                                     <span class="input-unit">원</span>
@@ -440,7 +440,7 @@
                         <div class="summary-row"><span>손익분기점 판매가</span><strong id="breakEvenPrice">0</strong></div>
                     </div>
                     <div class="chart-section" id="chartSection" style="display:none;">
-                        <p class="chart-title"><i class="fas fa-chart-pie" style="color:#0066FF;"></i> 비용 구성 비율</p>
+                        <p class="chart-title"><i class="fas fa-chart-pie" style="color:var(--accent);"></i> 비용 구성 비율</p>
                         <div class="chart-canvas-wrapper"><canvas id="marginChart"></canvas></div>
                     </div>
                     <div class="share-section" id="shareSection" style="display:none;">
@@ -449,7 +449,7 @@
                         <button class="share-btn image-btn" onclick="saveAsImage()"><i class="fas fa-image"></i> <span>이미지 저장</span></button>
                     </div>
                     <div class="project-save-row" id="projectSaveRow" style="display:none;margin-top:12px;">
-                        <input type="text" id="projectNameInput" class="project-name-input" placeholder="프로젝트 이름 입력...">
+                        <input type="text" id="projectNameInput" aria-label="저장할 프로젝트 이름" class="project-name-input" placeholder="프로젝트 이름 입력...">
                         <button class="project-save-btn" onclick="saveProject()"><i class="fas fa-bookmark"></i> 저장</button>
                     </div>
                     <div class="coupang-banner" id="coupangBanner" style="display:none;">
@@ -519,7 +519,7 @@
 
             <!-- 북마크/프로젝트 관리 -->
             <section class="projects-section" id="projectsSection" style="display:none;">
-                <h2><i class="fas fa-bookmark" style="color:#0066FF;"></i> 저장된 프로젝트</h2>
+                <h2><i class="fas fa-bookmark" style="color:var(--accent);"></i> 저장된 프로젝트</h2>
                 <p style="font-size:13px;color:#6b7280;margin-bottom:14px;">계산 결과를 이름을 붙여 저장하고 언제든지 불러올 수 있습니다.</p>
                 <div class="projects-grid" id="projectsGrid"></div>
             </section>
@@ -579,7 +579,7 @@
             <!-- 서브페이지 탐색 안내 -->
             <section style="margin-top:32px;">
                 <h2 style="font-size:18px;font-weight:700;color:#111827;margin:0 0 16px;padding-bottom:10px;border-bottom:2px solid #eff6ff;">
-                    <i class="fas fa-compass" style="color:#0066FF;"></i> 더 알아보기
+                    <i class="fas fa-compass" style="color:var(--accent);"></i> 더 알아보기
                 </h2>
                 <div class="nav-teaser-grid">
                     <a href="/platforms/" class="nav-teaser-card">
@@ -607,7 +607,7 @@
 
     <footer class="footer" role="contentinfo">
         <div class="container">
-            <p>&copy; <span id="copyright-year">2024</span> <strong>유어팀 글로벌 마진 계산기</strong> - <a href="#calculator" style="color:#0066FF;">라자다/틱톡샵/이베이/아마존/쇼피/큐텐 셀러</a>를 위한 무료 해외판매 수익 계산 도구. All rights reserved.</p>
+            <p>&copy; <span id="copyright-year">2024</span> <strong>유어팀 글로벌 마진 계산기</strong> - <a href="#calculator" style="color:var(--accent);">라자다/틱톡샵/이베이/아마존/쇼피/큐텐 셀러</a>를 위한 무료 해외판매 수익 계산 도구. All rights reserved.</p>
             <p class="footer-note" data-i18n="ft.note">본 계산기는 참고용이며, 실제 수수료는 플랫폼 정책에 따라 달라질 수 있습니다.</p>
             <div class="footer-links">
                 <a href="/">마진 계산기</a> |
@@ -618,7 +618,7 @@
                 <a href="/privacy/">개인정보처리방침</a> |
                 <a href="/terms/">이용약관</a>
             </div>
-            <p class="footer-contact" data-i18n="ft.contact">협업 및 제휴 문의 : <a href="mailto:contact@ur-team.com" style="color:#0066FF;text-decoration:none;font-weight:600;">contact@ur-team.com</a></p>
+            <p class="footer-contact" data-i18n="ft.contact">협업 및 제휴 문의 : <a href="mailto:contact@ur-team.com" style="color:var(--accent);text-decoration:none;font-weight:600;">contact@ur-team.com</a></p>
         </div>
     </footer>
 

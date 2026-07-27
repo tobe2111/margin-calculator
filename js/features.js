@@ -190,7 +190,7 @@ function updateChart(revenue, purchasePrice, platformFeeAmt, fxSpreadAmt, domest
     const adjustedProfit = Math.max(0, netProfit);
     const data = [adjustedPurchase, platformFeeAmt, fxSpreadAmt, domesticShipping, intlShipping, adjustedProfit];
     const labels = ['매입가', '플랫폼 수수료', '환전 수수료', '국내배송비', '해외배송비', '순이익'];
-    const colors = ['#6b7280', '#f59e0b', '#8b5cf6', '#06b6d4', '#10b981', '#0066FF'];
+    const colors = ['#9AA1AC', '#9A6212', '#6B7280', '#3D424D', '#0E7A5F', '#0F1115'];
     if (marginChart) {
         marginChart.data.datasets[0].data = data; marginChart.update();
     } else {
@@ -277,7 +277,7 @@ function calculateComparison() {
         const cls = netProfit < 0 ? 'c-negative' : 'c-positive';
         const isBest = netProfit === bestProfit && netProfit > 0;
         return `<tr${isBest ? ' class="best-row"' : ''}>
-            <td><i class="${platform.icon}" style="color:#0066FF;margin-right:6px;"></i>${platform.name}</td>
+            <td><i class="${platform.icon}" style="color:var(--ink-3);margin-right:6px;"></i>${platform.name}</td>
             <td>${platform.fee}%</td>
             <td class="${cls}">₩ ${Math.round(netProfit).toLocaleString('ko-KR')}</td>
             <td class="${cls}">${marginRate.toFixed(1)}%</td>
@@ -473,8 +473,8 @@ async function loadExchangeRateChart() {
             datasets: [{
                 label: 'USD/KRW',
                 data,
-                borderColor: '#0066FF',
-                backgroundColor: 'rgba(0,102,255,0.08)',
+                borderColor: '#0F1115',
+                backgroundColor: 'rgba(15,17,21,0.06)',
                 borderWidth: 2,
                 pointRadius: 0,
                 pointHoverRadius: 4,

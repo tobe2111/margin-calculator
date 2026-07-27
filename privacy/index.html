@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0066FF">
+    <meta name="theme-color" content="#0F1115">
     <title>개인정보처리방침 | 유어팀 마진 계산기</title>
     <meta name="description" content="유어팀 마진 계산기 개인정보처리방침. 수집 항목, 브라우저 로컬 저장, 쿠키 및 광고, 이용자 권리 안내.">
     <meta name="robots" content="index, follow">
@@ -15,23 +15,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/shared-nav.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Noto Sans KR', sans-serif; background: #f5f6fa; color: #1a202c; line-height: 1.7; }
-        a { color: #0066FF; }
+        body { font-family: var(--sans); background: var(--paper-2); color: var(--ink); line-height: 1.7; }
+        a { color: var(--accent); }
         .container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
-        .legal-doc { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 36px 40px; margin-top: 24px; }
-        .legal-doc h2 { font-size: 19px; font-weight: 700; color: #111827; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid #f3f4f6; }
+        .legal-doc { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 36px 40px; margin-top: 24px; }
+        .legal-doc h2 { font-size: 19px; font-weight: 700; color: var(--ink); margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--paper-3); }
         .legal-doc h2:first-child { margin-top: 0; }
-        .legal-doc h3 { font-size: 15px; font-weight: 700; color: #111827; margin: 18px 0 8px; }
-        .legal-doc p { font-size: 14.5px; color: #374151; margin-bottom: 12px; }
+        .legal-doc h3 { font-size: 15px; font-weight: 700; color: var(--ink); margin: 18px 0 8px; }
+        .legal-doc p { font-size: 14.5px; color: var(--ink-2); margin-bottom: 12px; }
         .legal-doc ul { padding-left: 20px; margin-bottom: 14px; }
-        .legal-doc li { font-size: 14.5px; color: #374151; margin-bottom: 6px; }
-        .legal-meta { font-size: 13px; color: #6b7280; padding: 14px 18px; background: #f9fafb; border-radius: 10px; margin-bottom: 26px; border-left: 3px solid #0066FF; }
+        .legal-doc li { font-size: 14.5px; color: var(--ink-2); margin-bottom: 6px; }
+        .legal-meta { font-size: 13px; color: var(--ink-3); padding: 14px 18px; background: var(--paper-2); border-radius: 10px; margin-bottom: 26px; border-left: 3px solid var(--accent); }
         .legal-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 12px 0 18px; }
-        .legal-table th { background: #f9fafb; padding: 10px 12px; text-align: left; font-weight: 700; color: #374151; border: 1px solid #e5e7eb; }
-        .legal-table td { padding: 10px 12px; border: 1px solid #e5e7eb; color: #4b5563; vertical-align: top; }
+        .legal-table th { background: var(--paper-2); padding: 10px 12px; text-align: left; font-weight: 700; color: var(--ink-2); border: 1px solid var(--line); }
+        .legal-table td { padding: 10px 12px; border: 1px solid var(--line); color: var(--ink-2); vertical-align: top; }
         .highlight-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 16px 18px; margin: 16px 0; }
         .highlight-box p { margin: 0; font-size: 14px; color: #1e40af; }
         @media (max-width: 640px) { .legal-doc { padding: 22px 18px; } .legal-table { font-size: 12.5px; } }
