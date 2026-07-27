@@ -277,7 +277,11 @@
         </div>
 
         <!-- 빠른 이동 -->
-        <nav class="tools-quick-nav" aria-label="도구 빠른 이동">
+        <div class="tools-search-wrap">
+        <input type="search" id="toolSearch" class="tools-search" placeholder="도구 검색 — 예: 배송비, 관세, 환율, FBA" aria-label="도구 검색" oninput="filterTools(this.value)">
+        <p class="tools-search-empty" id="toolSearchEmpty" hidden>일치하는 도구가 없습니다.</p>
+    </div>
+    <nav class="tools-quick-nav" aria-label="도구 빠른 이동">
             <a href="#tool-sim"        class="tools-quick-link"><span class="tq-num">1</span><span>환율 시뮬레이션</span></a>
             <a href="#tool-duty"       class="tools-quick-link"><span class="tq-num">2</span><span>관세 계산기</span></a>
             <a href="#tool-compare"    class="tools-quick-link"><span class="tq-num">3</span><span>플랫폼 비교</span></a>
@@ -2595,6 +2599,67 @@
             showToolMsg('vatMsg', summary, isRefund ? 'ok' : 'info');
             if (typeof gtag !== 'undefined') gtag('event', 'tools_vat', { event_category: 'tools' });
         }
+    
+        // ===== 도구 검색 =====
+        function filterTools(q) {
+            const term = (q || '').trim().toLowerCase();
+            const sections = document.querySelectorAll('section[id^="tool-"]');
+            const links = document.querySelectorAll('.tools-quick-link');
+            let shown = 0;
+            sections.forEach(sec => {
+                const text = (sec.textContent || '').toLowerCase();
+                const hit = !term || text.includes(term);
+                sec.hidden = !hit;
+                if (hit) shown++;
+            });
+            links.forEach(a => {
+                const id = (a.getAttribute('href') || '').replace('#', '');
+                const sec = id && document.getElementById(id);
+                a.style.display = (!term || (sec && !sec.hidden)) ? '' : 'none';
+            });
+            const empty = document.getElementById('toolSearchEmpty');
+            if (empty) empty.hidden = shown !== 0;
+        }
+
+        // ===== 계산기에서 넘어온 값 채우기 =====
+        // /tools/?p=15000&s=29.9&r=1350&f=15#tool-shipping
+        (function applyIncomingValues() {
+            const q = new URLSearchParams(location.search);
+            if (![...q.keys()].length) return;
+            const set = (id, v) => {
+                const el = document.getElementById(id);
+                if (el && v !== null && v !== '') { el.value = v; return true; }
+                return false;
+            };
+            const p = q.get('p'), sell = q.get('s'), rate = q.get('r'), fee = q.get('f');
+            const filled = [];
+            // 매입가 성격의 필드들
+            const ship = q.get('ds') && q.get('is')
+                ? String((parseFloat(q.get('ds')) || 0) + (parseFloat(q.get('is')) || 0))
+                : (q.get('ds') || q.get('is'));
+            [// 매입가
+             ['sim-purchase', p], ['fx-purchase', p], ['am-purchase', p],
+             ['mp-purchase', p], ['rs-current', p], ['vat-purchase', p],
+             // 판매가
+             ['sim-selling', sell], ['fx-price', sell], ['am-price', sell],
+             ['duty-price', sell], ['rs-price', sell], ['fba-price', sell],
+             // 환율
+             ['sim-base-rate', rate], ['fx-rate', rate], ['am-rate', rate],
+             ['mp-rate', rate], ['rs-rate', rate],
+             // 수수료율
+             ['sim-fee', fee], ['fx-fee', fee], ['am-fee', fee], ['rs-fee', fee],
+             // 배송비 합계
+             ['mp-ship', ship], ['fx-ship', ship], ['rs-ship', ship]
+            ].forEach(([id, v]) => { if (v && set(id, v)) filled.push(id); });
+            if (filled.length) {
+                const note = document.createElement('div');
+                note.className = 'tools-prefill-note';
+                note.textContent = '계산기에서 입력한 값을 자동으로 채웠습니다.';
+                const nav = document.querySelector('.tools-search-wrap');
+                if (nav) nav.appendChild(note);
+            }
+        })();
+
     </script>
 </body>
 </html>
