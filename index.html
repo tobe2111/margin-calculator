@@ -308,6 +308,29 @@
                         </div>
                         <small class="help-text">보통 1% 내외 (페이오니아, 월드퍼스트 등)</small>
                     </div>
+
+                    <button type="button" class="advanced-toggle-btn" id="advancedToggle" onclick="toggleAdvancedFields()" aria-expanded="false" aria-controls="advancedFields">
+                        <i class="fas fa-chevron-right"></i> 광고비 · 반품률 반영 (실질 마진)
+                    </button>
+                    <div class="advanced-fields" id="advancedFields">
+                        <div class="form-group">
+                            <label for="adCostPerUnit">개당 광고비 <i class="fas fa-info-circle" title="아마존 PPC, 쇼피 부스트, 틱톡 광고 등 상품 1개 판매에 투입되는 광고비"></i></label>
+                            <div class="input-with-unit">
+                                <input type="number" id="adCostPerUnit" placeholder="0" min="0" step="100" value="0">
+                                <span class="input-unit">원</span>
+                            </div>
+                            <small class="help-text">월 광고 예산 ÷ 월 판매 수량으로 계산하세요</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="returnRate">반품률 <i class="fas fa-info-circle" title="반품 시 매입가와 플랫폼 수수료는 회수되지 않는다고 가정합니다"></i></label>
+                            <div class="input-with-unit">
+                                <input type="number" id="returnRate" placeholder="0" min="0" max="100" step="0.1" value="0">
+                                <span class="input-unit">%</span>
+                            </div>
+                            <small class="help-text">아마존·이베이 미국/유럽은 보통 5~15%</small>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="vatRefund">부가세 환급 (매입세액 공제) <i class="fas fa-info-circle" title="국내 매입 시 지불한 10% 부가세는 환급받습니다"></i></label>
                         <div class="checkbox-group">
@@ -408,6 +431,8 @@
                         <div class="breakdown-item"><span>환전 수수료 (FX Spread)</span><span id="costFxSpread">0 원</span></div>
                         <div class="breakdown-item"><span>국내배송비</span><span id="costDomesticShipping">0 원</span></div>
                         <div class="breakdown-item"><span>해외배송비</span><span id="costIntlShipping">0 원</span></div>
+                        <div class="breakdown-item" id="rowAdCost" style="display:none;"><span>광고비 (개당)</span><span id="costAdSpend">0 원</span></div>
+                        <div class="breakdown-item" id="rowReturnRisk" style="display:none;"><span>반품 손실 (기대값)</span><span id="costReturnRisk">0 원</span></div>
                         <div class="breakdown-item positive"><span>부가세 환급 (매입세액 공제 10%)</span><span id="vatRefundAmount">+ 0 원</span></div>
                     </div>
                     <div class="result-summary">

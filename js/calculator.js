@@ -175,6 +175,8 @@ function calculateMargin() {
     const domesticShipping = parseFloat(domesticShippingInput.value) || 0;
     const intlShipping = parseFloat(intlShippingInput.value) || 0;
     const applyVatRefund = vatRefundCheckbox.checked;
+    const adCostPerUnit = parseFloat(document.getElementById('adCostPerUnit')?.value) || 0;
+    const returnRate = parseFloat(document.getElementById('returnRate')?.value) || 0;
 
     if (sellingPrice <= 0) { alert('판매가를 입력해주세요.'); return; }
     if (currentExchangeRate <= 0) { alert('환율 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.'); return; }
@@ -188,7 +190,9 @@ function calculateMargin() {
     const platformFee = revenue * (platformFeeRate / 100);
     const fxSpread = revenue * (fxSpreadRate / 100);
     const vatRefund = applyVatRefund ? purchasePrice * 0.10 : 0;
-    const totalCostBeforeVat = purchasePrice + platformFee + fxSpread + domesticShipping + intlShipping;
+    // 반품 시 매입가·플랫폼 수수료·배송비는 회수 불가로 가정한 기대 손실
+    const returnLoss = (returnRate / 100) * (purchasePrice + platformFee + domesticShipping + intlShipping);
+    const totalCostBeforeVat = purchasePrice + platformFee + fxSpread + domesticShipping + intlShipping + adCostPerUnit + returnLoss;
     const totalCost = totalCostBeforeVat - vatRefund;
     const netProfit = revenue - totalCost;
     const marginRate = revenue > 0 ? (netProfit / revenue) * 100 : 0;
@@ -210,6 +214,18 @@ function calculateMargin() {
     document.getElementById('costDomesticShipping').textContent = `₩ ${Math.round(domesticShipping).toLocaleString('ko-KR')}`;
     document.getElementById('costIntlShipping').textContent = `₩ ${Math.round(intlShipping).toLocaleString('ko-KR')}`;
     document.getElementById('vatRefundAmount').textContent = `+ ₩ ${Math.round(vatRefund).toLocaleString('ko-KR')}`;
+
+    // 광고비 / 반품 손실은 입력이 있을 때만 상세내역에 노출
+    const rowAd = document.getElementById('rowAdCost');
+    if (rowAd) {
+        rowAd.style.display = adCostPerUnit > 0 ? 'flex' : 'none';
+        document.getElementById('costAdSpend').textContent = `₩ ${Math.round(adCostPerUnit).toLocaleString('ko-KR')}`;
+    }
+    const rowRet = document.getElementById('rowReturnRisk');
+    if (rowRet) {
+        rowRet.style.display = returnLoss > 0 ? 'flex' : 'none';
+        document.getElementById('costReturnRisk').textContent = `₩ ${Math.round(returnLoss).toLocaleString('ko-KR')} (${returnRate}%)`;
+    }
     document.getElementById('roi').textContent = `${roi.toFixed(2)} %`;
     document.getElementById('breakEvenPrice').textContent = `${symbol} ${breakEvenPrice.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     document.getElementById('resultSection').style.display = 'block';
@@ -359,14 +375,19 @@ function reverseCalculate() {
     const domesticShipping = parseFloat(domesticShippingInput.value) || 0;
     const intlShipping = parseFloat(intlShippingInput.value) || 0;
     const applyVatRefund = vatRefundCheckbox.checked;
+    const adCostPerUnit = parseFloat(document.getElementById('adCostPerUnit')?.value) || 0;
+    const returnRate = parseFloat(document.getElementById('returnRate')?.value) || 0;
 
     if (targetMarginRate <= 0 || targetMarginRate >= 100) { alert('목표 마진율을 1~99% 사이로 입력해주세요.'); return; }
     if (purchasePrice <= 0) { alert('매입가를 먼저 입력해주세요.'); return; }
     if (currentExchangeRate <= 0) { alert('환율 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.'); return; }
 
     const vatRefund = applyVatRefund ? purchasePrice * 0.10 : 0;
-    const fixedCost = purchasePrice + domesticShipping + intlShipping - vatRefund;
-    const totalFeeRate = platformFeeRate + fxSpreadRate + targetMarginRate;
+    const r = returnRate / 100;
+    // 반품 손실은 매출 무관 부분(매입·배송)과 매출 비례 부분(플랫폼 수수료)으로 분해된다
+    const baseFixed = purchasePrice + domesticShipping + intlShipping;
+    const fixedCost = baseFixed + adCostPerUnit - vatRefund + r * baseFixed;
+    const totalFeeRate = platformFeeRate + fxSpreadRate + targetMarginRate + r * platformFeeRate;
 
     if (totalFeeRate >= 100) { alert('플랫폼 수수료 + 환전 수수료 + 목표 마진율의 합이 100% 이상입니다. 값을 조정해주세요.'); return; }
 
