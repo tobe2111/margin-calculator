@@ -1,21 +1,24 @@
-/* ===== Shared Navigation Bar ===== */
+/* ===== Shared Navigation Bar =====
+   main.css 와 같은 먹색 기반. 파랑은 쓰지 않고
+   활성 상태는 밑줄로만 표시한다. */
 .site-nav {
-    background: #fff;
-    border-bottom: 2px solid #e5e7eb;
+    background: rgba(255,255,255,.88);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid #E8E9EC;
     position: sticky;
     top: 0;
     z-index: 300;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .site-nav-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
-    max-width: 1140px;
+    padding: 0 28px;
+    max-width: 1080px;
     margin: 0 auto;
-    height: 52px;
+    height: 56px;
     gap: 16px;
 }
 
@@ -24,54 +27,67 @@
     align-items: center;
     gap: 8px;
     font-weight: 700;
-    color: #0066FF;
+    color: #0F1115;
     text-decoration: none;
     font-size: 15px;
+    letter-spacing: -.02em;
     white-space: nowrap;
     flex-shrink: 0;
 }
 
 .nav-brand img {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 4px;
     flex-wrap: nowrap;
 }
 
 .nav-link {
-    padding: 6px 12px;
+    padding: 6px 11px;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 500;
-    color: #374151;
+    color: #6B7280;
     text-decoration: none;
-    transition: background 0.15s, color 0.15s;
+    transition: color .15s;
     white-space: nowrap;
+    letter-spacing: -.01em;
+    position: relative;
 }
 
 .nav-link:hover {
-    background: #f3f4f6;
-    color: #0066FF;
+    background: none;
+    color: #0F1115;
 }
 
 .nav-link.active {
-    background: #eff6ff;
-    color: #0066FF;
+    background: none;
+    color: #0F1115;
     font-weight: 700;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 11px;
+    right: 11px;
+    bottom: -1px;
+    height: 2px;
+    background: #0F1115;
 }
 
 .nav-toggle {
     display: none;
     background: none;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #E8E9EC;
     border-radius: 6px;
     font-size: 16px;
-    color: #374151;
+    color: #3D424D;
     cursor: pointer;
     padding: 6px 10px;
     line-height: 1;
@@ -79,38 +95,44 @@
 }
 
 .nav-toggle:hover {
-    background: #f3f4f6;
+    background: #F4F5F7;
 }
 
 /* ===== Sub-page Header ===== */
 /* 메인 페이지 헤더와 동일한 밝은 톤.
    서브페이지만 진한 남색이면 사이트 안에서 톤이 갈라진다. */
+/* 서브페이지 헤더 — 메인과 동일하게 좌측 정렬 활자 중심 */
 .sub-header {
-    background: linear-gradient(180deg, #fff 0%, #f0f5ff 100%);
-    color: #111827;
-    padding: 44px 20px 40px;
-    text-align: center;
+    background: #fff;
+    color: #0F1115;
+    padding: 56px 28px 40px;
+    text-align: left;
     position: relative;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #E8E9EC;
+    max-width: 1080px;
+    margin: 0 auto;
 }
 
 .sub-header h1 {
-    font-size: clamp(22px, 4vw, 34px);
+    font-size: clamp(26px, 4vw, 38px);
     font-weight: 800;
-    margin: 0 0 8px;
-    letter-spacing: -0.5px;
+    margin: 0 0 10px;
+    letter-spacing: -.035em;
+    line-height: 1.15;
     position: relative;
 }
 
-.sub-header h1 i { color: #0066FF; }
+/* 제목 옆 장식 아이콘은 쓰지 않는다 */
+.sub-header h1 i { display: none; }
 
 .sub-header p {
-    font-size: 15px;
-    color: #4b5563;
-    max-width: 560px;
-    margin: 0 auto;
+    font-size: 16px;
+    color: #3D424D;
+    max-width: 52ch;
+    margin: 0;
     position: relative;
     line-height: 1.6;
+    letter-spacing: -.012em;
 }
 
 /* Tools hero variant */
