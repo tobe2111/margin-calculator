@@ -32,6 +32,9 @@ const json = (data, status = 200, extra = {}) =>
   });
 
 /** KV 미바인딩 환경에서도 죽지 않도록 모든 KV 접근을 감싼다. */
+// KV가 아직 바인딩되지 않았을 때, 외부 API 호출이 매 요청 나가지 않도록
+// 모든 아웃바운드 fetch에 Cloudflare 엣지 캐시를 함께 건다 (cf.cacheTtl).
+// KV가 붙으면 KV가 1차, 엣지 캐시가 2차 방어선이 된다.
 async function kvGet(env, key) {
   if (!env.CACHE) return null;
   try { return await env.CACHE.get(key, 'json'); } catch { return null; }
@@ -90,7 +93,9 @@ async function fetchRates() {
     }
   } catch { /* 2차 소스로 */ }
 
-  const r2 = await fetch('https://api.frankfurter.app/latest?from=KRW');
+  const r2 = await fetch('https://api.frankfurter.app/latest?from=KRW', {
+    cf: { cacheTtl: 600, cacheEverything: true },
+  });
   if (!r2.ok) throw new Error('all rate sources failed');
   const j2 = await r2.json();
   return { rates: j2.rates, updated: j2.date || null, source: 'frankfurter' };
@@ -101,7 +106,8 @@ async function fetchHistory(days = 30) {
   const from = new Date(today.getTime() - (days - 1) * 86400000);
   const fmt = (d) => d.toISOString().split('T')[0];
   const r = await fetch(
-    `https://api.frankfurter.app/${fmt(from)}..${fmt(today)}?from=KRW&to=USD`
+    `https://api.frankfurter.app/${fmt(from)}..${fmt(today)}?from=KRW&to=USD`,
+    { cf: { cacheTtl: 3600, cacheEverything: true } }
   );
   if (!r.ok) throw new Error('history source failed');
   const j = await r.json();
