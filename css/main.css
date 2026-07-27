@@ -18,33 +18,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR','Helvetica Neue
 .container{max-width:1040px;margin:0 auto;padding:0 24px}
 
 /* Top Banner */
-.top-banner{background:#0a0f1e;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.top-banner{background:var(--blue);padding:10px 0}
 .banner-content{display:flex;align-items:center;justify-content:center;gap:12px;position:relative}
 .banner-icon{font-size:18px}
-.banner-text{color:rgba(255,255,255,.88);font-size:14px;margin:0}
+.banner-text{color:rgba(255,255,255,.95);font-size:14px;margin:0}
 .banner-text strong{color:#fff}
-.banner-text a{color:rgba(255,255,255,.88);text-decoration:underline;text-underline-offset:2px}
-.banner-close{position:absolute;right:16px;background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer;transition:color .2s;padding:0;line-height:1}
+.banner-text a{color:#fff;text-decoration:underline;text-underline-offset:2px}
+.banner-close{position:absolute;right:16px;background:none;border:none;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;transition:color .2s;padding:0;line-height:1}
 .banner-close:hover{color:#fff}
 
-/* Header */
-.header{background:linear-gradient(160deg,#040d2b 0%,#0a1f5e 50%,#040d2b 100%);padding:48px 0 40px;position:relative;overflow:hidden}
-.header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:280px;background:radial-gradient(ellipse,rgba(0,102,255,.18) 0%,transparent 70%);pointer-events:none}
+/* Header — 밝은 히어로.
+   기존 진한 남색 그라데이션이 화면 상단 전체를 눌러 무거운 인상을 줬다.
+   본문과 같은 밝은 톤으로 통일하고 색은 포인트로만 쓴다. */
+.header{background:linear-gradient(180deg,#fff 0%,#f0f5ff 100%);padding:52px 0 40px;position:relative;border-bottom:1px solid var(--border)}
 .header-content{text-align:center;position:relative}
-.main-title{font-size:38px;font-weight:800;color:#fff;letter-spacing:-.5px;margin-bottom:8px;line-height:1.2}
-.header .subtitle{font-size:16px;color:rgba(255,255,255,.62);margin-bottom:20px;max-width:520px;margin-left:auto;margin-right:auto}
-.header .platforms{font-size:13px;color:rgba(255,255,255,.38);margin-bottom:20px;letter-spacing:.2px}
+.main-title{font-size:40px;font-weight:800;color:var(--t1);letter-spacing:-.8px;margin-bottom:10px;line-height:1.2}
+.header .subtitle{font-size:16px;color:var(--t2);margin-bottom:20px;max-width:520px;margin-left:auto;margin-right:auto}
+.header .platforms{font-size:13px;color:var(--t3);margin-bottom:20px;letter-spacing:.2px}
 .platform-logos{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-bottom:24px}
-.platform-logo-item{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:30px;padding:6px 14px;font-size:13px;font-weight:600;color:rgba(255,255,255,.82);backdrop-filter:blur(8px);transition:all .2s}
-.platform-logo-item:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22)}
+.platform-logo-item{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:30px;padding:6px 14px;font-size:13px;font-weight:600;color:var(--t2);box-shadow:0 1px 3px rgba(0,0,0,.04);transition:all .2s}
+.platform-logo-item:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
 .platform-logo-item i{font-size:14px}
-.header-feature-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.07)}
-.header-feature-strip span{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.3px}
+.header-feature-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;padding-top:20px;border-top:1px solid var(--border)}
+.header-feature-strip span{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--t3);letter-spacing:.3px}
+.header-feature-strip span i{color:var(--blue)}
 
 /* Language Selector */
 .language-selector{position:absolute;top:16px;right:24px;z-index:10}
-.language-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;color:rgba(255,255,255,.78);cursor:pointer;transition:all .2s;font-family:inherit}
-.language-btn:hover{background:rgba(255,255,255,.15)}
+.language-btn{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;color:var(--t2);cursor:pointer;transition:all .2s;font-family:inherit}
+.language-btn:hover{border-color:var(--blue);color:var(--blue)}
 .language-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--border);border-radius:var(--r-md);box-shadow:var(--shadow-md);overflow:hidden;min-width:140px;display:none;z-index:100}
 .language-dropdown.open{display:block}
 .language-option{display:flex;align-items:center;gap:8px;width:100%;padding:10px 16px;background:none;border:none;font-size:14px;color:var(--t1);cursor:pointer;transition:background .15s;font-family:inherit}
