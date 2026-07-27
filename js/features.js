@@ -31,7 +31,9 @@ function saveInputsToLocalStorage() {
             domesticShipping: document.getElementById('domesticShipping').value,
             intlShipping: document.getElementById('intlShipping').value,
             vatRefund: document.getElementById('vatRefund').checked,
-            targetMargin: document.getElementById('targetMargin').value
+            targetMargin: document.getElementById('targetMargin').value,
+            adCostPerUnit: document.getElementById('adCostPerUnit')?.value,
+            returnRate: document.getElementById('returnRate')?.value
         };
         localStorage.setItem('marginCalcInputs', JSON.stringify(inputs));
     } catch(e) {}
@@ -54,6 +56,12 @@ function restoreInputsFromLocalStorage() {
         set('domesticShipping', d.domesticShipping);
         set('intlShipping', d.intlShipping);
         set('targetMargin', d.targetMargin);
+        set('adCostPerUnit', d.adCostPerUnit);
+        set('returnRate', d.returnRate);
+        // 저장된 값이 있으면 고급 설정 패널을 열어둔다
+        if ((parseFloat(d.adCostPerUnit) || 0) > 0 || (parseFloat(d.returnRate) || 0) > 0) {
+            openAdvancedFields();
+        }
         if (d.currency) {
             document.getElementById('currency').value = d.currency;
             currentCurrency = d.currency;
@@ -85,6 +93,12 @@ function resetForm() {
     });
     document.getElementById('fxSpread').value = '1';
     document.getElementById('vatRefund').checked = true;
+    ['adCostPerUnit','returnRate'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '0';
+    });
+    ['rowAdCost','rowReturnRisk'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.style.display = 'none';
+    });
     ['resultSection','reverseResult','coupangBanner','chartSection','comparisonSection'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
     });
@@ -334,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadExchangeRateChart();
     setupMobileCalcButton();
     // Auto-save on any input change
-    document.querySelectorAll('#productName,#purchasePrice,#currency,#sellingPrice,#platformFee,#fxSpread,#domesticShipping,#intlShipping,#vatRefund,#targetMargin').forEach(el => {
+    document.querySelectorAll('#productName,#purchasePrice,#currency,#sellingPrice,#platformFee,#fxSpread,#domesticShipping,#intlShipping,#vatRefund,#targetMargin,#adCostPerUnit,#returnRate').forEach(el => {
         el.addEventListener('change', saveInputsToLocalStorage);
         el.addEventListener('input', saveInputsToLocalStorage);
     });
@@ -360,6 +374,25 @@ function setupNumberFormatDisplay() {
         el.addEventListener('input', update);
         update();
     });
+}
+
+// ===== 고급 설정 (광고비 · 반품률) 토글 =====
+function openAdvancedFields() {
+    const panel = document.getElementById('advancedFields');
+    const btn = document.getElementById('advancedToggle');
+    if (!panel || !btn) return;
+    panel.classList.add('show');
+    btn.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+}
+
+function toggleAdvancedFields() {
+    const panel = document.getElementById('advancedFields');
+    const btn = document.getElementById('advancedToggle');
+    if (!panel || !btn) return;
+    const open = panel.classList.toggle('show');
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
 }
 
 // ===== 모바일 고정 계산 버튼 =====

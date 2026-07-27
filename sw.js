@@ -1,7 +1,7 @@
-const CACHE = 'margin-calc-v3';
+const CACHE = 'margin-calc-v4';
 const STATIC = [
   '/', '/guide/', '/platforms/', '/tools/',
-  '/css/shared-nav.css', '/css/design-updates.css', '/css/style.css',
+  '/css/main.css', '/css/shared-nav.css',
   '/js/calculator.js', '/js/features.js', '/js/shared-nav.js',
   '/js/translations.js', '/js/language.js',
   '/manifest.json', '/favicon.ico', '/favicon.svg'
