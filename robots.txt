@@ -3,6 +3,7 @@ Allow: /
 Crawl-delay: 1
 
 Disallow: /cdn-cgi/
+Disallow: /api/
 
 # Google: no crawl delay
 User-agent: Googlebot

@@ -425,14 +425,26 @@ async function loadExchangeRateChart() {
 
     let labels = [], data = [];
     try {
-        const res = await fetch(`https://api.frankfurter.app/${fmt(from)}..${fmt(today)}?from=KRW&to=USD`);
-        const json = await res.json();
-        if (json.rates) {
-            Object.entries(json.rates).sort().forEach(([date, r]) => {
-                labels.push(date.slice(5));
-                data.push(r.USD ? Math.round(1 / r.USD) : null);
-            });
+        // 자체 프록시 우선 (서버 KV 캐시 공유) → 실패 시 원본 API 직접 호출
+        let series = null;
+        try {
+            const pr = await fetch('/api/rates/history');
+            if (pr.ok) {
+                const pj = await pr.json();
+                if (pj && Array.isArray(pj.series) && pj.series.length) series = pj.series;
+            }
+        } catch (e) { /* 직접 호출로 폴백 */ }
+
+        if (!series) {
+            const res = await fetch(`https://api.frankfurter.app/${fmt(from)}..${fmt(today)}?from=KRW&to=USD`);
+            const json = await res.json();
+            if (!json.rates) throw new Error('no history data');
+            series = Object.entries(json.rates).sort()
+                .map(([date, r]) => ({ date, rate: r.USD ? Math.round(1 / r.USD) : null }))
+                .filter(p => p.rate);
         }
+        if (!series.length) throw new Error('empty history');
+        series.forEach(p => { labels.push(p.date.slice(5)); data.push(p.rate); });
     } catch(e) {
         // Fallback: generate simulated data from current rate
         const base = defaultExchangeRates['USD'] || 1350;

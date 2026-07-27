@@ -18,7 +18,29 @@ const currencyInfo = {
 };
 
 const EXCHANGE_RATE_API = 'https://open.er-api.com/v6/latest/KRW';
+const RATE_API_PROXY = '/api/rates';
 const RATE_CACHE_KEY = 'marginRateCache';
+
+/**
+ * 환율 원본 데이터를 가져온다.
+ * 자체 프록시(/api/rates)를 우선 사용 — 서버 KV 캐시를 공유하므로
+ * 외부 API 호출량이 사용자 수와 무관하게 일정하고 응답도 빠르다.
+ * 프록시가 없는 환경(로컬 정적 서버 등)에서는 직접 호출로 폴백한다.
+ */
+async function fetchRatesPayload() {
+    try {
+        const r = await fetch(RATE_API_PROXY);
+        if (r.ok) {
+            const j = await r.json();
+            if (j && j.rates) return j;
+        }
+    } catch (e) { /* 직접 호출로 폴백 */ }
+    const r2 = await fetch(EXCHANGE_RATE_API);
+    if (!r2.ok) throw new Error('환율 API 요청 실패');
+    const j2 = await r2.json();
+    if (!j2 || !j2.rates) throw new Error('잘못된 API 응답');
+    return { rates: j2.rates, updated: j2.time_last_update_utc || null };
+}
 const RATE_CACHE_TTL = 60 * 60 * 1000; // 1시간
 let currentCurrency = 'USD';
 let currentExchangeRate = 1300;
@@ -69,10 +91,8 @@ async function fetchRealTimeExchangeRates() {
     if (loadCachedRates()) return true;
     try {
         if (exchangeRateDisplay) exchangeRateDisplay.value = '업데이트 중...';
-        const response = await fetch(EXCHANGE_RATE_API);
-        if (!response.ok) throw new Error('환율 API 요청 실패');
-        const data = await response.json();
-        if (data.result === 'success' && data.rates) {
+        const data = await fetchRatesPayload();
+        if (data && data.rates) {
             const rates = data.rates;
             defaultExchangeRates = {
                 USD: rates.USD ? Math.round(1 / rates.USD) : 1300,
@@ -96,7 +116,7 @@ async function fetchRealTimeExchangeRates() {
             };
             currentExchangeRate = defaultExchangeRates[currentCurrency];
             updateExchangeRateDisplay();
-            updateExchangeRateTimestamp(data.time_last_update_utc);
+            updateExchangeRateTimestamp(data.updated);
             saveCachedRates();
             return true;
         } else {
@@ -549,9 +569,8 @@ function startRateAlertCheck(target) {
     rateAlertInterval = setInterval(async () => {
         if (!rateAlertActive) { clearInterval(rateAlertInterval); return; }
         try {
-            const res = await fetch('https://open.er-api.com/v6/latest/KRW');
-            const d   = await res.json();
-            if (d.result === 'success' && d.rates?.USD) {
+            const d = await fetchRatesPayload();
+            if (d.rates?.USD) {
                 const current = Math.round(1 / d.rates.USD);
                 if (current >= target) {
                     new Notification('환율 알림 — 유어팀 마진 계산기', {

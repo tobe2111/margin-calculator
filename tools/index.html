@@ -89,6 +89,19 @@
         #tool-hs     .tool-card { border-left-color: #84cc16; } #tool-hs     .tool-icon { background: #ecfccb; color: #65a30d; }
         #tool-settlement .tool-card { border-left-color: #f97316; } #tool-settlement .tool-icon { background: #ffedd5; color: #ea580c; }
 
+        /* Excel/CSV upload */
+        .upload-zone { border: 2px dashed #d1d5db; border-radius: 12px; padding: 24px 20px; text-align: center; background: #fafbfc; margin-bottom: 16px; transition: all .18s ease; }
+        .upload-zone.dragover { border-color: #0066FF; background: #eff6ff; }
+        .upload-zone > i { font-size: 28px; color: #9ca3af; margin-bottom: 10px; display: block; }
+        .upload-zone.dragover > i { color: #0066FF; }
+        .upload-title { font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px; }
+        .upload-link { background: none; border: none; color: #0066FF; font: inherit; font-weight: 700; cursor: pointer; text-decoration: underline; padding: 0; }
+        .upload-hint { font-size: 12px; color: #6b7280; line-height: 1.7; }
+        .upload-privacy { font-size: 11.5px; color: #059669; margin-top: 10px; font-weight: 600; }
+        .upload-status { font-size: 13px; font-weight: 600; margin-top: 10px; min-height: 18px; }
+        .upload-status.ok { color: #059669; }
+        .upload-status.err { color: #dc2626; }
+
         /* Form elements */
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 16px; }
         .form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
@@ -421,11 +434,25 @@
                     <div class="tool-icon"><i class="fas fa-layer-group"></i></div>
                     <div><h2>복수 상품 일괄 계산</h2></div>
                 </div>
-                <p class="tool-desc">여러 상품의 마진을 한번에 계산하고 CSV로 내보냅니다. 행 추가 버튼으로 상품을 늘릴 수 있습니다.</p>
+                <p class="tool-desc">여러 상품의 마진을 한번에 계산하고 CSV로 내보냅니다. 엑셀 파일을 올리거나 행 추가로 직접 입력할 수 있습니다.</p>
+
+                <div class="upload-zone" id="uploadZone">
+                    <input type="file" id="batchFile" accept=".xlsx,.xls,.csv" hidden onchange="handleBatchFile(event)">
+                    <i class="fas fa-file-arrow-up"></i>
+                    <p class="upload-title">엑셀·CSV 파일을 여기에 끌어다 놓거나 <button type="button" class="upload-link" onclick="document.getElementById('batchFile').click()">파일 선택</button></p>
+                    <p class="upload-hint">
+                        열 순서: 상품명 · 매입가(₩) · 판매가 · 환율(₩) · 수수료(%) · 배송비(₩) &nbsp;|&nbsp; 첫 행이 제목이면 자동으로 건너뜁니다
+                        <br><button type="button" class="upload-link" onclick="downloadBatchTemplate()">양식 파일 내려받기</button>
+                    </p>
+                    <p class="upload-privacy"><i class="fas fa-lock"></i> 파일은 서버로 전송되지 않고 브라우저에서만 처리됩니다</p>
+                    <p class="upload-status" id="uploadStatus"></p>
+                </div>
+
                 <div class="batch-actions">
                     <button class="batch-add-btn" onclick="addBatchRow()"><i class="fas fa-plus"></i> 행 추가</button>
                     <button class="tool-btn" onclick="calcBatch()"><i class="fas fa-calculator"></i> 일괄 계산</button>
                     <button class="batch-add-btn" onclick="exportBatch()"><i class="fas fa-file-csv"></i> CSV 내보내기</button>
+                    <button class="batch-add-btn" onclick="clearBatch()"><i class="fas fa-trash-can"></i> 전체 비우기</button>
                 </div>
                 <div class="batch-table-wrap">
                     <table class="batch-table">
@@ -883,6 +910,8 @@
                 <a href="/platforms/">플랫폼 비교</a>
                 <a href="/tools/">도구 모음</a>
                 <a href="/guide/">셀러 가이드</a>
+                <a href="/privacy/">개인정보처리방침</a>
+                <a href="/terms/">이용약관</a>
             </div>
             <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
         </div>
@@ -1002,6 +1031,159 @@
         }
 
         // ===== 복수 상품 일괄 계산 =====
+        // ===== 엑셀 · CSV 업로드 =====
+        // 파일은 브라우저에서만 파싱한다 (서버 전송 없음).
+        const SHEETJS_CDN = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+        let sheetJsLoading = null;
+
+        function loadSheetJs() {
+            if (window.XLSX) return Promise.resolve();
+            if (sheetJsLoading) return sheetJsLoading;
+            sheetJsLoading = new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = SHEETJS_CDN;
+                s.onload = resolve;
+                s.onerror = () => reject(new Error('엑셀 파서를 불러오지 못했습니다'));
+                document.head.appendChild(s);
+            });
+            return sheetJsLoading;
+        }
+
+        function setUploadStatus(msg, kind) {
+            const el = document.getElementById('uploadStatus');
+            if (!el) return;
+            el.textContent = msg;
+            el.className = 'upload-status' + (kind ? ' ' + kind : '');
+        }
+
+        /** 첫 행이 제목 행인지 판단 — 숫자여야 할 칸이 숫자가 아니면 제목으로 본다. */
+        function looksLikeHeader(row) {
+            if (!row || row.length < 2) return false;
+            const numeric = [1, 2, 3, 4, 5].filter(i => row[i] !== undefined && row[i] !== '');
+            if (!numeric.length) return false;
+            return numeric.every(i => isNaN(parseFloat(String(row[i]).replace(/[,\s₩$]/g, ''))));
+        }
+
+        const cleanNum = v => {
+            if (v === undefined || v === null || v === '') return '';
+            const n = parseFloat(String(v).replace(/[,\s₩$%]/g, ''));
+            return isNaN(n) ? '' : n;
+        };
+
+        function fillBatchFromRows(rows) {
+            const data = rows.filter(r => r && r.some(c => c !== undefined && String(c).trim() !== ''));
+            if (!data.length) throw new Error('내용이 없는 파일입니다');
+            if (looksLikeHeader(data[0])) data.shift();
+            if (!data.length) throw new Error('제목 행 외에 데이터가 없습니다');
+
+            const MAX = 200;
+            const truncated = data.length > MAX;
+            const use = data.slice(0, MAX);
+
+            const tbody = document.getElementById('batchTableBody');
+            tbody.innerHTML = '';
+            use.forEach(r => {
+                addBatchRow();
+                const tr = tbody.lastElementChild;
+                const inputs = tr.querySelectorAll('input');
+                inputs[0].value = r[0] !== undefined ? String(r[0]).trim() : '';
+                const map = [
+                    [1, '.b-purchase'], [2, '.b-selling'], [3, '.b-rate'],
+                    [4, '.b-fee'], [5, '.b-ship'],
+                ];
+                map.forEach(([i, sel]) => {
+                    const v = cleanNum(r[i]);
+                    if (v !== '') tr.querySelector(sel).value = v;
+                });
+            });
+            renumberBatch();
+            calcBatch();
+            setUploadStatus(
+                `✅ ${use.length}개 상품을 불러와 계산했습니다.` +
+                (truncated ? ` (파일에 ${data.length}행이 있어 앞 ${MAX}행만 적용했습니다)` : ''),
+                'ok'
+            );
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'batch_upload', { event_category: 'tools', value: use.length });
+            }
+        }
+
+        async function processBatchFile(file) {
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) {
+                setUploadStatus('❌ 파일이 너무 큽니다 (최대 5MB)', 'err');
+                return;
+            }
+            setUploadStatus('파일을 읽는 중...', '');
+            try {
+                let rows;
+                if (/\.csv$/i.test(file.name)) {
+                    const text = await file.text();
+                    rows = text.split(/\r?\n/).map(line => {
+                        // 따옴표로 감싼 필드 안의 쉼표를 보존하며 분리
+                        const out = []; let cur = '', q = false;
+                        for (const ch of line) {
+                            if (ch === '"') q = !q;
+                            else if (ch === ',' && !q) { out.push(cur); cur = ''; }
+                            else cur += ch;
+                        }
+                        out.push(cur);
+                        return out.map(c => c.trim());
+                    });
+                } else {
+                    await loadSheetJs();
+                    const buf = await file.arrayBuffer();
+                    const wb = XLSX.read(buf, { type: 'array' });
+                    const ws = wb.Sheets[wb.SheetNames[0]];
+                    rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '' });
+                }
+                fillBatchFromRows(rows);
+            } catch (err) {
+                setUploadStatus('❌ ' + (err.message || '파일을 읽지 못했습니다'), 'err');
+            }
+        }
+
+        function handleBatchFile(e) {
+            processBatchFile(e.target.files[0]);
+            e.target.value = ''; // 같은 파일 재선택 허용
+        }
+
+        function downloadBatchTemplate() {
+            const rows = [
+                ['상품명', '매입가(원)', '판매가', '환율(원)', '수수료(%)', '배송비(원)'],
+                ['샘플 상품 A', 15000, 25, 1350, 5, 3000],
+                ['샘플 상품 B', 32000, 49.9, 1350, 15, 5500],
+            ];
+            const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+            const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = '일괄계산_양식.csv';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        function clearBatch() {
+            const tbody = document.getElementById('batchTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            addBatchRow(); addBatchRow(); addBatchRow();
+            setUploadStatus('', '');
+        }
+
+        // 드래그 앤 드롭
+        document.addEventListener('DOMContentLoaded', () => {
+            const zone = document.getElementById('uploadZone');
+            if (!zone) return;
+            ['dragenter', 'dragover'].forEach(ev =>
+                zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('dragover'); })
+            );
+            ['dragleave', 'drop'].forEach(ev =>
+                zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('dragover'); })
+            );
+            zone.addEventListener('drop', e => processBatchFile(e.dataTransfer.files[0]));
+        });
+
         function addBatchRow() {
             const tbody = document.getElementById('batchTableBody');
             const idx = tbody.children.length + 1;

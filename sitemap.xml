@@ -37,4 +37,16 @@
     <xhtml:link rel="alternate" hreflang="ko" href="https://margin.ur-team.com/tools/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://margin.ur-team.com/tools/"/>
   </url>
+  <url>
+    <loc>https://margin.ur-team.com/privacy/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://margin.ur-team.com/terms/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>

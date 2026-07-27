@@ -1,14 +1,39 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "margin-calculator",
+  "main": "worker.js",
   "compatibility_date": "2026-04-14",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS"
   },
   "compatibility_flags": [
     "nodejs_compat"
-  ]
+  ],
+  // 캐시 워밍 — 매시 정각에 환율 캐시를 미리 채워
+  // 사용자 요청이 항상 캐시 히트가 되게 한다.
+  "triggers": {
+    "crons": ["0 * * * *"]
+  }
+
+  // ── 아래는 운영자 설정이 끝난 뒤 활성화 ────────────────────────
+  //
+  // [1] KV 캐시 (권장 — 외부 API 호출을 시간당 1회로 고정)
+  //     $ npx wrangler kv namespace create CACHE
+  //     출력된 id를 넣고 아래 블록의 주석을 해제한다.
+  //     ※ id를 비운 채로 두면 배포가 실패하므로, 반드시 값을 채운 뒤 해제할 것.
+  //
+  // ,"kv_namespaces": [
+  //   { "binding": "CACHE", "id": "여기에_발급받은_ID" }
+  // ]
+  //
+  // [2] 관세청 UNIPASS 키 (HS코드·고시환율 조회)
+  //     https://unipass.customs.go.kr 에서 무료 발급 후:
+  //     $ npx wrangler secret put UNIPASS_KEY
+  //     시크릿이므로 이 파일에 적지 않는다.
+  //     미설정 시 관련 API는 available:false 로 응답하고
+  //     프런트엔드는 내장 표로 자동 폴백한다.
 }
