@@ -1,6 +1,6 @@
-const CACHE = 'margin-calc-v6';
+const CACHE = 'margin-calc-v7';
 const STATIC = [
-  '/', '/guide/', '/platforms/', '/tools/', '/privacy/', '/terms/',
+  '/', '/guide/', '/platforms/', '/tools/', '/dashboard/', '/privacy/', '/terms/',
   '/css/main.css', '/css/shared-nav.css',
   '/js/calculator.js', '/js/features.js', '/js/shared-nav.js',
   '/js/translations.js', '/js/language.js',

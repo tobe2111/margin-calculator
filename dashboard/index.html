@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0066FF">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LFJX1XVFNZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LFJX1XVFNZ');
+    </script>
+    <title>셀러 대시보드 | 월간 손익·SKU 포트폴리오 분석 | 유어팀 마진 계산기</title>
+    <meta name="description" content="저장한 마진 계산 데이터로 월간 손익 추이, SKU 포트폴리오 매트릭스, 목표 판매량을 자동 분석하는 셀러 대시보드. 모든 데이터는 브라우저에만 저장되며 서버로 전송되지 않습니다.">
+    <meta name="keywords" content="셀러 대시보드, 해외판매 손익 분석, SKU 포트폴리오, 월간 손익 추이, 마진율 분석, 순이익 목표 관리, 상품별 마진 비교, 셀러 수익 관리, 판매량 목표 계산, 적자 상품 점검, 마진 계산기 대시보드">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://margin.ur-team.com/dashboard/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://margin.ur-team.com/dashboard/">
+    <meta property="og:title" content="셀러 대시보드 | 월간 손익·SKU 포트폴리오 분석">
+    <meta property="og:description" content="저장한 계산 데이터로 월간 손익 추이와 SKU 포트폴리오를 자동 분석합니다. 데이터는 브라우저에만 저장됩니다.">
+    <meta property="og:image" content="https://margin.ur-team.com/og-image.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="유어팀 글로벌 마진 계산기">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="셀러 대시보드 | 유어팀 마진 계산기">
+    <meta name="twitter:description" content="월간 손익 추이·SKU 포트폴리오·목표 판매량을 한 화면에서 분석하세요">
+    <link rel="alternate" hreflang="ko" href="https://margin.ur-team.com/dashboard/" />
+    <link rel="alternate" hreflang="x-default" href="https://margin.ur-team.com/dashboard/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/shared-nav.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "마진 계산기", "item": "https://margin.ur-team.com/"},
+        {"@type": "ListItem", "position": 2, "name": "셀러 대시보드", "item": "https://margin.ur-team.com/dashboard/"}
+      ]
+    }
+    </script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: #f9fafb; color: #1a202c; line-height: 1.6; }
+        a { color: #0066FF; }
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+
+        /* Privacy note */
+        .privacy-note { display: flex; align-items: flex-start; gap: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 14px 18px; margin-top: 24px; }
+        .privacy-note i { color: #0066FF; margin-top: 3px; flex-shrink: 0; }
+        .privacy-note p { font-size: 13.5px; color: #1e40af; margin: 0; }
+
+        /* Summary cards */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 16px; }
+        .kpi-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 20px 22px; }
+        .kpi-label { font-size: 12.5px; color: #6b7280; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .kpi-label i { color: #9ca3af; font-size: 12px; }
+        .kpi-value { font-size: clamp(22px, 3.4vw, 30px); font-weight: 800; letter-spacing: -0.5px; margin-top: 8px; line-height: 1.2; word-break: break-all; }
+        .kpi-sub { font-size: 12px; color: #9ca3af; margin-top: 6px; }
+        .val-pos { color: #059669; }
+        .val-neg { color: #dc2626; }
+        .val-neutral { color: #111827; }
+        .val-blue { color: #0066FF; }
+
+        /* Cards / panels */
+        .panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 22px; margin-top: 16px; }
+        .panel-caption { font-size: 12px; color: #9ca3af; margin-bottom: 12px; }
+        .chart-box { position: relative; height: 340px; width: 100%; }
+
+        /* Quadrant legend */
+        .quad-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-top: 16px; }
+        .quad-chip { border-radius: 10px; padding: 12px 14px; border: 1px solid #e5e7eb; background: #fafafa; }
+        .quad-chip strong { display: block; font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+        .quad-chip span { font-size: 11.5px; color: #6b7280; }
+        .q-core { background: #ecfdf5; border-color: #a7f3d0; } .q-core strong { color: #047857; }
+        .q-grow { background: #fffbeb; border-color: #fde68a; } .q-grow strong { color: #b45309; }
+        .q-volume { background: #eff6ff; border-color: #bfdbfe; } .q-volume strong { color: #1d4ed8; }
+        .q-cut { background: #fef2f2; border-color: #fecaca; } .q-cut strong { color: #b91c1c; }
+
+        /* Tables */
+        .table-wrap { overflow-x: auto; margin-top: 14px; -webkit-overflow-scrolling: touch; }
+        .dash-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; min-width: 640px; }
+        .dash-table th { background: #f9fafb; color: #374151; font-weight: 700; text-align: left; padding: 11px 14px; border-bottom: 2px solid #e5e7eb; white-space: nowrap; }
+        .dash-table td { padding: 11px 14px; border-bottom: 1px solid #f3f4f6; color: #4b5563; vertical-align: middle; }
+        .dash-table tbody tr:hover { background: #f8faff; }
+        .dash-table .num { text-align: right; white-space: nowrap; }
+        .dash-table .muted { color: #9ca3af; font-size: 11.5px; }
+        .sortable { cursor: pointer; user-select: none; }
+        .sortable:hover { color: #0066FF; }
+        .sortable i { font-size: 10px; margin-left: 5px; color: #cbd5e1; }
+        .sortable.active i { color: #0066FF; }
+        .badge { display: inline-block; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+        .b-core { background: #ecfdf5; color: #047857; }
+        .b-grow { background: #fffbeb; color: #b45309; }
+        .b-volume { background: #eff6ff; color: #1d4ed8; }
+        .b-cut { background: #fef2f2; color: #b91c1c; }
+
+        /* Goal form */
+        .goal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+        .goal-field label { display: block; font-size: 12.5px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+        .goal-field input { width: 100%; padding: 11px 13px; border: 1.5px solid #e5e7eb; border-radius: 9px; font-size: 14px; font-family: inherit; color: #111827; background: #fff; }
+        .goal-field input:focus { outline: none; border-color: #0066FF; box-shadow: 0 0 0 3px rgba(0,102,255,0.10); }
+        .goal-field small { display: block; font-size: 11.5px; color: #9ca3af; margin-top: 5px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: none; border-radius: 9px; padding: 11px 20px; font-size: 13.5px; font-weight: 700; font-family: inherit; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s; }
+        .btn-primary { background: #0066FF; color: #fff; }
+        .btn-primary:hover { background: #0047cc; }
+        .btn-ghost { background: #fff; color: #374151; border: 1.5px solid #e5e7eb; }
+        .btn-ghost:hover { border-color: #0066FF; color: #0066FF; }
+        .goal-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+        .goal-result { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #e5e7eb; }
+        .goal-stat { background: #f9fafb; border-radius: 10px; padding: 14px 16px; }
+        .goal-stat span { display: block; font-size: 12px; color: #6b7280; font-weight: 600; }
+        .goal-stat strong { display: block; font-size: 20px; font-weight: 800; color: #111827; margin-top: 4px; letter-spacing: -0.4px; }
+        .progress-wrap { margin-top: 18px; }
+        .progress-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 12.5px; color: #374151; font-weight: 600; margin-bottom: 8px; }
+        .progress-bar { height: 14px; background: #f3f4f6; border-radius: 999px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #0066FF, #22c55e); width: 0; transition: width 0.5s ease; }
+        .progress-fill.over { background: linear-gradient(90deg, #10b981, #059669); }
+        .progress-fill.low { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+
+        /* Empty state */
+        .empty-state { text-align: center; padding: 38px 20px; background: #fff; border: 1px dashed #d1d5db; border-radius: 14px; margin-top: 16px; }
+        .empty-state .empty-icon { font-size: 34px; color: #cbd5e1; margin-bottom: 12px; display: block; }
+        .empty-state h3 { font-size: 15.5px; font-weight: 700; color: #374151; margin-bottom: 6px; }
+        .empty-state p { font-size: 13px; color: #9ca3af; margin-bottom: 18px; line-height: 1.6; }
+        .empty-state .back-to-calc { margin-top: 0; }
+
+        .section-actions { display: flex; justify-content: flex-end; margin-top: 12px; }
+
+        @media (max-width: 640px) {
+            .panel { padding: 16px; }
+            .chart-box { height: 280px; }
+            .kpi-card { padding: 16px 18px; }
+            .goal-actions .btn { flex: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Shared Nav injected by JS -->
+
+    <header class="sub-header">
+        <h1><i class="fas fa-chart-line"></i> 셀러 대시보드</h1>
+        <p>저장한 계산 데이터로 월간 손익 추이 · SKU 포트폴리오 · 목표 판매량을 한 화면에서 분석하세요</p>
+    </header>
+
+    <main class="subpage-main">
+        <div class="container">
+
+            <div class="privacy-note">
+                <i class="fas fa-lock"></i>
+                <p><strong>모든 데이터는 브라우저에만 저장되며 서버로 전송되지 않습니다.</strong> 이 대시보드는 마진 계산기에서 저장한 프로젝트와 계산 이력을 이용자의 기기에서만 읽어 분석합니다.</p>
+            </div>
+
+            <!-- 1. 요약 카드 -->
+            <section class="subpage-section">
+                <h2><i class="fas fa-gauge-high"></i> 요약</h2>
+                <div id="summarySection"></div>
+            </section>
+
+            <!-- 2. 월간 손익 추이 -->
+            <section class="subpage-section">
+                <h2><i class="fas fa-chart-column"></i> 월간 손익 추이</h2>
+                <div id="monthlySection"></div>
+            </section>
+
+            <!-- 3. SKU 포트폴리오 매트릭스 -->
+            <section class="subpage-section">
+                <h2><i class="fas fa-table-cells-large"></i> SKU 포트폴리오 매트릭스</h2>
+                <div id="matrixSection"></div>
+            </section>
+
+            <!-- 4. 목표 관리 -->
+            <section class="subpage-section">
+                <h2><i class="fas fa-bullseye"></i> 목표 관리</h2>
+                <div id="goalSection"></div>
+            </section>
+
+            <!-- 5. 상품별 상세 표 -->
+            <section class="subpage-section">
+                <h2><i class="fas fa-list-ul"></i> 상품별 상세</h2>
+                <div id="productsSection"></div>
+            </section>
+
+            <!-- CTA -->
+            <div style="text-align:center;margin-top:48px;padding:32px;background:#fff;border-radius:16px;border:1px solid #e5e7eb;">
+                <p style="font-size:20px;font-weight:800;color:#111827;margin-bottom:8px;">데이터가 쌓일수록 분석이 정확해집니다</p>
+                <p style="font-size:14px;color:#6b7280;margin-bottom:20px;">마진 계산기에서 상품을 계산하고 프로젝트로 저장하면 이 대시보드에 자동 반영됩니다.</p>
+                <a href="/" class="back-to-calc"><i class="fas fa-calculator"></i> 마진 계산기로 이동</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="sub-footer">
+        <div class="container">
+            <p>&copy; <span id="copyright-year">2026</span> <strong>유어팀 글로벌 마진 계산기</strong> — 해외 판매 셀러를 위한 무료 수익 분석 도구</p>
+            <div class="footer-links">
+                <a href="/">마진 계산기</a>
+                <a href="/platforms/">플랫폼 비교</a>
+                <a href="/tools/">도구 모음</a>
+                <a href="/dashboard/">셀러 대시보드</a>
+                <a href="/guide/">셀러 가이드</a>
+                <a href="/privacy/">개인정보처리방침</a>
+                <a href="/terms/">이용약관</a>
+            </div>
+            <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+        </div>
+    </footer>
+
+    <script src="/js/shared-nav.js"></script>
+    <script>
+    document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+    (function () {
+        'use strict';
+
+        /* ===================== 유틸 ===================== */
+
+        function isFiniteNum(v) {
+            return typeof v === 'number' && isFinite(v);
+        }
+
+        function num(v) {
+            var n = (typeof v === 'number') ? v : parseFloat(v);
+            return isFiniteNum(n) ? n : 0;
+        }
+
+        function safeDiv(a, b, fallback) {
+            a = num(a); b = num(b);
+            if (b === 0) return (fallback === undefined ? 0 : fallback);
+            var r = a / b;
+            return isFiniteNum(r) ? r : (fallback === undefined ? 0 : fallback);
+        }
+
+        function pad2(n) {
+            n = Math.abs(Math.round(num(n)));
+            return n < 10 ? '0' + n : String(n);
+        }
+
+        function toDate(v) {
+            if (v === null || v === undefined || v === '') return null;
+            var d = (v instanceof Date) ? v : new Date(v);
+            if (!d || isNaN(d.getTime())) return null;
+            return d;
+        }
+
+        function won(v) {
+            var n = Math.round(num(v));
+            var sign = n < 0 ? '-' : '';
+            return sign + '₩' + Math.abs(n).toLocaleString('ko-KR');
+        }
+
+        function pct(v, digits) {
+            var d = (digits === undefined) ? 1 : digits;
+            return num(v).toFixed(d) + '%';
+        }
+
+        function fmtDate(d) {
+            if (!d) return '-';
+            return d.getFullYear() + '.' + pad2(d.getMonth() + 1) + '.' + pad2(d.getDate());
+        }
+
+        function esc(s) {
+            return String(s === null || s === undefined ? '' : s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function readArray(key) {
+            try {
+                var raw = localStorage.getItem(key);
+                if (!raw) return [];
+                var parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed.filter(function (x) {
+                    return x && typeof x === 'object';
+                }) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function emptyState(title, desc) {
+            return '<div class="empty-state">' +
+                '<i class="fas fa-inbox empty-icon"></i>' +
+                '<h3>' + esc(title || '아직 저장된 계산이 없습니다') + '</h3>' +
+                '<p>' + esc(desc || '마진 계산기에서 상품을 계산하면 이곳에서 자동으로 분석됩니다.') + '</p>' +
+                '<a href="/" class="back-to-calc"><i class="fas fa-calculator"></i> 마진 계산 시작하기</a>' +
+                '</div>';
+        }
+
+        function setHTML(id, html) {
+            var el = document.getElementById(id);
+            if (el) el.innerHTML = html;
+        }
+
+        var CURRENCY_SYMBOL = {
+            USD: '$', EUR: '€', JPY: '¥', CNY: '¥', GBP: '£', KRW: '₩',
+            SGD: 'S$', MYR: 'RM', THB: '฿', IDR: 'Rp', PHP: '₱', VND: '₫',
+            TWD: 'NT$', HKD: 'HK$', AUD: 'A$', CAD: 'C$', INR: '₹', BRL: 'R$'
+        };
+
+        function symbolOf(code) {
+            var c = String(code || '').toUpperCase();
+            return CURRENCY_SYMBOL[c] || '';
+        }
+
+        /* ===================== 데이터 로딩 ===================== */
+
+        function normalize(raw, nameField, dateField, sourceLabel) {
+            var sellingPrice = num(raw.sellingPrice);
+            var exchangeRate = num(raw.exchangeRate);
+            var revenueKRW = sellingPrice * exchangeRate;
+            var netProfit = num(raw.netProfit);
+            var marginRate = isFiniteNum(raw.marginRate) ? raw.marginRate : safeDiv(netProfit * 100, revenueKRW, 0);
+            if (!isFiniteNum(marginRate)) marginRate = 0;
+            // 비정상적으로 큰 값은 차트가 깨지지 않도록 제한
+            if (marginRate > 10000) marginRate = 10000;
+            if (marginRate < -10000) marginRate = -10000;
+
+            var nm = raw[nameField];
+            if (typeof nm !== 'string' || nm.trim() === '') nm = '이름 없음';
+
+            return {
+                name: nm.trim(),
+                purchasePrice: num(raw.purchasePrice),
+                sellingPrice: sellingPrice,
+                currency: String(raw.currency || ''),
+                exchangeRate: exchangeRate,
+                revenueKRW: revenueKRW,
+                netProfit: netProfit,
+                marginRate: marginRate,
+                date: toDate(raw[dateField]),
+                source: sourceLabel
+            };
+        }
+
+        var projects = readArray('marginProjects').map(function (p) {
+            return normalize(p, 'name', 'savedAt', '프로젝트');
+        });
+
+        var history = readArray('marginCalcHistory').map(function (h) {
+            return normalize(h, 'productName', 'timestamp', '계산 이력');
+        });
+
+        // 저장 프로젝트가 있으면 그것을, 없으면 계산 이력을 상품명 기준으로 중복 제거해 사용
+        function dedupeByName(list) {
+            var map = {};
+            list.forEach(function (r) {
+                var key = r.name;
+                var prev = map[key];
+                if (!prev) { map[key] = r; return; }
+                var a = prev.date ? prev.date.getTime() : 0;
+                var b = r.date ? r.date.getTime() : 0;
+                if (b >= a) map[key] = r;
+            });
+            return Object.keys(map).map(function (k) { return map[k]; });
+        }
+
+        var usingProjects = projects.length > 0;
+        var products = usingProjects ? projects.slice() : dedupeByName(history);
+        var productSourceLabel = usingProjects ? '저장한 프로젝트' : '계산 이력(상품명 기준 중복 제거)';
+
+        // 월간 추이는 계산 이력을 우선 사용 (없으면 프로젝트)
+        var trendSource = history.length > 0 ? history : projects;
+        var trendSourceLabel = history.length > 0 ? '계산 이력' : '저장한 프로젝트';
+
+        var HAS_DATA = products.length > 0 || trendSource.length > 0;
+        var CHART_OK = (typeof window.Chart !== 'undefined');
+
+        /* ===================== 1. 요약 카드 ===================== */
+
+        function totalProfit() {
+            return products.reduce(function (s, p) { return s + num(p.netProfit); }, 0);
+        }
+
+        function avgMargin() {
+            if (!products.length) return 0;
+            var sum = products.reduce(function (s, p) { return s + num(p.marginRate); }, 0);
+            return safeDiv(sum, products.length, 0);
+        }
+
+        function lossCount() {
+            return products.filter(function (p) { return num(p.netProfit) < 0; }).length;
+        }
+
+        function renderSummary() {
+            if (!products.length) {
+                setHTML('summarySection', emptyState('아직 저장된 계산이 없습니다', '마진 계산기에서 상품을 계산하고 저장하면 저장 상품 수·평균 마진율·총 순이익이 여기에 표시됩니다.'));
+                return;
+            }
+
+            var tp = totalProfit();
+            var am = avgMargin();
+            var lc = lossCount();
+
+            var marginCls = am >= 15 ? 'val-pos' : (am >= 0 ? 'val-neutral' : 'val-neg');
+            var profitCls = tp >= 0 ? 'val-pos' : 'val-neg';
+            var lossCls = lc > 0 ? 'val-neg' : 'val-pos';
+
+            var html = '<div class="kpi-grid">' +
+                '<div class="kpi-card">' +
+                    '<div class="kpi-label"><i class="fas fa-box"></i> 저장 상품 수</div>' +
+                    '<div class="kpi-value val-blue">' + products.length.toLocaleString('ko-KR') + '<span style="font-size:16px;font-weight:700;"> 개</span></div>' +
+                    '<div class="kpi-sub">' + esc(productSourceLabel) + ' 기준</div>' +
+                '</div>' +
+                '<div class="kpi-card">' +
+                    '<div class="kpi-label"><i class="fas fa-percent"></i> 평균 마진율</div>' +
+                    '<div class="kpi-value ' + marginCls + '">' + pct(am, 1) + '</div>' +
+                    '<div class="kpi-sub">' + (am >= 15 ? '권장 마진(15%) 이상' : (am >= 0 ? '권장 마진(15%) 미만' : '평균 역마진 상태')) + '</div>' +
+                '</div>' +
+                '<div class="kpi-card">' +
+                    '<div class="kpi-label"><i class="fas fa-coins"></i> 총 예상 순이익</div>' +
+                    '<div class="kpi-value ' + profitCls + '">' + won(tp) + '</div>' +
+                    '<div class="kpi-sub">개당 순이익 합계 (수량 미반영)</div>' +
+                '</div>' +
+                '<div class="kpi-card">' +
+                    '<div class="kpi-label"><i class="fas fa-triangle-exclamation"></i> 적자 상품 수</div>' +
+                    '<div class="kpi-value ' + lossCls + '">' + lc.toLocaleString('ko-KR') + '<span style="font-size:16px;font-weight:700;"> 개</span></div>' +
+                    '<div class="kpi-sub">' + (lc > 0 ? '판매가·수수료 재점검이 필요합니다' : '적자 상품이 없습니다') + '</div>' +
+                '</div>' +
+            '</div>';
+
+            setHTML('summarySection', html);
+        }
+
+        /* ===================== 2. 월간 손익 추이 ===================== */
+
+        function buildMonthly() {
+            var map = {};
+            trendSource.forEach(function (r) {
+                if (!r.date) return;
+                var key = r.date.getFullYear() + '-' + pad2(r.date.getMonth() + 1);
+                if (!map[key]) map[key] = { key: key, profit: 0, marginSum: 0, count: 0 };
+                map[key].profit += num(r.netProfit);
+                map[key].marginSum += num(r.marginRate);
+                map[key].count += 1;
+            });
+            return Object.keys(map).sort().slice(-12).map(function (k) {
+                var m = map[k];
+                return {
+                    key: m.key,
+                    label: m.key.replace('-', '.'),
+                    profit: m.profit,
+                    count: m.count,
+                    avgMargin: safeDiv(m.marginSum, m.count, 0)
+                };
+            });
+        }
+
+        function monthlyTableHTML(months) {
+            var rows = months.map(function (m) {
+                var cls = m.profit >= 0 ? 'val-pos' : 'val-neg';
+                return '<tr>' +
+                    '<td>' + esc(m.label) + '</td>' +
+                    '<td class="num">' + m.count.toLocaleString('ko-KR') + '건</td>' +
+                    '<td class="num ' + cls + '"><strong>' + won(m.profit) + '</strong></td>' +
+                    '<td class="num">' + pct(m.avgMargin, 1) + '</td>' +
+                '</tr>';
+            }).join('');
+
+            return '<div class="table-wrap"><table class="dash-table" style="min-width:420px;">' +
+                '<thead><tr><th>월</th><th class="num">건수</th><th class="num">순이익 합계</th><th class="num">평균 마진율</th></tr></thead>' +
+                '<tbody>' + rows + '</tbody></table></div>';
+        }
+
+        function renderMonthly() {
+            var months = buildMonthly();
+
+            if (!months.length) {
+                setHTML('monthlySection', emptyState('아직 저장된 계산이 없습니다', '계산을 진행하면 월별 순이익과 평균 마진율 추이가 자동으로 그려집니다.'));
+                return;
+            }
+
+            var caption = '<p class="panel-caption">' + esc(trendSourceLabel) + ' 기준 · 최근 ' + months.length + '개월</p>';
+
+            if (!CHART_OK) {
+                setHTML('monthlySection', '<div class="panel">' + caption +
+                    '<p class="panel-caption" style="color:#b45309;"><i class="fas fa-circle-info"></i> 차트를 불러오지 못해 표로 대신 표시합니다.</p>' +
+                    monthlyTableHTML(months) + '</div>');
+                return;
+            }
+
+            setHTML('monthlySection', '<div class="panel">' + caption +
+                '<div class="chart-box"><canvas id="monthlyChart"></canvas></div>' +
+                monthlyTableHTML(months) + '</div>');
+
+            var canvas = document.getElementById('monthlyChart');
+            if (!canvas) return;
+
+            try {
+                new Chart(canvas, {
+                    type: 'bar',
+                    data: {
+                        labels: months.map(function (m) { return m.label; }),
+                        datasets: [
+                            {
+                                type: 'bar',
+                                label: '월 순이익 (원)',
+                                data: months.map(function (m) { return Math.round(m.profit); }),
+                                backgroundColor: months.map(function (m) {
+                                    return m.profit >= 0 ? 'rgba(0,102,255,0.75)' : 'rgba(239,68,68,0.75)';
+                                }),
+                                borderRadius: 6,
+                                yAxisID: 'y',
+                                order: 2
+                            },
+                            {
+                                type: 'line',
+                                label: '평균 마진율 (%)',
+                                data: months.map(function (m) { return Number(m.avgMargin.toFixed(2)); }),
+                                borderColor: '#10b981',
+                                backgroundColor: '#10b981',
+                                borderWidth: 2,
+                                tension: 0.3,
+                                pointRadius: 4,
+                                yAxisID: 'y1',
+                                order: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 12 } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (ctx) {
+                                        var v = num(ctx.parsed.y);
+                                        if (ctx.dataset.yAxisID === 'y1') return ctx.dataset.label + ': ' + pct(v, 2);
+                                        return ctx.dataset.label + ': ' + won(v);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                position: 'left',
+                                ticks: {
+                                    callback: function (v) { return won(v); },
+                                    font: { size: 11 }
+                                },
+                                grid: { color: '#f3f4f6' }
+                            },
+                            y1: {
+                                position: 'right',
+                                ticks: {
+                                    callback: function (v) { return num(v).toFixed(0) + '%'; },
+                                    font: { size: 11 }
+                                },
+                                grid: { drawOnChartArea: false }
+                            },
+                            x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                        }
+                    }
+                });
+            } catch (e) {
+                setHTML('monthlySection', '<div class="panel">' + caption + monthlyTableHTML(months) + '</div>');
+            }
+        }
+
+        /* ===================== 3. SKU 포트폴리오 매트릭스 ===================== */
+
+        var QUADRANTS = {
+            core:   { label: '주력 (키우세요)',        cls: 'b-core',   chip: 'q-core',   color: '#10b981', desc: '고마진 · 고수익' },
+            grow:   { label: '성장 후보',              cls: 'b-grow',   chip: 'q-grow',   color: '#f59e0b', desc: '고마진 · 저수익' },
+            volume: { label: '박리다매 (비용 점검)',   cls: 'b-volume', chip: 'q-volume', color: '#3b82f6', desc: '저마진 · 고수익' },
+            cut:    { label: '정리 검토',              cls: 'b-cut',    chip: 'q-cut',    color: '#ef4444', desc: '저마진 · 저수익' }
+        };
+
+        var MARGIN_THRESHOLD = 15; // 권장 최소 마진율
+
+        function profitThreshold() {
+            if (!products.length) return 0;
+            var sum = products.reduce(function (s, p) { return s + num(p.netProfit); }, 0);
+            var avg = safeDiv(sum, products.length, 0);
+            return avg > 0 ? avg : 0;
+        }
+
+        function quadrantKey(p, mx, my) {
+            var hiMargin = num(p.marginRate) >= mx;
+            var hiProfit = num(p.netProfit) >= my;
+            if (hiMargin && hiProfit) return 'core';
+            if (hiMargin && !hiProfit) return 'grow';
+            if (!hiMargin && hiProfit) return 'volume';
+            return 'cut';
+        }
+
+        function matrixTableHTML(items) {
+            var rows = items.map(function (it) {
+                var q = QUADRANTS[it.q];
+                var pcls = it.p.netProfit >= 0 ? 'val-pos' : 'val-neg';
+                return '<tr>' +
+                    '<td><strong>' + esc(it.p.name) + '</strong></td>' +
+                    '<td class="num">' + pct(it.p.marginRate, 1) + '</td>' +
+                    '<td class="num ' + pcls + '">' + won(it.p.netProfit) + '</td>' +
+                    '<td><span class="badge ' + q.cls + '">' + esc(q.label) + '</span></td>' +
+                '</tr>';
+            }).join('');
+
+            return '<div class="table-wrap"><table class="dash-table" style="min-width:520px;">' +
+                '<thead><tr><th>상품명</th><th class="num">마진율</th><th class="num">순이익</th><th>분류</th></tr></thead>' +
+                '<tbody>' + rows + '</tbody></table></div>';
+        }
+
+        function renderMatrix() {
+            if (!products.length) {
+                setHTML('matrixSection', emptyState('아직 저장된 계산이 없습니다', '상품을 저장하면 마진율과 순이익을 기준으로 4분면 포트폴리오를 분석해 드립니다.'));
+                return;
+            }
+
+            var mx = MARGIN_THRESHOLD;
+            var my = profitThreshold();
+
+            var items = products.map(function (p) {
+                return { p: p, q: quadrantKey(p, mx, my) };
+            });
+
+            var legend = '<div class="quad-legend">' +
+                ['core', 'grow', 'volume', 'cut'].map(function (k) {
+                    var q = QUADRANTS[k];
+                    var n = items.filter(function (it) { return it.q === k; }).length;
+                    return '<div class="quad-chip ' + q.chip + '">' +
+                        '<strong>' + esc(q.label) + ' · ' + n + '개</strong>' +
+                        '<span>' + esc(q.desc) + '</span></div>';
+                }).join('') + '</div>';
+
+            var caption = '<p class="panel-caption">기준선 — 마진율 ' + pct(mx, 0) + ' · 순이익 ' + won(my) + ' (저장 상품 평균, 음수일 경우 0원)</p>';
+
+            if (!CHART_OK) {
+                setHTML('matrixSection', '<div class="panel">' + caption +
+                    '<p class="panel-caption" style="color:#b45309;"><i class="fas fa-circle-info"></i> 차트를 불러오지 못해 표로 대신 표시합니다.</p>' +
+                    legend + matrixTableHTML(items) + '</div>');
+                return;
+            }
+
+            setHTML('matrixSection', '<div class="panel">' + caption +
+                '<div class="chart-box"><canvas id="matrixChart"></canvas></div>' +
+                legend + matrixTableHTML(items) + '</div>');
+
+            var canvas = document.getElementById('matrixChart');
+            if (!canvas) return;
+
+            var quadrantBg = {
+                id: 'quadrantBg',
+                beforeDatasetsDraw: function (chart, args, opts) {
+                    var xs = chart.scales.x, ys = chart.scales.y;
+                    if (!xs || !ys || !opts) return;
+                    var cx = xs.getPixelForValue(opts.mx);
+                    var cy = ys.getPixelForValue(opts.my);
+                    if (!isFiniteNum(cx) || !isFiniteNum(cy)) return;
+                    cx = Math.min(Math.max(cx, xs.left), xs.right);
+                    cy = Math.min(Math.max(cy, ys.top), ys.bottom);
+                    var ctx = chart.ctx;
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(16,185,129,0.10)';   // 우상단: 주력
+                    ctx.fillRect(cx, ys.top, xs.right - cx, cy - ys.top);
+                    ctx.fillStyle = 'rgba(59,130,246,0.10)';   // 좌상단: 박리다매
+                    ctx.fillRect(xs.left, ys.top, cx - xs.left, cy - ys.top);
+                    ctx.fillStyle = 'rgba(245,158,11,0.10)';   // 우하단: 성장 후보
+                    ctx.fillRect(cx, cy, xs.right - cx, ys.bottom - cy);
+                    ctx.fillStyle = 'rgba(239,68,68,0.10)';    // 좌하단: 정리 검토
+                    ctx.fillRect(xs.left, cy, cx - xs.left, ys.bottom - cy);
+                    ctx.restore();
+                }
+            };
+
+            var datasets = ['core', 'grow', 'volume', 'cut'].map(function (k) {
+                var q = QUADRANTS[k];
+                return {
+                    label: q.label,
+                    data: items.filter(function (it) { return it.q === k; }).map(function (it) {
+                        return {
+                            x: Number(num(it.p.marginRate).toFixed(2)),
+                            y: Math.round(num(it.p.netProfit)),
+                            name: it.p.name
+                        };
+                    }),
+                    backgroundColor: q.color,
+                    borderColor: '#fff',
+                    borderWidth: 1.5,
+                    pointRadius: 7,
+                    pointHoverRadius: 9
+                };
+            });
+
+            try {
+                new Chart(canvas, {
+                    type: 'scatter',
+                    data: { datasets: datasets },
+                    plugins: [quadrantBg],
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            quadrantBg: { mx: mx, my: my },
+                            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 12 } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (ctx) {
+                                        var raw = ctx.raw || {};
+                                        return (raw.name || '상품') + ' — 마진율 ' + pct(raw.x, 1) + ' · 순이익 ' + won(raw.y);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: { display: true, text: '마진율 (%)', font: { size: 12 } },
+                                ticks: { callback: function (v) { return num(v).toFixed(0) + '%'; }, font: { size: 11 } },
+                                grid: { color: '#f3f4f6' }
+                            },
+                            y: {
+                                title: { display: true, text: '개당 순이익 (원)', font: { size: 12 } },
+                                ticks: { callback: function (v) { return won(v); }, font: { size: 11 } },
+                                grid: { color: '#f3f4f6' }
+                            }
+                        }
+                    }
+                });
+            } catch (e) {
+                setHTML('matrixSection', '<div class="panel">' + caption + legend + matrixTableHTML(items) + '</div>');
+            }
+        }
+
+        /* ===================== 4. 목표 관리 ===================== */
+
+        var GOAL_KEY = 'marginMonthlyGoal';
+
+        function readGoal() {
+            var out = { goal: 0, perUnit: 0 };
+            try {
+                var raw = localStorage.getItem(GOAL_KEY);
+                if (!raw) return out;
+                var parsed = JSON.parse(raw);
+                if (typeof parsed === 'number') {
+                    out.goal = isFiniteNum(parsed) ? parsed : 0;
+                } else if (parsed && typeof parsed === 'object') {
+                    out.goal = num(parsed.goal);
+                    out.perUnit = num(parsed.perUnit);
+                }
+            } catch (e) {
+                return { goal: 0, perUnit: 0 };
+            }
+            if (out.goal < 0) out.goal = 0;
+            if (out.perUnit < 0) out.perUnit = 0;
+            return out;
+        }
+
+        function writeGoal(goal, perUnit) {
+            try {
+                localStorage.setItem(GOAL_KEY, JSON.stringify({
+                    goal: num(goal),
+                    perUnit: num(perUnit),
+                    updatedAt: new Date().toISOString()
+                }));
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function defaultPerUnit() {
+            if (!products.length) return 0;
+            var positives = products.filter(function (p) { return num(p.netProfit) > 0; });
+            var list = positives.length ? positives : products;
+            var sum = list.reduce(function (s, p) { return s + num(p.netProfit); }, 0);
+            var avg = safeDiv(sum, list.length, 0);
+            return avg > 0 ? Math.round(avg) : 0;
+        }
+
+        function renderGoal() {
+            var saved = readGoal();
+            var perUnitDefault = saved.perUnit > 0 ? saved.perUnit : defaultPerUnit();
+
+            var form = '<div class="panel">' +
+                '<div class="goal-grid">' +
+                    '<div class="goal-field">' +
+                        '<label for="goalAmount">월간 순이익 목표 (원)</label>' +
+                        '<input type="number" id="goalAmount" min="0" step="10000" inputmode="numeric" placeholder="예: 3000000" value="' + (saved.goal > 0 ? Math.round(saved.goal) : '') + '">' +
+                        '<small>한 달 동안 남기고 싶은 순이익 금액</small>' +
+                    '</div>' +
+                    '<div class="goal-field">' +
+                        '<label for="goalPerUnit">평균 개당 순이익 (원)</label>' +
+                        '<input type="number" id="goalPerUnit" min="0" step="100" inputmode="numeric" placeholder="예: 5000" value="' + (perUnitDefault > 0 ? perUnitDefault : '') + '">' +
+                        '<small>' + (products.length ? '저장 상품 평균으로 자동 입력됩니다' : '계산기에서 확인한 개당 순이익을 입력하세요') + '</small>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="goal-actions">' +
+                    '<button type="button" class="btn btn-primary" id="goalSaveBtn"><i class="fas fa-floppy-disk"></i> 목표 저장</button>' +
+                    '<button type="button" class="btn btn-ghost" id="goalResetBtn"><i class="fas fa-rotate-left"></i> 초기화</button>' +
+                '</div>' +
+                '<div id="goalOutput"></div>' +
+            '</div>';
+
+            setHTML('goalSection', form);
+
+            var goalInput = document.getElementById('goalAmount');
+            var perUnitInput = document.getElementById('goalPerUnit');
+            var saveBtn = document.getElementById('goalSaveBtn');
+            var resetBtn = document.getElementById('goalResetBtn');
+
+            function compute() {
+                var goal = Math.max(0, num(goalInput ? goalInput.value : 0));
+                var perUnit = Math.max(0, num(perUnitInput ? perUnitInput.value : 0));
+                var current = totalProfit();
+
+                if (goal <= 0) {
+                    setHTML('goalOutput', '<div class="goal-result"><div class="goal-stat" style="grid-column:1/-1;">' +
+                        '<span>안내</span><strong style="font-size:14px;font-weight:600;color:#6b7280;">월간 순이익 목표를 입력하면 필요 판매량과 달성률을 계산해 드립니다.</strong></div></div>');
+                    return;
+                }
+
+                var needQty = perUnit > 0 ? Math.ceil(safeDiv(goal, perUnit, 0)) : null;
+                var achievedPct = safeDiv(current * 100, goal, 0);
+                if (achievedPct < 0) achievedPct = 0;
+                var remainProfit = Math.max(0, goal - current);
+                var remainQty = perUnit > 0 ? Math.ceil(safeDiv(remainProfit, perUnit, 0)) : null;
+
+                var barPct = Math.min(100, Math.max(0, achievedPct));
+                var barCls = achievedPct >= 100 ? 'over' : (achievedPct >= 50 ? '' : 'low');
+
+                var qtyText = (needQty === null) ? '개당 순이익 입력 필요' : needQty.toLocaleString('ko-KR') + ' 개';
+                var remainText = (remainQty === null) ? '개당 순이익 입력 필요' : remainQty.toLocaleString('ko-KR') + ' 개';
+
+                var html = '<div class="progress-wrap">' +
+                        '<div class="progress-head"><span>현재 저장 상품 기준 달성률</span><span>' + pct(achievedPct, 1) + ' · ' + won(current) + ' / ' + won(goal) + '</span></div>' +
+                        '<div class="progress-bar"><div class="progress-fill ' + barCls + '" style="width:' + barPct.toFixed(1) + '%"></div></div>' +
+                    '</div>' +
+                    '<div class="goal-result">' +
+                        '<div class="goal-stat"><span>필요 판매량</span><strong>' + esc(qtyText) + '</strong></div>' +
+                        '<div class="goal-stat"><span>남은 순이익</span><strong class="' + (remainProfit > 0 ? 'val-neg' : 'val-pos') + '">' + won(remainProfit) + '</strong></div>' +
+                        '<div class="goal-stat"><span>남은 판매량</span><strong>' + esc(remainText) + '</strong></div>' +
+                    '</div>' +
+                    '<p class="panel-caption" style="margin-top:12px;margin-bottom:0;">* 달성률은 저장된 상품의 개당 순이익 합계(' + won(current) + ')를 기준으로 한 참고값입니다.</p>';
+
+                setHTML('goalOutput', html);
+            }
+
+            if (goalInput) goalInput.addEventListener('input', compute);
+            if (perUnitInput) perUnitInput.addEventListener('input', compute);
+
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function () {
+                    var ok = writeGoal(
+                        Math.max(0, num(goalInput ? goalInput.value : 0)),
+                        Math.max(0, num(perUnitInput ? perUnitInput.value : 0))
+                    );
+                    saveBtn.innerHTML = ok
+                        ? '<i class="fas fa-check"></i> 저장 완료'
+                        : '<i class="fas fa-triangle-exclamation"></i> 저장 실패';
+                    setTimeout(function () {
+                        saveBtn.innerHTML = '<i class="fas fa-floppy-disk"></i> 목표 저장';
+                    }, 1800);
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'dashboard_goal_save', { event_category: 'dashboard' });
+                    }
+                    compute();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function () {
+                    try { localStorage.removeItem(GOAL_KEY); } catch (e) {}
+                    if (goalInput) goalInput.value = '';
+                    if (perUnitInput) perUnitInput.value = '';
+                    compute();
+                });
+            }
+
+            compute();
+        }
+
+        /* ===================== 5. 상품별 상세 표 ===================== */
+
+        var COLUMNS = [
+            { key: 'name',          label: '상품명',  type: 'str', align: 'left' },
+            { key: 'purchasePrice', label: '매입가',  type: 'num', align: 'num' },
+            { key: 'revenueKRW',    label: '판매가',  type: 'num', align: 'num' },
+            { key: 'marginRate',    label: '마진율',  type: 'num', align: 'num' },
+            { key: 'netProfit',     label: '순이익',  type: 'num', align: 'num' },
+            { key: 'dateVal',       label: '저장일',  type: 'num', align: 'num' }
+        ];
+
+        var sortKey = 'dateVal';
+        var sortDir = -1; // -1 내림차순, 1 오름차순
+
+        function sortedProducts() {
+            var list = products.slice();
+            var col = COLUMNS.filter(function (c) { return c.key === sortKey; })[0] || COLUMNS[5];
+            list.sort(function (a, b) {
+                var av, bv;
+                if (col.key === 'dateVal') {
+                    av = a.date ? a.date.getTime() : 0;
+                    bv = b.date ? b.date.getTime() : 0;
+                } else {
+                    av = a[col.key];
+                    bv = b[col.key];
+                }
+                if (col.type === 'str') {
+                    return String(av || '').localeCompare(String(bv || ''), 'ko') * sortDir;
+                }
+                return (num(av) - num(bv)) * sortDir;
+            });
+            return list;
+        }
+
+        function productsBodyHTML() {
+            return sortedProducts().map(function (p) {
+                var sym = symbolOf(p.currency);
+                var local = sym
+                    ? sym + ' ' + num(p.sellingPrice).toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                    : num(p.sellingPrice).toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                var mCls = num(p.marginRate) >= 15 ? 'val-pos' : (num(p.marginRate) >= 0 ? '' : 'val-neg');
+                var pCls = num(p.netProfit) >= 0 ? 'val-pos' : 'val-neg';
+                return '<tr>' +
+                    '<td><strong>' + esc(p.name) + '</strong>' + (p.currency ? '<div class="muted">' + esc(p.currency) + '</div>' : '') + '</td>' +
+                    '<td class="num">' + won(p.purchasePrice) + '</td>' +
+                    '<td class="num">' + esc(local) + '<div class="muted">' + won(p.revenueKRW) + '</div></td>' +
+                    '<td class="num ' + mCls + '">' + pct(p.marginRate, 1) + '</td>' +
+                    '<td class="num ' + pCls + '"><strong>' + won(p.netProfit) + '</strong></td>' +
+                    '<td class="num">' + esc(fmtDate(p.date)) + '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function productsHeadHTML() {
+            return '<tr>' + COLUMNS.map(function (c) {
+                var active = (c.key === sortKey);
+                var icon = active ? (sortDir === 1 ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort';
+                return '<th class="sortable' + (active ? ' active' : '') + (c.align === 'num' ? ' num' : '') +
+                    '" data-key="' + c.key + '" role="button" tabindex="0" aria-label="' + esc(c.label) + ' 정렬">' +
+                    esc(c.label) + '<i class="fas ' + icon + '"></i></th>';
+            }).join('') + '</tr>';
+        }
+
+        function bindSortHandlers() {
+            var ths = document.querySelectorAll('#productsTable th.sortable');
+            Array.prototype.forEach.call(ths, function (th) {
+                th.addEventListener('click', function () {
+                    var key = th.getAttribute('data-key');
+                    if (!key) return;
+                    if (key === sortKey) {
+                        sortDir = sortDir * -1;
+                    } else {
+                        sortKey = key;
+                        sortDir = (key === 'name') ? 1 : -1;
+                    }
+                    refreshProductsTable();
+                });
+                th.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); th.click(); }
+                });
+            });
+        }
+
+        function refreshProductsTable() {
+            var thead = document.getElementById('productsThead');
+            var tbody = document.getElementById('productsTbody');
+            if (!thead || !tbody) return;
+            thead.innerHTML = productsHeadHTML();
+            tbody.innerHTML = productsBodyHTML();
+            bindSortHandlers();
+        }
+
+        function csvCell(v) {
+            return '"' + String(v === null || v === undefined ? '' : v).replace(/"/g, '""') + '"';
+        }
+
+        function exportCSV() {
+            var list = sortedProducts();
+            if (!list.length) return;
+            var csv = '\uFEFF';
+            csv += ['상품명', '매입가(원)', '통화', '판매가', '환율(원)', '판매가(원화환산)', '마진율(%)', '순이익(원)', '저장일'].map(csvCell).join(',') + '\n';
+            list.forEach(function (p) {
+                csv += [
+                    csvCell(p.name),
+                    Math.round(num(p.purchasePrice)),
+                    csvCell(p.currency),
+                    num(p.sellingPrice).toFixed(2),
+                    Math.round(num(p.exchangeRate)),
+                    Math.round(num(p.revenueKRW)),
+                    num(p.marginRate).toFixed(2),
+                    Math.round(num(p.netProfit)),
+                    csvCell(fmtDate(p.date))
+                ].join(',') + '\n';
+            });
+
+            try {
+                var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                var url = URL.createObjectURL(blob);
+                var link = document.createElement('a');
+                var today = new Date();
+                link.setAttribute('href', url);
+                link.setAttribute('download', '셀러대시보드_상품별_' + today.getFullYear() + pad2(today.getMonth() + 1) + pad2(today.getDate()) + '.csv');
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'dashboard_csv_export', { event_category: 'dashboard', value: list.length });
+                }
+            } catch (e) {
+                alert('CSV 내보내기에 실패했습니다. 브라우저 설정을 확인해주세요.');
+            }
+        }
+
+        function renderProducts() {
+            if (!products.length) {
+                setHTML('productsSection', emptyState('아직 저장된 계산이 없습니다', '계산 후 프로젝트로 저장하면 상품별 매입가·판매가·마진율·순이익을 표로 비교할 수 있습니다.'));
+                return;
+            }
+
+            var html = '<div class="panel">' +
+                '<p class="panel-caption">' + esc(productSourceLabel) + ' · 총 ' + products.length + '개 · 열 제목을 클릭하면 정렬됩니다</p>' +
+                '<div class="table-wrap"><table class="dash-table" id="productsTable">' +
+                    '<thead id="productsThead"></thead><tbody id="productsTbody"></tbody>' +
+                '</table></div>' +
+                '<div class="section-actions"><button type="button" class="btn btn-ghost" id="csvBtn"><i class="fas fa-file-csv"></i> CSV 내보내기</button></div>' +
+            '</div>';
+
+            setHTML('productsSection', html);
+            refreshProductsTable();
+
+            var csvBtn = document.getElementById('csvBtn');
+            if (csvBtn) csvBtn.addEventListener('click', exportCSV);
+        }
+
+        /* ===================== 실행 ===================== */
+
+        function renderAll() {
+            CHART_OK = (typeof window.Chart !== 'undefined');
+            try { renderSummary(); } catch (e) { setHTML('summarySection', emptyState('데이터를 읽는 중 문제가 발생했습니다', '브라우저에 저장된 데이터가 손상되었을 수 있습니다. 마진 계산기에서 다시 계산해보세요.')); }
+            try { renderMonthly(); } catch (e) { setHTML('monthlySection', emptyState('데이터를 읽는 중 문제가 발생했습니다', '월간 추이를 계산할 수 없습니다. 마진 계산기에서 다시 계산해보세요.')); }
+            try { renderMatrix(); } catch (e) { setHTML('matrixSection', emptyState('데이터를 읽는 중 문제가 발생했습니다', '포트폴리오를 분석할 수 없습니다. 마진 계산기에서 다시 계산해보세요.')); }
+            try { renderGoal(); } catch (e) { setHTML('goalSection', emptyState('목표 관리를 불러올 수 없습니다', '브라우저 저장소를 사용할 수 없는 환경일 수 있습니다.')); }
+            try { renderProducts(); } catch (e) { setHTML('productsSection', emptyState('데이터를 읽는 중 문제가 발생했습니다', '상품 목록을 표시할 수 없습니다. 마진 계산기에서 다시 계산해보세요.')); }
+
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'dashboard_view', {
+                    event_category: 'dashboard',
+                    event_label: HAS_DATA ? 'with_data' : 'empty',
+                    value: products.length
+                });
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderAll);
+        } else {
+            renderAll();
+        }
+    })();
+    </script>
+</body>
+</html>
