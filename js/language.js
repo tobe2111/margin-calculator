@@ -5,15 +5,17 @@ let currentLanguage = 'ko';
 
 // Initialize language system
 function initLanguageSystem() {
-    // Auto-detect browser language
-    const browserLang = detectBrowserLanguage();
-    
-    // Check if user has saved language preference
+    // 사용자가 명시적으로 고른 언어만 적용한다.
+    //
+    // 브라우저 언어 자동 감지는 쓰지 않는다. 번역 사전이 약 17개 키만
+    // 담고 있어(페이지 문구는 수백 개) 한국어 이외로 전환하면 일부만
+    // 번역되고 나머지는 한국어로 남아 화면이 깨져 보이기 때문이다.
+    // 한국 사용자라도 OS·브라우저가 영어면 이 상태에 빠졌다.
+    // 번역이 전 문구로 확대되면 detectBrowserLanguage() 를 다시 쓰면 된다.
     const savedLang = localStorage.getItem('selectedLanguage');
-    
-    // Set initial language
-    currentLanguage = savedLang || browserLang;
-    
+
+    currentLanguage = savedLang || 'ko';
+
     // Apply language
     applyLanguage(currentLanguage);
     
