@@ -1,10 +1,11 @@
-const CACHE = 'margin-calc-v5';
+const CACHE = 'margin-calc-v6';
 const STATIC = [
   '/', '/guide/', '/platforms/', '/tools/', '/privacy/', '/terms/',
   '/css/main.css', '/css/shared-nav.css',
   '/js/calculator.js', '/js/features.js', '/js/shared-nav.js',
   '/js/translations.js', '/js/language.js',
-  '/manifest.json', '/favicon.ico', '/favicon.svg'
+  '/manifest.json', '/favicon.ico', '/favicon.svg',
+  '/apple-touch-icon.png', '/icon-192.png', '/icon-512.png', '/og-image.png'
 ];
 
 self.addEventListener('install', e => {
