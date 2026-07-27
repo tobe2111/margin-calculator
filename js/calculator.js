@@ -249,6 +249,7 @@ function calculateMargin() {
     document.getElementById('roi').textContent = `${roi.toFixed(2)} %`;
     document.getElementById('breakEvenPrice').textContent = `${symbol} ${breakEvenPrice.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     document.getElementById('resultSection').style.display = 'block';
+    document.querySelector('.calculator-container')?.classList.add('has-result');
 
     // 마진율 시각화 (색상 + 게이지)
     updateMarginVisual(marginRate, netProfit);

@@ -99,6 +99,7 @@ function resetForm() {
     ['rowAdCost','rowReturnRisk'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
     });
+    document.querySelector('.calculator-container')?.classList.remove('has-result');
     ['resultSection','reverseResult','coupangBanner','chartSection','comparisonSection'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
     });
@@ -400,8 +401,10 @@ function setupMobileCalcButton() {
     const fixed = document.getElementById('mobileCalcFixed');
     const mainBtn = document.getElementById('calculateBtn');
     if (!fixed || !mainBtn || !window.IntersectionObserver) return;
+    // 인라인 style 을 쓰면 모바일 미디어쿼리를 덮어써 데스크톱에도 뜬다.
+    // 클래스만 토글하고 실제 노출 여부는 CSS 브레이크포인트가 결정한다.
     const obs = new IntersectionObserver(entries => {
-        fixed.style.display = entries[0].isIntersecting ? 'none' : 'block';
+        fixed.classList.toggle('show', !entries[0].isIntersecting);
     }, { threshold: 0.5 });
     obs.observe(mainBtn);
 }
