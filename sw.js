@@ -1,6 +1,6 @@
-const CACHE = 'margin-calc-v4';
+const CACHE = 'margin-calc-v5';
 const STATIC = [
-  '/', '/guide/', '/platforms/', '/tools/',
+  '/', '/guide/', '/platforms/', '/tools/', '/privacy/', '/terms/',
   '/css/main.css', '/css/shared-nav.css',
   '/js/calculator.js', '/js/features.js', '/js/shared-nav.js',
   '/js/translations.js', '/js/language.js',
@@ -27,9 +27,12 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
-  // Skip: cross-origin, API calls, analytics, ads
+  // Skip: cross-origin, analytics, ads
   if (url.origin !== self.location.origin) return;
   if (url.pathname.startsWith('/cdn-cgi/')) return;
+  // /api/ 는 캐시하지 않는다 — 환율 등 동적 데이터이고,
+  // 서버(KV)에서 이미 캐싱하므로 여기서 또 잡으면 낡은 값이 고착된다.
+  if (url.pathname.startsWith('/api/')) return;
 
   e.respondWith(
     caches.match(e.request).then(cached => {
