@@ -345,6 +345,7 @@
                     <div class="form-group">
                         <label for="exchangeRate">환율 (자동 적용) <span class="live-badge">🔴 LIVE</span></label>
                         <input type="text" id="exchangeRate" readonly class="readonly-input">
+                        <div class="rate-source bad" id="rateSourceBadge" aria-live="polite"></div>
                         <small class="help-text" id="exchangeRateHelp">예: 1 USD = 1,300 KRW</small>
                         <button type="button" class="rate-alert-trigger" id="rateAlertTrigger" onclick="toggleRateAlert()">
                             <i class="fas fa-bell"></i> 환율 알림 설정
@@ -366,7 +367,8 @@
                                 <button class="rate-alert-btn" onclick="saveAlertSettings()"><i class="fas fa-bell"></i> 알림 등록</button>
                                 <button class="rate-alert-btn cancel" onclick="cancelRateAlert()"><i class="fas fa-bell-slash"></i> 해제</button>
                             </div>
-                            <p id="alertStatusText" style="font-size:12px;color:#92400e;margin-top:8px;min-height:18px;"></p>
+                            <p id="alertStatusText" style="font-size:12px;margin-top:8px;min-height:18px;"></p>
+                            <p class="alert-scope-note">이 페이지가 열려 있는 동안 5분마다 확인합니다. 탭을 닫으면 확인이 멈추며, 다시 방문하면 즉시 한 번 확인합니다.</p>
                         </div>
                     </div>
                     <div class="form-divider"></div>
@@ -448,6 +450,13 @@
                         <button class="share-btn share-native-btn" onclick="shareResult()"><i class="fas fa-share-alt"></i> <span>공유</span></button>
                         <button class="share-btn image-btn" onclick="saveAsImage()"><i class="fas fa-image"></i> <span>이미지 저장</span></button>
                     </div>
+                    <div class="tool-handoff" id="toolHandoff" style="display:none;">
+                        <span>이 값으로 계속:</span>
+                        <button type="button" onclick="openToolsWithValues('#tool-shipping')">배송비</button>
+                        <button type="button" onclick="openToolsWithValues('#tool-fxstress')">환율 스트레스</button>
+                        <button type="button" onclick="openToolsWithValues('#tool-minprice')">최소 판매가</button>
+                        <button type="button" onclick="openToolsWithValues('#tool-admargin')">광고비 마진</button>
+                    </div>
                     <div class="project-save-row" id="projectSaveRow" style="display:none;margin-top:12px;">
                         <input type="text" id="projectNameInput" aria-label="저장할 프로젝트 이름" class="project-name-input" placeholder="프로젝트 이름 입력...">
                         <button class="project-save-btn" onclick="saveProject()"><i class="fas fa-bookmark"></i> 저장</button>
@@ -509,7 +518,7 @@
                             <tr>
                                 <th>No</th><th>상품명</th><th>매입가</th><th>판매 타겟 통화</th><th>판매가</th>
                                 <th>환율</th><th>국내배송비</th><th>해외배송비</th><th>플랫폼 수수료</th>
-                                <th>환전 수수료</th><th>순이익</th><th>마진율</th><th>계산일시</th>
+                                <th>환전 수수료</th><th>순이익</th><th>마진율</th><th>계산일시</th><th></th>
                             </tr>
                         </thead>
                         <tbody id="historyTableBody"></tbody>
@@ -518,10 +527,21 @@
             </section>
 
             <!-- 북마크/프로젝트 관리 -->
-            <section class="projects-section" id="projectsSection" style="display:none;">
+            <section class="projects-section" id="projectsSection">
                 <h2><i class="fas fa-bookmark" style="color:var(--accent);"></i> 저장된 프로젝트</h2>
                 <p style="font-size:13px;color:#6b7280;margin-bottom:14px;">계산 결과를 이름을 붙여 저장하고 언제든지 불러올 수 있습니다.</p>
                 <div class="projects-grid" id="projectsGrid"></div>
+                <div class="backup-row">
+                    <div class="backup-text">
+                        <strong>데이터 백업</strong>
+                        <span>계산 이력·프로젝트·프리셋은 이 브라우저에만 저장됩니다. 브라우저 데이터를 지우거나 기기를 바꾸면 사라지니 주기적으로 백업하세요.</span>
+                    </div>
+                    <div class="backup-actions">
+                        <button type="button" class="backup-btn" onclick="exportAllData()">백업 파일 내려받기</button>
+                        <input type="file" id="backupFile" accept="application/json,.json" hidden onchange="handleBackupFile(event)" aria-label="백업 파일 선택">
+                        <button type="button" class="backup-btn ghost" onclick="document.getElementById('backupFile').click()">백업에서 복원</button>
+                    </div>
+                </div>
             </section>
 
             <!-- 해외판매 셀러 필수 도구 (쿠팡파트너스) -->
@@ -660,6 +680,17 @@
         });
     });
     </script>
+    <div class="install-prompt" id="installPrompt">
+        <div class="install-text">
+            <strong>홈 화면에 추가</strong>
+            <span>앱처럼 바로 열고, 오프라인에서도 계산할 수 있습니다.</span>
+        </div>
+        <div class="install-actions">
+            <button type="button" class="install-btn" onclick="acceptInstall()">추가</button>
+            <button type="button" class="install-btn ghost" onclick="dismissInstall()">나중에</button>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <!-- 모바일 고정 계산 버튼 -->

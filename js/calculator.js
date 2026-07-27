@@ -46,6 +46,52 @@ let currentCurrency = 'USD';
 let currentExchangeRate = 1300;
 let calculationHistory = [];
 
+/**
+ * 지금 화면의 환율이 어디서 왔는지.
+ * 'live'  — 방금 API에서 받음
+ * 'cache' — 로컬 캐시 (1시간 이내)
+ * 'stale' — API 실패, 만료된 캐시로 버팀
+ * 'fallback' — API도 캐시도 없어 내장 기준값 사용
+ *
+ * 예전에는 실패해도 console.warn 만 찍고 내장 기준값으로 조용히 계산했다.
+ * 사용자는 실시간 환율인 줄 알고 그 숫자로 판매가를 정하게 되므로,
+ * 출처를 화면에 반드시 표시한다.
+ */
+let rateSource = 'fallback';
+let rateAsOf = null;
+
+function setRateSource(kind, asOf) {
+    rateSource = kind;
+    rateAsOf = asOf || null;
+    renderRateSourceBadge();
+}
+
+function renderRateSourceBadge() {
+    const el = document.getElementById('rateSourceBadge');
+    if (!el) return;
+    const rel = (t) => {
+        if (!t) return '';
+        const m = Math.floor((Date.now() - new Date(t).getTime()) / 60000);
+        if (!isFinite(m) || m < 0) return '';
+        if (m < 1) return '방금';
+        if (m < 60) return `${m}분 전`;
+        const h = Math.floor(m / 60);
+        return h < 24 ? `${h}시간 전` : `${Math.floor(h / 24)}일 전`;
+    };
+    const map = {
+        live:     { cls: 'ok',   txt: '실시간',   sub: rel(rateAsOf) },
+        cache:    { cls: 'ok',   txt: '캐시',     sub: rel(rateAsOf) },
+        stale:    { cls: 'warn', txt: '지연',     sub: `최근 성공 ${rel(rateAsOf)}` },
+        fallback: { cls: 'bad',  txt: '연결 실패', sub: '내장 기준값으로 계산 중' },
+    };
+    const m = map[rateSource] || map.fallback;
+    el.className = 'rate-source ' + m.cls;
+    el.innerHTML = `<b>${m.txt}</b>${m.sub ? `<span>${m.sub}</span>` : ''}`;
+    el.title = rateSource === 'fallback'
+        ? '실시간 환율을 불러오지 못해 내장 기준값을 쓰고 있습니다. 실제 환율과 차이가 클 수 있으니 새로고침하거나 직접 확인하세요.'
+        : '';
+}
+
 const productNameInput = document.getElementById('productName');
 const purchasePriceInput = document.getElementById('purchasePrice');
 const sellingPriceInput = document.getElementById('sellingPrice');
@@ -76,6 +122,7 @@ function loadCachedRates() {
         defaultExchangeRates = rates;
         currentExchangeRate = defaultExchangeRates[currentCurrency];
         updateExchangeRateDisplay();
+        setRateSource('cache', ts);
         return true;
     } catch(e) { return false; }
 }
@@ -118,12 +165,27 @@ async function fetchRealTimeExchangeRates() {
             updateExchangeRateDisplay();
             updateExchangeRateTimestamp(data.updated);
             saveCachedRates();
+            setRateSource('live', Date.now());
             return true;
         } else {
             throw new Error('잘못된 API 응답');
         }
     } catch (error) {
-        console.warn('⚠️ 실시간 환율 로드 실패, 기본 환율 사용:', error.message);
+        console.warn('⚠️ 실시간 환율 로드 실패:', error.message);
+        // 만료됐더라도 캐시가 있으면 내장 기준값보다 낫다.
+        let usedStale = false;
+        try {
+            const raw = localStorage.getItem(RATE_CACHE_KEY);
+            if (raw) {
+                const { rates, ts } = JSON.parse(raw);
+                if (rates && rates[currentCurrency]) {
+                    defaultExchangeRates = rates;
+                    setRateSource('stale', ts);
+                    usedStale = true;
+                }
+            }
+        } catch (e) { /* 내장 기준값으로 */ }
+        if (!usedStale) setRateSource('fallback', null);
         currentExchangeRate = defaultExchangeRates[currentCurrency];
         updateExchangeRateDisplay();
         return false;
@@ -271,6 +333,8 @@ function calculateMargin() {
     if (projectSaveRow) projectSaveRow.style.display = 'flex';
     const coupangBanner = document.getElementById('coupangBanner');
     if (coupangBanner) coupangBanner.style.display = 'block';
+    const toolHandoff = document.getElementById('toolHandoff');
+    if (toolHandoff) toolHandoff.style.display = 'flex';
 
     // 입력값 자동 저장
     if (typeof saveInputsToLocalStorage === 'function') saveInputsToLocalStorage();
@@ -345,7 +409,14 @@ function addToHistory(data) {
         <td class="${netProfitClass}">₩ ${Math.round(data.netProfit).toLocaleString('ko-KR')}</td>
         <td class="${marginRateClass}">${data.marginRate.toFixed(2)}%</td>
         <td>${data.timestamp.toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
+        <td><button type="button" class="history-load-btn" data-hidx="${no - 1}" title="이 조건으로 다시 계산">불러오기</button></td>
     `;
+    const loadBtn = row.querySelector('.history-load-btn');
+    if (loadBtn) {
+        loadBtn.addEventListener('click', () => {
+            if (typeof loadFromHistory === 'function') loadFromHistory(Number(loadBtn.dataset.hidx));
+        });
+    }
     historyTableBody.appendChild(row);
     if (historySection) historySection.style.display = 'block';
     saveHistoryToLocalStorage();
@@ -461,10 +532,18 @@ function saveProject() {
 
     const projects = getProjects();
     projects.unshift(data);
-    localStorage.setItem('marginProjects', JSON.stringify(projects.slice(0, 20)));
+    // 상한을 넘으면 가장 오래된 항목이 밀려난다. 예전에는 말없이 사라져
+    // 사용자가 잃어버린 사실조차 몰랐으므로, 무엇이 지워지는지 알린다.
+    const MAX_PROJECTS = 20;
+    const dropped = projects.length > MAX_PROJECTS ? projects.slice(MAX_PROJECTS) : [];
+    localStorage.setItem('marginProjects', JSON.stringify(projects.slice(0, MAX_PROJECTS)));
     document.getElementById('projectNameInput').value = '';
     renderProjects();
-    showToast(`"${name}" 저장 완료!`);
+    if (dropped.length) {
+        showToast(`"${name}" 저장 — 한도(${MAX_PROJECTS}개) 초과로 "${dropped[0].name}" 삭제됨`);
+    } else {
+        showToast(`"${name}" 저장 완료!`);
+    }
     if (typeof gtag !== 'undefined') gtag('event', 'save_project', { event_category: 'projects' });
 }
 
@@ -550,7 +629,8 @@ function saveAlertSettings() {
         }
         localStorage.setItem('rateAlertTarget', String(target));
         rateAlertActive = true;
-        document.getElementById('alertStatusText').textContent = `✅ 환율 ₩${target.toLocaleString('ko-KR')} 도달 시 알림 발송`;
+        document.getElementById('alertStatusText').textContent =
+            `✅ ₩${target.toLocaleString('ko-KR')} 알림 등록 — 확인 중...`;
         document.getElementById('rateAlertTrigger').classList.add('active');
         startRateAlertCheck(target);
     });
@@ -565,23 +645,53 @@ function cancelRateAlert() {
     document.getElementById('rateAlertTrigger')?.classList.remove('active');
 }
 
+/**
+ * 목표 환율 도달 확인.
+ *
+ * 이 검사는 페이지가 열려 있는 동안에만 동작한다. 브라우저는 닫힌 탭에서
+ * 임의의 주기 작업을 돌려주지 않기 때문이다(Periodic Background Sync 는
+ * 설치형 PWA에 한정되고 발화 시점도 보장되지 않는다).
+ *
+ * 그래서 두 가지로 보완한다.
+ *  1) 다시 방문했을 때 즉시 한 번 검사한다. 자리를 비운 사이 목표에
+ *     도달했더라도 돌아오는 즉시 알 수 있다.
+ *  2) UI에 "탭이 열려 있는 동안 확인" 이라고 명시한다.
+ *     예전에는 이 사실을 알리지 않아, 알림을 걸어두고 탭을 닫은 사용자가
+ *     오지 않을 알림을 기다리게 됐다.
+ */
+async function checkRateAlertOnce(target) {
+    try {
+        const d = await fetchRatesPayload();
+        if (!d.rates?.USD) return false;
+        const current = Math.round(1 / d.rates.USD);
+        const statusEl = document.getElementById('alertStatusText');
+        if (current >= target) {
+            if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+                new Notification('환율 알림 — 유어팀 마진 계산기', {
+                    body: `현재 환율 ₩${current.toLocaleString('ko-KR')}이 목표(₩${target.toLocaleString('ko-KR')})에 도달했습니다.`,
+                    icon: '/apple-touch-icon.png'
+                });
+            }
+            showToast(`🔔 목표 환율 도달 — 현재 ₩${current.toLocaleString('ko-KR')}`);
+            cancelRateAlert();
+            if (statusEl) statusEl.textContent = `🔔 목표 도달! 현재 ₩${current.toLocaleString('ko-KR')} (알림 해제됨)`;
+            return true;
+        }
+        if (statusEl) {
+            statusEl.textContent =
+                `⏰ 대기 중 — 현재 ₩${current.toLocaleString('ko-KR')} / 목표 ₩${target.toLocaleString('ko-KR')}`;
+        }
+    } catch (e) { /* 다음 주기에 재시도 */ }
+    return false;
+}
+
 function startRateAlertCheck(target) {
     if (rateAlertInterval) clearInterval(rateAlertInterval);
-    rateAlertInterval = setInterval(async () => {
-        if (!rateAlertActive) { clearInterval(rateAlertInterval); return; }
-        try {
-            const d = await fetchRatesPayload();
-            if (d.rates?.USD) {
-                const current = Math.round(1 / d.rates.USD);
-                if (current >= target) {
-                    new Notification('환율 알림 — 유어팀 마진 계산기', {
-                        body: `현재 환율 ₩${current.toLocaleString('ko-KR')}이 목표(₩${target.toLocaleString('ko-KR')})에 도달했습니다!`,
-                        icon: '/favicon.ico'
-                    });
-                    cancelRateAlert();
-                }
-            }
-        } catch(e) {}
+    checkRateAlertOnce(target); // 방문 즉시 1회
+    rateAlertInterval = setInterval(() => {
+        if (!rateAlertActive) { clearInterval(rateAlertInterval); rateAlertInterval = null; return; }
+        if (document.hidden) return; // 백그라운드 탭에서는 외부 호출을 아낀다
+        checkRateAlertOnce(target);
     }, 5 * 60 * 1000);
 }
 

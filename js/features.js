@@ -494,3 +494,175 @@ async function loadExchangeRateChart() {
         }
     });
 }
+
+// ===== 전체 백업 · 복원 =====
+//
+// 모든 데이터가 localStorage 에만 있어 브라우저 데이터 삭제·기기 변경 시
+// 복구가 불가능했다. 이용약관에 소실 위험을 고지해 두고 정작 대비 수단이
+// 없었으므로, 파일 하나로 통째로 내보내고 되돌릴 수 있게 한다.
+const BACKUP_KEYS = [
+    'marginProjects', 'marginCalcHistory', 'marginCalcPresets',
+    'marginCalcInputs', 'rateAlertTarget', 'marginMonthlyGoal', 'selectedLanguage',
+];
+const BACKUP_FORMAT = 1;
+
+function exportAllData() {
+    const data = {};
+    let items = 0;
+    BACKUP_KEYS.forEach(k => {
+        const v = localStorage.getItem(k);
+        if (v === null) return;
+        try { data[k] = JSON.parse(v); } catch (e) { data[k] = v; }
+        if (Array.isArray(data[k])) items += data[k].length;
+    });
+    if (!Object.keys(data).length) {
+        showToast('내보낼 데이터가 없습니다.');
+        return;
+    }
+    const payload = {
+        format: BACKUP_FORMAT,
+        app: 'margin.ur-team.com',
+        exportedAt: new Date().toISOString(),
+        data,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    const d = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    a.download = `마진계산기_백업_${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast(`백업 파일 저장 완료 (${Object.keys(data).length}종)`);
+    if (typeof gtag !== 'undefined') gtag('event', 'backup_export', { event_category: 'data' });
+}
+
+async function importAllData(file) {
+    if (!file) return;
+    try {
+        const payload = JSON.parse(await file.text());
+        const data = payload && payload.data;
+        if (!data || typeof data !== 'object') throw new Error('형식을 알 수 없는 파일입니다');
+        if (payload.format > BACKUP_FORMAT) {
+            throw new Error('더 새로운 버전의 백업 파일입니다. 최신 페이지에서 시도해주세요');
+        }
+        const found = BACKUP_KEYS.filter(k => k in data);
+        if (!found.length) throw new Error('복원할 항목이 없습니다');
+
+        const when = payload.exportedAt
+            ? new Date(payload.exportedAt).toLocaleString('ko-KR') : '알 수 없음';
+        const ok = confirm(
+            `백업 생성 시각: ${when}\n복원 항목: ${found.length}종\n\n` +
+            '현재 브라우저에 저장된 계산 이력·프로젝트·프리셋을 이 백업으로 덮어씁니다.\n계속할까요?'
+        );
+        if (!ok) return;
+
+        found.forEach(k => {
+            const v = data[k];
+            localStorage.setItem(k, typeof v === 'string' ? v : JSON.stringify(v));
+        });
+        showToast(`복원 완료 (${found.length}종) — 새로고침합니다`);
+        if (typeof gtag !== 'undefined') gtag('event', 'backup_import', { event_category: 'data' });
+        setTimeout(() => location.reload(), 900);
+    } catch (err) {
+        showToast('복원 실패: ' + (err.message || '파일을 읽을 수 없습니다'));
+    }
+}
+
+function handleBackupFile(e) {
+    importAllData(e.target.files[0]);
+    e.target.value = '';
+}
+
+// ===== 계산 이력 → 계산기로 되돌리기 =====
+// 이력은 보기 전용이라 과거 조건으로 다시 계산하려면 전부 다시 입력해야 했다.
+function loadFromHistory(index) {
+    try {
+        const hist = JSON.parse(localStorage.getItem('marginCalcHistory') || '[]');
+        const h = hist[index];
+        if (!h) return;
+        const set = (id, v) => { const el = document.getElementById(id); if (el && v !== undefined && v !== null) el.value = v; };
+        set('productName', h.productName === '상품명 없음' ? '' : h.productName);
+        set('purchasePrice', h.purchasePrice);
+        set('sellingPrice', h.sellingPrice);
+        set('platformFee', h.platformFeeRate);
+        set('fxSpread', h.fxSpreadRate);
+        set('domesticShipping', h.domesticShipping);
+        set('intlShipping', h.intlShipping);
+        if (h.currency) {
+            const cs = document.getElementById('currency');
+            if (cs) { cs.value = h.currency; currentCurrency = h.currency; }
+            const sc = document.getElementById('sellingPriceCurrency');
+            if (sc) sc.textContent = h.currency;
+        }
+        saveInputsToLocalStorage();
+        if (typeof calculateMargin === 'function') calculateMargin();
+        showToast('이력을 불러왔습니다');
+    } catch (e) { showToast('이력을 불러오지 못했습니다'); }
+}
+
+// ===== 오류 수집 =====
+// 사용자 기기에서 스크립트가 깨져도 운영자가 알 방법이 없었다.
+// 개인정보는 담지 않고 오류 지점만 GA4 이벤트로 남긴다.
+(function setupErrorReporting() {
+    let sent = 0;
+    const report = (label) => {
+        if (sent >= 5) return;           // 한 세션에 5건까지만
+        sent++;
+        if (typeof gtag === 'function') {
+            gtag('event', 'js_error', {
+                event_category: 'error',
+                event_label: String(label).slice(0, 300),
+                page_path: location.pathname,
+            });
+        }
+    };
+    window.addEventListener('error', (e) => {
+        if (e.message) report(`${e.message} @${(e.filename || '').split('/').pop()}:${e.lineno}`);
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+        report('unhandled: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+    });
+})();
+
+// ===== 홈 화면에 추가 안내 =====
+// manifest·아이콘·서비스워커를 갖췄는데 설치 경로를 알리지 않고 있었다.
+let deferredInstall = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstall = e;
+    if (localStorage.getItem('installDismissed')) return;
+    const bar = document.getElementById('installPrompt');
+    if (bar) bar.classList.add('show');
+});
+function acceptInstall() {
+    const bar = document.getElementById('installPrompt');
+    if (bar) bar.classList.remove('show');
+    if (!deferredInstall) return;
+    deferredInstall.prompt();
+    deferredInstall.userChoice.then((c) => {
+        if (typeof gtag === 'function') {
+            gtag('event', 'pwa_install', { event_category: 'pwa', event_label: c.outcome });
+        }
+        deferredInstall = null;
+    });
+}
+function dismissInstall() {
+    localStorage.setItem('installDismissed', '1');
+    document.getElementById('installPrompt')?.classList.remove('show');
+}
+window.addEventListener('appinstalled', () => {
+    document.getElementById('installPrompt')?.classList.remove('show');
+});
+
+// ===== 계산기 → 도구 값 전달 =====
+// 도구를 쓰려면 매입가·판매가·환율을 처음부터 다시 입력해야 했다.
+function openToolsWithValues(hash) {
+    const g = (id) => (document.getElementById(id)?.value || '').trim();
+    const q = new URLSearchParams();
+    const map = { p: 'purchasePrice', s: 'sellingPrice', f: 'platformFee', ds: 'domesticShipping', is: 'intlShipping' };
+    Object.entries(map).forEach(([k, id]) => { const v = g(id); if (v) q.set(k, v); });
+    if (typeof currentExchangeRate === 'number' && currentExchangeRate > 0) q.set('r', Math.round(currentExchangeRate));
+    if (typeof currentCurrency === 'string') q.set('c', currentCurrency);
+    location.href = '/tools/?' + q.toString() + (hash || '');
+}

@@ -569,3 +569,85 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
   .header-feature-strip{display:none}
   .projects-grid{grid-template-columns:1fr}
 }
+
+/* ── 환율 출처 표시 ────────────────────────────────────────── */
+/* 실시간인지, 캐시인지, 실패해서 기준값을 쓰는지 반드시 드러낸다.
+   조용히 내장 기준값으로 계산하면 잘못된 환율로 가격을 정하게 된다. */
+.rate-source{display:flex;align-items:baseline;gap:6px;margin-top:6px;font-size:11.5px;line-height:1.4}
+.rate-source b{font-weight:700;padding:1px 6px;border-radius:3px;letter-spacing:.01em}
+.rate-source span{color:var(--ink-4)}
+.rate-source.ok b{background:var(--pos-wash);color:var(--pos)}
+.rate-source.warn b{background:var(--warn-wash);color:var(--warn)}
+.rate-source.bad b{background:var(--neg-wash);color:var(--neg)}
+.rate-source.bad span{color:var(--neg)}
+.alert-scope-note{font-size:11px;color:var(--ink-4);margin-top:8px;line-height:1.5}
+
+/* ── 이력 불러오기 ─────────────────────────────────────────── */
+.history-load-btn{background:none;border:1px solid var(--line-2);border-radius:var(--r-s);
+  padding:3px 9px;font-size:11.5px;font-weight:600;color:var(--ink-2);cursor:pointer;
+  font-family:inherit;white-space:nowrap;transition:all .15s}
+.history-load-btn:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ── 백업 · 복원 ───────────────────────────────────────────── */
+.backup-row{display:flex;align-items:center;justify-content:space-between;gap:20px;
+  flex-wrap:wrap;margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
+.backup-text{flex:1;min-width:240px}
+.backup-text strong{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.backup-text span{font-size:12px;color:var(--ink-3);line-height:1.55}
+.backup-actions{display:flex;gap:8px;flex-wrap:wrap}
+.backup-btn{background:var(--ink);color:#fff;border:none;border-radius:var(--r-s);padding:9px 15px;
+  font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;
+  transition:background .15s}
+.backup-btn:hover{background:#25282F}
+.backup-btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line-2)}
+.backup-btn.ghost:hover{border-color:var(--ink);color:var(--ink);background:none}
+@media(max-width:768px){
+  .backup-row{flex-direction:column;align-items:stretch}
+  .backup-actions{flex-direction:column}
+  .backup-btn{width:100%}
+}
+
+/* ── 도구로 이어가기 ───────────────────────────────────────── */
+.tool-handoff{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:18px;
+  padding-top:18px;border-top:1px solid var(--line)}
+.tool-handoff>span{font-size:12px;color:var(--ink-3);font-weight:600}
+.tool-handoff button{background:none;border:1px solid var(--line-2);border-radius:20px;
+  padding:6px 13px;font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer;
+  font-family:inherit;white-space:nowrap;transition:all .15s}
+.tool-handoff button:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ── 홈 화면에 추가 ────────────────────────────────────────── */
+.install-prompt{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(24px);
+  z-index:400;display:none;align-items:center;gap:18px;background:var(--ink);color:#fff;
+  padding:14px 18px;border-radius:var(--r-m);box-shadow:var(--shadow-pop);
+  max-width:calc(100vw - 32px);opacity:0;transition:opacity .25s ease,transform .25s ease}
+.install-prompt.show{display:flex;opacity:1;transform:translateX(-50%) translateY(0)}
+.install-text strong{display:block;font-size:13.5px;font-weight:700;margin-bottom:2px}
+.install-text span{font-size:12px;color:rgba(255,255,255,.62);line-height:1.45}
+.install-actions{display:flex;gap:7px;flex-shrink:0}
+.install-btn{background:#fff;color:var(--ink);border:none;border-radius:var(--r-s);
+  padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;
+  white-space:nowrap;transition:opacity .15s}
+.install-btn:hover{opacity:.86}
+.install-btn.ghost{background:none;color:rgba(255,255,255,.66);border:1px solid rgba(255,255,255,.2)}
+.install-btn.ghost:hover{color:#fff;opacity:1}
+@media(max-width:768px){
+  .install-prompt{left:12px;right:12px;bottom:84px;transform:translateY(24px);
+    flex-direction:column;align-items:stretch;gap:12px}
+  .install-prompt.show{transform:translateY(0)}
+  .install-actions{width:100%}
+  .install-btn{flex:1}
+  .tool-handoff{gap:6px}
+}
+
+/* ── 도구 검색 ─────────────────────────────────────────────── */
+.tools-search-wrap{max-width:1080px;margin:26px auto 0;padding:0 28px}
+.tools-search{width:100%;padding:12px 15px;border:1px solid var(--line-2);border-radius:var(--r-m);
+  font-size:14.5px;font-family:var(--sans);color:var(--ink);background:var(--paper);outline:none;
+  transition:border-color .15s,box-shadow .15s}
+.tools-search::placeholder{color:var(--ink-4)}
+.tools-search:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(15,17,21,.07)}
+.tools-search-empty{font-size:13px;color:var(--ink-3);margin-top:12px;text-align:center}
+.tools-prefill-note{font-size:12px;color:var(--pos);background:var(--pos-wash);
+  border-radius:var(--r-s);padding:8px 12px;margin-top:10px;font-weight:600}
+@media(max-width:768px){.tools-search-wrap{padding:0 18px;margin-top:18px}}
