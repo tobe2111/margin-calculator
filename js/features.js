@@ -69,7 +69,41 @@ function restoreInputsFromLocalStorage() {
             if (sc) sc.textContent = d.currency;
         }
         if (d.vatRefund !== undefined) document.getElementById('vatRefund').checked = d.vatRefund;
+        notifyRestored(d);
     } catch(e) {}
+}
+
+/**
+ * 값이 복원됐다는 사실을 알린다.
+ * 예전에는 지난 방문의 입력값이 말없이 채워져, 사용자가 넣은 적 없다고
+ * 여기는 숫자가 그대로 계산에 쓰였다. 어디서 온 값인지 밝히고
+ * 한 번에 비울 수 있게 한다.
+ */
+function notifyRestored(d) {
+    const bar = document.getElementById('restoredNotice');
+    if (!bar) return;
+    const filled = ['productName','purchasePrice','sellingPrice','domesticShipping','intlShipping']
+        .filter(k => d[k] !== undefined && String(d[k]).trim() !== '' && String(d[k]) !== '0');
+    if (!filled.length) return;
+    bar.classList.add('show');
+}
+
+function clearRestored() {
+    ['productName','purchasePrice','sellingPrice','domesticShipping','intlShipping',
+     'platformFee','targetMargin'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+    });
+    ['adCostPerUnit','returnRate'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '0';
+    });
+    localStorage.removeItem('marginCalcInputs');
+    document.getElementById('restoredNotice')?.classList.remove('show');
+    document.querySelectorAll('.platform-quick-btn').forEach(b => b.classList.remove('active'));
+    showToast('입력값을 비웠습니다');
+}
+
+function dismissRestored() {
+    document.getElementById('restoredNotice')?.classList.remove('show');
 }
 
 function restoreFromURL(params) {
