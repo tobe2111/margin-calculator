@@ -15,7 +15,7 @@
 
 :root{
   /* 먹색 계열 — 순수 검정 대신 살짝 푸른 기를 넣어 눈이 덜 피로하다 */
-  --ink:#0F1115;--ink-2:#3D424D;--ink-3:#6B7280;--ink-4:#9AA1AC;
+  --ink:#0F1115;--ink-2:#3D424D;--ink-3:#575E68;--ink-4:#6A717A;
   --line:#E8E9EC;--line-2:#D3D6DB;
   --paper:#fff;--paper-2:#FAFAFB;--paper-3:#F4F5F7;
 
@@ -56,16 +56,17 @@ h1,h2,h3,h4,p,li,label,button,a,td,th,span{word-break:keep-all;overflow-wrap:bre
 .banner-close:hover{color:#fff}
 
 /* ── 헤더 ──────────────────────────────────────────────────── */
-.header{background:var(--paper);padding:60px 0 44px;position:relative;border-bottom:1px solid var(--line)}
-.header-content{position:relative;max-width:1080px;margin:0 auto;padding:0 28px;text-align:left}
+.header{background:var(--paper);padding:44px 0 32px;position:relative;border-bottom:1px solid var(--line)}
+/* 바깥 .container 가 이미 폭과 좌우 여백을 잡는다. 여기서 또 주면 28px 이 겹쳐 축이 밀린다. */
+.header-content{position:relative;text-align:left}
 .main-title{font-size:clamp(34px,5vw,52px);font-weight:800;color:var(--ink);
   letter-spacing:-.035em;line-height:1.12;margin-bottom:18px;max-width:22ch}
 .header .subtitle{font-size:18px;color:var(--ink-2);line-height:1.55;
-  margin-bottom:32px;max-width:46ch;letter-spacing:-.012em}
+  margin-bottom:24px;max-width:46ch;letter-spacing:-.012em}
 .header .platforms{display:none}
 
 /* 지원 플랫폼 — 칩 대신 담백한 목록 */
-.platform-logos{display:flex;flex-wrap:wrap;gap:0 26px;margin-bottom:34px;align-items:center}
+.platform-logos{display:flex;flex-wrap:wrap;gap:0 22px;margin-bottom:24px;align-items:center}
 .platform-logo-item{display:inline-flex;align-items:center;gap:7px;background:none;border:none;
   border-radius:0;padding:0;font-size:14px;font-weight:600;color:var(--ink-3);
   letter-spacing:-.01em;transition:color .15s}
@@ -73,7 +74,7 @@ h1,h2,h3,h4,p,li,label,button,a,td,th,span{word-break:keep-all;overflow-wrap:bre
 .platform-logo-item i{font-size:15px;color:var(--ink-4)}
 .platform-logo-item:hover i{color:var(--ink-2)}
 
-.header-feature-strip{display:flex;flex-wrap:wrap;gap:0;padding-top:26px;border-top:1px solid var(--line)}
+.header-feature-strip{display:flex;flex-wrap:wrap;gap:0;padding-top:20px;border-top:1px solid var(--line)}
 .header-feature-strip span{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500;
   color:var(--ink-3);padding-right:22px;margin-right:22px;border-right:1px solid var(--line);
   letter-spacing:-.008em}
@@ -97,14 +98,14 @@ h1,h2,h3,h4,p,li,label,button,a,td,th,span{word-break:keep-all;overflow-wrap:bre
 .lang-name{font-size:14px}
 
 /* ── 본문 레이아웃 ─────────────────────────────────────────── */
-.main-content{padding:56px 0 120px;background:var(--paper-2)}
-.calculator-container{display:grid;grid-template-columns:1fr;gap:28px;margin-bottom:40px;
+.main-content{padding:36px 0 96px;background:var(--paper-2)}
+.calculator-container{display:grid;grid-template-columns:1fr;gap:22px;margin-bottom:32px;
   max-width:680px;margin-left:auto;margin-right:auto;align-items:start}
 .calculator-container.has-result{grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-width:none}
 
 /* 카드는 그림자 없이 선으로만 */
 .input-section,.result-section{background:var(--paper);border-radius:var(--r-l);
-  border:1px solid var(--line);padding:34px 32px}
+  border:1px solid var(--line);padding:28px 26px}
 .input-section h2,.result-section h2{font-size:15px;font-weight:700;color:var(--ink-3);
   margin-bottom:26px;letter-spacing:.02em;text-transform:uppercase;
   padding-bottom:14px;border-bottom:1px solid var(--line)}
@@ -312,7 +313,7 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 .history-section,.projects-section,.seller-tools-section,
 .adsense-container,.faq-section,.info-section{
   background:var(--paper);border:1px solid var(--line);border-radius:var(--r-l);
-  padding:30px 32px;margin-bottom:24px}
+  padding:26px 28px;margin-bottom:20px}
 .comparison-section h2,.sim-section h2,.duty-section h2,
 .history-section h2,.projects-section h2,.seller-tools-section h2,
 .faq-section h2,.info-section h2{
@@ -483,7 +484,7 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 .no-projects{font-size:13px;color:var(--ink-4);text-align:center;padding:22px}
 
 /* ── 푸터 ──────────────────────────────────────────────────── */
-.footer{background:var(--paper);border-top:1px solid var(--line);padding:40px 0;text-align:left}
+.footer{background:var(--paper);border-top:1px solid var(--line);padding:32px 0;text-align:left}
 .footer p{font-size:12.5px;color:var(--ink-3);margin:6px 0}
 .footer-note{font-size:11px;color:var(--ink-4)}
 .footer-links{display:flex;gap:0;flex-wrap:wrap;margin:14px 0}
@@ -651,3 +652,19 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 .tools-prefill-note{font-size:12px;color:var(--pos);background:var(--pos-wash);
   border-radius:var(--r-s);padding:8px 12px;margin-top:10px;font-weight:600}
 @media(max-width:768px){.tools-search-wrap{padding:0 18px;margin-top:18px}}
+
+
+/* ── 조작 요소 최소 크기 ────────────────────────────────────
+   WCAG 2.5.8 은 24x24px 이상을 권한다. 시각적 무게는 그대로 두고
+   패딩·최소높이로 누를 수 있는 면적만 넓힌다. */
+.banner-close{min-width:32px;min-height:32px;display:inline-flex;align-items:center;justify-content:center}
+.advanced-toggle-btn{min-height:32px;padding:5px 0}
+.preset-save-btn,.preset-load-btn{min-height:28px}
+.preset-delete-btn{min-width:24px;min-height:24px;display:inline-flex;align-items:center;justify-content:center}
+.refresh-btn{min-height:26px}
+.history-load-btn{min-height:28px}
+.checkbox-label input[type="checkbox"]{width:20px;height:20px}
+.checkbox-label{min-height:32px}
+.rate-alert-close{min-width:32px;min-height:32px;display:inline-flex;align-items:center;justify-content:center}
+.footer-links a{display:inline-block;padding:4px 0}
+.nav-brand{min-height:32px}

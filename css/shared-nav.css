@@ -102,15 +102,19 @@
 /* 메인 페이지 헤더와 동일한 밝은 톤.
    서브페이지만 진한 남색이면 사이트 안에서 톤이 갈라진다. */
 /* 서브페이지 헤더 — 메인과 동일하게 좌측 정렬 활자 중심 */
+/* 배경은 화면 전체로 깔고, 안쪽 콘텐츠만 폭을 제한한다.
+   max-width 를 헤더 자체에 걸면 좌우에 회색 여백이 생겨
+   페이지 위에 카드가 떠 있는 것처럼 보이고 화면이 휑해진다. */
+/* 배경은 화면 전체, 콘텐츠는 본문과 같은 축에 맞춘다.
+   자식에 max-width + auto 마진을 주는 방식은 .sub-header h1{margin:0} 처럼
+   더 구체적인 규칙에 덮여 축이 어긋난다. 부모 좌우 패딩으로 맞춘다. */
 .sub-header {
     background: #fff;
     color: #0F1115;
-    padding: 56px 28px 40px;
+    padding: 44px max(28px, calc((100% - 1080px) / 2 + 28px)) 32px;
     text-align: left;
     position: relative;
     border-bottom: 1px solid #E8E9EC;
-    max-width: 1080px;
-    margin: 0 auto;
 }
 
 .sub-header h1 {
@@ -155,9 +159,9 @@
 .tools-hero-stats {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0;
-    margin-top: 20px;
+    margin-top: 18px;
     flex-wrap: wrap;
     position: relative;
 }
@@ -165,9 +169,10 @@
 .tools-stat {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 0 20px;
+    align-items: flex-start;
+    padding: 0 22px;
 }
+.tools-stat:first-child { padding-left: 0; }
 
 .tools-stat strong {
     font-size: 22px;
@@ -192,9 +197,9 @@
 .tools-quick-nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin: 24px 0 8px;
+    gap: 7px;
+    justify-content: flex-start;
+    margin: 18px 0 4px;
     padding: 0;
 }
 
@@ -247,9 +252,9 @@
     color: #6B7280;
     border-top: 1px solid #E8E9EC;
     text-align: center;
-    padding: 36px 20px;
+    padding: 32px 20px;
     font-size: 13px;
-    margin-top: 72px;
+    margin-top: 48px;
 }
 
 .sub-footer a {
@@ -273,13 +278,13 @@
 
 /* ===== Subpage Common Styles ===== */
 .subpage-main {
-    max-width: 1140px;
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 0 20px 60px;
+    padding: 0 28px 48px;
 }
 
 .subpage-section {
-    margin-top: 48px;
+    margin-top: 36px;
 }
 
 .subpage-section h2 {
