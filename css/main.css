@@ -1,15 +1,18 @@
 /* =============================================================
-   유어팀 마진 계산기 — 디자인 시스템 (다크 / 증권 대시보드)
+   유어팀 마진 계산기 — 디자인 시스템
    -------------------------------------------------------------
-   토스증권류 금융 대시보드를 기준으로 삼는다.
-   - 어두운 바탕에 카드가 한 단계 밝게 떠 있는 구조
+   증권사 대시보드 구조 + 밝은 테마.
+   - 좌측 고정 사이드바(이동 메뉴 + 시세 + 바로가기)
+   - 카드는 흰 면, 페이지 바탕은 한 톤 어둡게 눌러 층을 만든다
    - 숫자가 주인공. tabular-nums 로 자릿수를 고정한다
-   - 색은 의미가 있을 때만. 손익 표시가 유일한 채도 높은 색이다
+   - 정보 밀도를 높인다. 여백보다 한 화면에 담기는 양을 우선한다
 
-   손익 색: 국내 증권앱은 상승을 빨강으로 쓰지만, 이 서비스는 주가가
-   아니라 회계상 손익을 다룬다. 회계에서 빨강은 '적자'이므로 여기서는
-   이익=초록, 손실=빨강을 쓴다. 증권앱 관습을 그대로 따르면 손실을
-   이익으로 오독할 위험이 크다.
+   손익 색: 국내 증권앱은 상승을 빨강으로 쓰지만 이 서비스는 주가가
+   아니라 회계상 손익을 다룬다. 회계에서 빨강은 '적자'이므로
+   이익=초록, 손실=빨강. 증권앱 관습을 따르면 손실을 이익으로 오독한다.
+
+   파랑이 둘인 이유: 버튼 배경(위에 흰 글씨)은 어두워야 대비가 나오고,
+   흰 배경 위 링크 글씨도 충분히 어두워야 한다. 역할별로 나눠 둔다.
    ============================================================= */
 
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css');
@@ -17,24 +20,21 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  /* 표면 — 뒤에서 앞으로 갈수록 밝아진다 */
-  --bg:#0F1013;--paper:#17181C;--paper-2:#1D1F24;--paper-3:#25272E;
+  --bg:#F5F6F8;--paper:#FFFFFF;--paper-2:#F7F8FA;--paper-3:#EEF0F4;
 
-  /* 글자 */
-  --ink:#EDEFF2;--ink-2:#BAC1CC;--ink-3:#9BA3B0;--ink-4:#929AA7;
+  --ink:#14161A;--ink-2:#495059;--ink-3:#5C636E;--ink-4:#656C75;
 
-  /* 경계 */
-  --line:#26282F;--line-2:#333640;
+  --line:#E4E7EC;--line-2:#D2D6DE;
 
-  /* 파랑이 두 역할을 겸할 수 없다. 버튼 배경(흰 글씨를 얹음)은 어두워야
-     대비가 나오고, 어두운 배경 위 링크 글씨는 밝아야 한다. 분리해 둔다. */
-  --accent:#2570E8;--accent-ink:#1B58BF;--accent-wash:#17233A;--accent-text:#6BA6FF;
-  --pos:#26C07E;--pos-wash:#12241D;
-  --neg:#F0555F;--neg-wash:#2A1519;
-  --warn:#E8A33D;--warn-wash:#2A2114;
+  --accent:#2570E8;--accent-ink:#1B58BF;--accent-wash:#EEF4FE;--accent-text:#1B58BF;
+  --pos:#0B7A5C;--pos-wash:#E9F6F1;
+  --neg:#C42A44;--neg-wash:#FCEEF1;
+  --warn:#8A5A10;--warn-wash:#FCF5E8;
 
-  --r-s:6px;--r-m:10px;--r-l:16px;
-  --shadow-pop:0 12px 40px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.4);
+  --r-s:6px;--r-m:10px;--r-l:14px;
+  --shadow-pop:0 8px 32px rgba(20,22,26,.12),0 2px 8px rgba(20,22,26,.06);
+
+  --sb-w:236px;   /* 사이드바 폭 */
 
   --sans:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
 }
@@ -53,7 +53,7 @@ h1,h2,h3,h4,p,li,label,button,a,td,th,span{word-break:keep-all;overflow-wrap:bre
   font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 
 /* ── 상단 고지 바 ───────────────────────────────────────────── */
-.top-banner{background:var(--paper);border-bottom:1px solid var(--line);padding:9px 0}
+.top-banner{background:var(--ink);padding:9px 0}
 .banner-content{display:flex;align-items:center;justify-content:center;gap:10px;position:relative}
 .banner-icon{display:none}
 .banner-text{color:rgba(255,255,255,.72);font-size:13px;margin:0;letter-spacing:-.005em}
@@ -629,7 +629,7 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 
 /* ── 홈 화면에 추가 ────────────────────────────────────────── */
 .install-prompt{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(24px);
-  z-index:400;display:none;align-items:center;gap:18px;background:var(--paper-3);color:var(--ink);border:1px solid var(--line-2);
+  z-index:400;display:none;align-items:center;gap:18px;background:var(--ink);color:#fff;
   padding:14px 18px;border-radius:var(--r-m);box-shadow:var(--shadow-pop);
   max-width:calc(100vw - 32px);opacity:0;transition:opacity .25s ease,transform .25s ease}
 .install-prompt.show{display:flex;opacity:1;transform:translateX(-50%) translateY(0)}
@@ -640,8 +640,8 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
   padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;
   white-space:nowrap;transition:opacity .15s}
 .install-btn:hover{opacity:.86}
-.install-btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line-2)}
-.install-btn.ghost:hover{color:#fff;opacity:1}
+.install-btn.ghost{background:none;color:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.24)}
+.install-btn.ghost:hover{color:#fff;border-color:rgba(255,255,255,.5)}
 @media(max-width:768px){
   .install-prompt{left:12px;right:12px;bottom:84px;transform:translateY(24px);
     flex-direction:column;align-items:stretch;gap:12px}
@@ -692,7 +692,7 @@ ins.adsbygoogle{min-height:0}
    넓은 화면에서 문구가 왼쪽에만 몰리고 오른쪽이 통째로 비어 있었다.
    빈 자리를 실시간 환율로 채운다. 마진 계산기의 첫 화면에서
    가장 먼저 궁금한 정보이기도 하다. */
-.header-content{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:56px;align-items:start}
+.header-content{position:relative;text-align:left}
 .header-copy{min-width:0}
 
 .hero-rates{border:1px solid var(--line);border-radius:var(--r-l);background:var(--paper-2);
@@ -806,4 +806,127 @@ input:-webkit-autofill,input:-webkit-autofill:focus{
 *::-webkit-scrollbar-track{background:var(--bg)}
 *::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:6px;border:2px solid var(--bg)}
 *::-webkit-scrollbar-thumb:hover{background:var(--ink-4)}
-html{color-scheme:dark}
+html{color-scheme:light}
+
+/* =============================================================
+   좌측 사이드바 레이아웃
+   ============================================================= */
+.site-sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb-w);z-index:300;
+  background:var(--paper);border-right:1px solid var(--line);overflow-y:auto;overscroll-behavior:contain}
+.sidebar-inner{display:flex;flex-direction:column;min-height:100%;padding:16px 14px 14px}
+
+.sb-brand{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:var(--ink);
+  text-decoration:none;letter-spacing:-.02em;padding:4px 8px 14px;min-height:32px}
+
+.sb-nav{display:flex;flex-direction:column;gap:1px;margin-bottom:18px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--r-s);
+  font-size:13.5px;font-weight:600;color:var(--ink-2);text-decoration:none;transition:all .13s;
+  letter-spacing:-.01em}
+.sb-link i{width:16px;font-size:13px;color:var(--ink-4);flex-shrink:0;text-align:center}
+.sb-link:hover{background:var(--paper-3);color:var(--ink)}
+.sb-link:hover i{color:var(--ink-2)}
+.sb-link.active{background:var(--accent-wash);color:var(--accent-text)}
+.sb-link.active i{color:var(--accent-text)}
+
+.sb-block{border-top:1px solid var(--line);padding:14px 8px 0;margin-bottom:16px}
+.sb-block-head{display:flex;align-items:baseline;justify-content:space-between;
+  font-size:11px;font-weight:700;color:var(--ink-4);letter-spacing:.04em;margin-bottom:9px}
+.sb-block-head span{font-size:10px;font-weight:600;color:var(--pos)}
+.sb-block-head span.warn{color:var(--neg)}
+
+.sb-rates{list-style:none;margin:0;padding:0}
+.sb-rates li{display:flex;align-items:baseline;justify-content:space-between;padding:5px 0;font-size:12.5px}
+.sb-rates b{font-weight:700;color:var(--ink-3);letter-spacing:.02em}
+.sb-rates b small{font-size:9px;font-weight:600;color:var(--ink-4);margin-left:2px}
+.sb-rates em{font-style:normal;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;
+  letter-spacing:-.015em}
+
+.sb-shortcuts{display:flex;flex-direction:column;gap:1px}
+.sb-shortcuts a{font-size:12.5px;color:var(--ink-2);text-decoration:none;padding:5px 0;transition:color .13s}
+.sb-shortcuts a:hover{color:var(--accent-text)}
+
+.sb-foot{margin-top:auto;padding:12px 8px 0;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:10px}
+.sb-foot a{font-size:11px;color:var(--ink-4);text-decoration:none}
+.sb-foot a:hover{color:var(--ink-2)}
+
+/* 모바일 상단 바 + 가림막 */
+.sb-mobilebar{display:none;position:sticky;top:0;z-index:290;align-items:center;gap:10px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:8px 14px;min-height:48px}
+.sb-toggle{background:none;border:1px solid var(--line-2);border-radius:var(--r-s);
+  color:var(--ink-2);font-size:15px;cursor:pointer;min-width:34px;min-height:34px;
+  display:inline-flex;align-items:center;justify-content:center}
+.sb-mobilebrand{font-size:14px;font-weight:800;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+.sb-scrim{display:none;position:fixed;inset:0;background:rgba(20,22,26,.4);z-index:295}
+.sb-scrim.show{display:block}
+
+/* 본문을 사이드바 폭만큼 밀어준다 */
+body.has-sidebar .top-banner,
+body.has-sidebar .header,
+body.has-sidebar .main-content,
+body.has-sidebar .footer,
+body.has-sidebar .sub-header,
+body.has-sidebar .subpage-main,
+body.has-sidebar .sub-footer,
+body.has-sidebar .tools-search-wrap,
+body.has-sidebar .tools-quick-nav{margin-left:var(--sb-w)}
+
+/* 사이드바가 폭을 먹으므로 본문 컨테이너는 조금 넓혀 밀도를 유지한다 */
+.container,.header-content{max-width:1160px}
+.subpage-main{max-width:1160px}
+.sub-header{padding-left:max(28px,calc((100% - 1160px)/2 + 28px));
+            padding-right:max(28px,calc((100% - 1160px)/2 + 28px))}
+
+@media(max-width:1080px){
+  .site-sidebar{transform:translateX(-100%);transition:transform .22s ease;box-shadow:var(--shadow-pop)}
+  .site-sidebar.open{transform:translateX(0)}
+  .sb-mobilebar{display:flex}
+  body.has-sidebar .top-banner,
+  body.has-sidebar .header,
+  body.has-sidebar .main-content,
+  body.has-sidebar .footer,
+  body.has-sidebar .sub-header,
+  body.has-sidebar .subpage-main,
+  body.has-sidebar .sub-footer,
+  body.has-sidebar .tools-search-wrap,
+  body.has-sidebar .tools-quick-nav{margin-left:0}
+}
+
+/* =============================================================
+   정보 밀도
+   ============================================================= */
+.header{padding:32px 0 24px}
+.main-title{font-size:clamp(28px,3.4vw,40px);margin-bottom:12px}
+.header .subtitle{font-size:16px;margin-bottom:18px}
+.platform-logos{margin-bottom:18px}
+.header-feature-strip{padding-top:16px}
+.main-content{padding:24px 0 72px}
+.calculator-container{gap:18px;margin-bottom:24px}
+.input-section,.result-section,.pre-result{padding:22px 20px}
+.input-section h2,.result-section h2,.pre-result h2{margin-bottom:18px;padding-bottom:11px}
+.form-group{margin-bottom:15px}
+.form-group label{margin-bottom:5px}
+.form-group input,.form-group select,.currency-select{padding:9px 12px;font-size:14px}
+.help-text{margin-top:3px}
+.result-card{padding:12px 0}
+.result-value{font-size:22px}
+.breakdown-item{padding:7px 0;font-size:13px}
+.result-breakdown{margin-top:20px}
+.comparison-section,.sim-section,.duty-section,.rate-history-section,
+.history-section,.projects-section,.seller-tools-section,
+.faq-section,.info-section{padding:20px 22px;margin-bottom:16px}
+.history-table th,.comparison-table th{padding:7px 10px;font-size:11px}
+.history-table td,.comparison-table td{padding:8px 10px;font-size:12.5px}
+.subpage-section{margin-top:28px}
+.footer{padding:24px 0}
+
+/* 계산 전 안내의 수수료표는 4열(이름·값·이름·값)이라 좁은 화면에서 넘친다.
+   모바일에서는 2열로 접어 세로로 흐르게 한다. */
+@media(max-width:640px){
+  .pre-fee-table,.pre-fee-table tbody,.pre-fee-table tr{display:block;width:100%}
+  .pre-fee-table td{display:inline-block;width:50%;padding:6px 0}
+  .pre-fee-table td:nth-child(2),.pre-fee-table td:nth-child(4){text-align:right;padding-right:0}
+  .pre-fee-table td:nth-child(3){padding-left:0}
+  .pre-fee-table td[colspan]{width:100%;text-align:left!important}
+}

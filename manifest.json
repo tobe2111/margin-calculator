@@ -4,8 +4,8 @@
   "description": "라자다·틱톡샵·이베이·아마존·쇼피 셀러를 위한 무료 해외판매 마진 계산기",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0F1013",
-  "theme_color": "#0F1013",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
   "lang": "ko",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
