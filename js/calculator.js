@@ -65,6 +65,10 @@ function setRateSource(kind, asOf) {
     rateAsOf = asOf || null;
     renderRateSourceBadge();
     renderHeroRates();
+    // 좌측 사이드바 시세도 같은 값으로 맞춘다
+    if (typeof window.renderSidebarRates === 'function') {
+        window.renderSidebarRates(defaultExchangeRates, kind);
+    }
 }
 
 /** 히어로 오른쪽 환율 패널. 환율이 갱신될 때마다 같이 다시 그린다. */

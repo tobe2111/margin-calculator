@@ -1,102 +1,5 @@
-/* ===== Shared Navigation Bar =====
-   main.css 와 같은 먹색 기반. 파랑은 쓰지 않고
-   활성 상태는 밑줄로만 표시한다. */
-.site-nav {
-    background: rgba(15,16,19,.82);
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
-    border-bottom: 1px solid #26282F;
-    position: sticky;
-    top: 0;
-    z-index: 300;
-}
-
-.site-nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 28px;
-    max-width: 1080px;
-    margin: 0 auto;
-    height: 56px;
-    gap: 16px;
-}
-
-.nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 700;
-    color: #EDEFF2;
-    text-decoration: none;
-    font-size: 15px;
-    letter-spacing: -.02em;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.nav-brand img {
-    width: 22px;
-    height: 22px;
-}
-
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex-wrap: nowrap;
-}
-
-.nav-link {
-    padding: 6px 11px;
-    border-radius: 6px;
-    font-size: 13.5px;
-    font-weight: 500;
-    color: #7C8390;
-    text-decoration: none;
-    transition: color .15s;
-    white-space: nowrap;
-    letter-spacing: -.01em;
-    position: relative;
-}
-
-.nav-link:hover {
-    background: none;
-    color: #EDEFF2;
-}
-
-.nav-link.active {
-    background: none;
-    color: #EDEFF2;
-    font-weight: 700;
-}
-
-.nav-link.active::after {
-    content: '';
-    position: absolute;
-    left: 11px;
-    right: 11px;
-    bottom: -1px;
-    height: 2px;
-    background: var(--accent);
-}
-
-.nav-toggle {
-    display: none;
-    background: none;
-    border: 1px solid #333640;
-    border-radius: 6px;
-    font-size: 16px;
-    color: #A8AEB8;
-    cursor: pointer;
-    padding: 6px 10px;
-    line-height: 1;
-    flex-shrink: 0;
-}
-
-.nav-toggle:hover {
-    background: #25272E;
-}
+/* 상단 가로 내비게이션은 좌측 사이드바로 대체됐다.
+   사이드바 스타일은 main.css 에 있다. */
 
 /* ===== Sub-page Header ===== */
 /* 메인 페이지 헤더와 동일한 밝은 톤.
@@ -109,8 +12,8 @@
    자식에 max-width + auto 마진을 주는 방식은 .sub-header h1{margin:0} 처럼
    더 구체적인 규칙에 덮여 축이 어긋난다. 부모 좌우 패딩으로 맞춘다. */
 .sub-header {
-    background: var(--bg, #0F1013);
-    color: #EDEFF2;
+    background: var(--bg, var(--bg));
+    color: var(--ink);
     padding: 44px max(28px, calc((100% - 1080px) / 2 + 28px)) 32px;
     text-align: left;
     position: relative;
@@ -131,7 +34,7 @@
 
 .sub-header p {
     font-size: 16px;
-    color: #A8AEB8;
+    color: var(--ink-2);
     max-width: 52ch;
     margin: 0;
     position: relative;
@@ -144,13 +47,13 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #1D1F24;
-    border: 1px solid #333640;
+    background: var(--paper-2);
+    border: 1px solid var(--line-2);
     border-radius: 999px;
     padding: 5px 14px;
     font-size: 12px;
     font-weight: 700;
-    color: #A8AEB8;
+    color: var(--ink-2);
     margin-bottom: 14px;
     letter-spacing: 0.5px;
     position: relative;
@@ -177,20 +80,20 @@
 .tools-stat strong {
     font-size: 22px;
     font-weight: 800;
-    color: #EDEFF2;
+    color: var(--ink);
     line-height: 1.2;
 }
 
 .tools-stat span {
     font-size: 11px;
-    color: #7C8390;
+    color: var(--ink-3);
     margin-top: 2px;
 }
 
 .tools-stat-divider {
     width: 1px;
     height: 32px;
-    background: #26282F;
+    background: var(--line);
 }
 
 /* Quick nav for tools page */
@@ -207,21 +110,21 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #1D1F24;
-    border: 1px solid #333640;
+    background: var(--paper-2);
+    border: 1px solid var(--line-2);
     border-radius: 8px;
     padding: 7px 14px;
     font-size: 13px;
     font-weight: 600;
-    color: #A8AEB8;
+    color: var(--ink-2);
     text-decoration: none;
     transition: all 0.15s ease;
 }
 
 .tools-quick-link:hover {
     border-color: var(--accent);
-    color: #EDEFF2;
-    background: #25272E;
+    color: var(--ink);
+    background: var(--paper-3);
 }
 
 .tq-num {
@@ -248,9 +151,9 @@
 
 /* ===== Sub-page Footer ===== */
 .sub-footer {
-    background: var(--bg, #0F1013);
-    color: #7C8390;
-    border-top: 1px solid #26282F;
+    background: var(--bg, var(--bg));
+    color: var(--ink-3);
+    border-top: 1px solid var(--line);
     text-align: center;
     padding: 32px 20px;
     font-size: 13px;
@@ -258,7 +161,7 @@
 }
 
 .sub-footer a {
-    color: #A8AEB8;
+    color: var(--ink-2);
     text-decoration: none;
 }
 
@@ -290,10 +193,10 @@
 .subpage-section h2 {
     font-size: 20px;
     font-weight: 700;
-    color: #EDEFF2;
+    color: var(--ink);
     margin: 0 0 16px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #26282F;
+    border-bottom: 1px solid var(--line);
     letter-spacing: -.02em;
 }
 
@@ -310,8 +213,8 @@
 }
 
 .nav-teaser-card {
-    background: #17181C;
-    border: 1px solid #26282F;
+    background: var(--paper);
+    border: 1px solid var(--line);
     border-radius: 12px;
     padding: 20px;
     text-decoration: none;
@@ -333,13 +236,13 @@
 .nav-teaser-card h3 {
     font-size: 16px;
     font-weight: 700;
-    color: #EDEFF2;
+    color: var(--ink);
     margin: 0 0 6px;
 }
 
 .nav-teaser-card p {
     font-size: 13px;
-    color: #7C8390;
+    color: var(--ink-3);
     margin: 0 0 12px;
     line-height: 1.5;
 }
@@ -347,7 +250,7 @@
 .nav-teaser-card .teaser-link {
     font-size: 13px;
     font-weight: 600;
-    color: #EDEFF2;
+    color: var(--ink);
 }
 
 /* Back to calculator CTA */
