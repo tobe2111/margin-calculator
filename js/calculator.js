@@ -64,6 +64,35 @@ function setRateSource(kind, asOf) {
     rateSource = kind;
     rateAsOf = asOf || null;
     renderRateSourceBadge();
+    renderHeroRates();
+}
+
+/** 히어로 오른쪽 환율 패널. 환율이 갱신될 때마다 같이 다시 그린다. */
+function renderHeroRates() {
+    const list = document.getElementById('heroRatesList');
+    if (!list) return;
+    const put = (key, val) => {
+        const el = list.querySelector(`[data-hr="${key}"]`);
+        if (el) el.textContent = val;
+    };
+    const r = defaultExchangeRates || {};
+    const fmt = (v, d = 0) => (typeof v === 'number' && isFinite(v) && v > 0)
+        ? '₩ ' + v.toLocaleString('ko-KR', { minimumFractionDigits: d, maximumFractionDigits: d })
+        : '—';
+    put('USD', fmt(r.USD));
+    put('JPY100', fmt(typeof r.JPY === 'number' ? r.JPY * 100 : null));
+    put('EUR', fmt(r.EUR));
+    put('CNY', fmt(r.CNY));
+
+    const foot = document.getElementById('heroRatesFoot');
+    if (foot) {
+        const label = {
+            live: '실시간 기준', cache: '최근 조회 기준',
+            stale: '지연 — 최근 성공한 값', fallback: '실시간 연결 실패 — 내장 기준값',
+        }[rateSource] || '';
+        foot.textContent = label + (rateSource === 'fallback' ? '. 실제 환율과 다를 수 있습니다.' : '');
+        foot.style.color = rateSource === 'fallback' ? 'var(--neg)' : '';
+    }
 }
 
 function renderRateSourceBadge() {
@@ -312,6 +341,8 @@ function calculateMargin() {
     document.getElementById('breakEvenPrice').textContent = `${symbol} ${breakEvenPrice.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     document.getElementById('resultSection').style.display = 'block';
     document.querySelector('.calculator-container')?.classList.add('has-result');
+    const preResult = document.getElementById('preResult');
+    if (preResult) preResult.style.display = 'none';
 
     // 마진율 시각화 (색상 + 게이지)
     updateMarginVisual(marginRate, netProfit);
