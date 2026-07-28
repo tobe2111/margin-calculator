@@ -100,6 +100,8 @@ function resetForm() {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
     });
     document.querySelector('.calculator-container')?.classList.remove('has-result');
+    const pre = document.getElementById('preResult');
+    if (pre) pre.style.display = '';
     ['resultSection','reverseResult','coupangBanner','chartSection','comparisonSection'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
     });

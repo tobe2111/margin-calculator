@@ -187,6 +187,7 @@
                 </div>
             </div>
             <div class="header-content">
+              <div class="header-copy">
                 <h1 class="main-title" data-i18n="h.title">유어팀 글로벌 무료 마진 계산기</h1>
                 <p class="platforms" data-i18n="header.platforms">쇼피 · 이베이 · 아마존 · 라자다 · 큐텐 · 틱톡샵 · 라쿠텐</p>
                 <p class="subtitle" data-i18n="h.sub">해외판매 마진계산 - 수수료를 정확하게 계산하고 최적의 가격 전략을 수립하세요</p>
@@ -199,7 +200,6 @@
                     <div class="platform-logo-item" title="Qoo10"><i class="fas fa-shopping-cart"></i><span>Qoo10</span></div>
                     <div class="platform-logo-item" title="Rakuten"><i class="fas fa-yen-sign"></i><span>Rakuten</span></div>
                 </div>
-            </div>
                 <div class="header-feature-strip">
                     <span><i class="fas fa-bolt" style="color:#fbbf24;"></i> 실시간 환율</span>
                     <span><i class="fas fa-layer-group" style="color:#60a5fa;"></i> 일괄 계산</span>
@@ -207,6 +207,22 @@
                     <span><i class="fas fa-bell" style="color:#fb923c;"></i> 환율 알림</span>
                     <span><i class="fas fa-bookmark" style="color:#34d399;"></i> 프로젝트 저장</span>
                 </div>
+              </div>
+
+              <aside class="hero-rates" aria-label="주요 통화 환율">
+                <div class="hero-rates-head">
+                  <span>주요 통화 환율</span>
+                  <span class="hero-rates-unit">원 기준</span>
+                </div>
+                <ul class="hero-rates-list" id="heroRatesList">
+                  <li><b>USD</b><span class="hr-name">미국 달러</span><em data-hr="USD">—</em></li>
+                  <li><b>JPY</b><span class="hr-name">일본 엔 (100엔)</span><em data-hr="JPY100">—</em></li>
+                  <li><b>EUR</b><span class="hr-name">유로</span><em data-hr="EUR">—</em></li>
+                  <li><b>CNY</b><span class="hr-name">중국 위안</span><em data-hr="CNY">—</em></li>
+                </ul>
+                <p class="hero-rates-foot" id="heroRatesFoot">환율 불러오는 중…</p>
+              </aside>
+            </div>
         </div>
     </header>
 
@@ -396,6 +412,32 @@
                     </div>
                     <p class="coupang-disclosure">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
                 </section>
+
+                <aside class="pre-result" id="preResult" aria-label="계산 안내">
+                    <h2>이렇게 계산됩니다</h2>
+                    <ol class="pre-steps">
+                        <li><b>매입가와 판매가</b>를 넣습니다. 판매가는 외화 기준이며 환율이 자동 적용됩니다.</li>
+                        <li><b>플랫폼</b>을 고르면 수수료가 자동 입력됩니다. 직접 수정할 수도 있습니다.</li>
+                        <li>광고비·반품률까지 넣으면 <b>실제로 남는 돈</b>이 나옵니다.</li>
+                    </ol>
+
+                    <h3 class="pre-sub">플랫폼별 기본 수수료</h3>
+                    <table class="pre-fee-table">
+                        <tbody>
+                            <tr><td>라자다</td><td>4.5%</td><td>쇼피</td><td>5.0%</td></tr>
+                            <tr><td>틱톡샵</td><td>6.4%</td><td>큐텐</td><td>11.0%</td></tr>
+                            <tr><td>라쿠텐</td><td>9.0%</td><td>아마존</td><td>14.9%</td></tr>
+                            <tr><td>이베이</td><td>16.4%</td><td class="pre-fee-note" colspan="2">카테고리별로 다를 수 있습니다</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="pre-sub">계산에 포함되는 비용</h3>
+                    <div class="pre-chips">
+                        <span>매입가</span><span>플랫폼 수수료</span><span>환전 수수료</span>
+                        <span>국내배송비</span><span>해외배송비</span><span>광고비</span>
+                        <span>반품 손실</span><span class="pos">부가세 환급 −</span>
+                    </div>
+                </aside>
 
                 <section class="result-section" id="resultSection" aria-label="계산 결과" aria-live="polite">
                     <h2 data-i18n="r.title"><i class="fas fa-chart-line"></i> 계산 결과</h2>

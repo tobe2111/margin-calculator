@@ -99,9 +99,10 @@ h1,h2,h3,h4,p,li,label,button,a,td,th,span{word-break:keep-all;overflow-wrap:bre
 
 /* ── 본문 레이아웃 ─────────────────────────────────────────── */
 .main-content{padding:36px 0 96px;background:var(--paper-2)}
-.calculator-container{display:grid;grid-template-columns:1fr;gap:22px;margin-bottom:32px;
-  max-width:680px;margin-left:auto;margin-right:auto;align-items:start}
-.calculator-container.has-result{grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-width:none}
+/* 결과 전에는 오른쪽을 안내 패널이, 결과 후에는 결과 카드가 채운다.
+   한 단으로 두면 넓은 화면에서 카드 하나만 덩그러니 남는다. */
+.calculator-container{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:22px;margin-bottom:32px;align-items:start}
 
 /* 카드는 그림자 없이 선으로만 */
 .input-section,.result-section{background:var(--paper);border-radius:var(--r-l);
@@ -668,3 +669,77 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 .rate-alert-close{min-width:32px;min-height:32px;display:inline-flex;align-items:center;justify-content:center}
 .footer-links a{display:inline-block;padding:4px 0}
 .nav-brand{min-height:32px}
+
+/* ── 광고 슬롯 ─────────────────────────────────────────────
+   AdSense 는 자동 크기 광고에 미리 높이를 잡아두고, 채워지지 않으면
+   data-ad-status="unfilled" 만 붙인 채 그 높이를 유지한다. 그 결과
+   페이지 한가운데 수백 px 짜리 빈 칸이 남는다. 비었으면 접는다. */
+ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important}
+ins.adsbygoogle{min-height:0}
+.adsense-container{min-height:0;border:none;background:none;padding:0;margin:20px 0}
+.adsense-container:empty{display:none}
+
+/* ── 히어로 2단 ────────────────────────────────────────────
+   넓은 화면에서 문구가 왼쪽에만 몰리고 오른쪽이 통째로 비어 있었다.
+   빈 자리를 실시간 환율로 채운다. 마진 계산기의 첫 화면에서
+   가장 먼저 궁금한 정보이기도 하다. */
+.header-content{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:56px;align-items:start}
+.header-copy{min-width:0}
+
+.hero-rates{border:1px solid var(--line);border-radius:var(--r-l);background:var(--paper-2);
+  padding:16px 18px;position:sticky;top:76px}
+.hero-rates-head{display:flex;align-items:baseline;justify-content:space-between;
+  padding-bottom:10px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.hero-rates-head span:first-child{font-size:12px;font-weight:700;color:var(--ink);letter-spacing:.01em}
+.hero-rates-unit{font-size:11px;color:var(--ink-4)}
+.hero-rates-list{list-style:none;margin:0;padding:0}
+.hero-rates-list li{display:flex;align-items:baseline;gap:8px;padding:9px 0;
+  border-bottom:1px solid var(--line)}
+.hero-rates-list li:last-child{border-bottom:none}
+.hero-rates-list b{font-size:12px;font-weight:800;color:var(--ink);width:34px;flex-shrink:0;letter-spacing:.02em}
+.hr-name{font-size:11.5px;color:var(--ink-3);flex:1;min-width:0}
+.hero-rates-list em{font-style:normal;font-size:15px;font-weight:700;color:var(--ink);
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.hero-rates-foot{font-size:11px;color:var(--ink-4);margin-top:10px;line-height:1.45}
+
+/* ── 계산 전 안내 패널 ─────────────────────────────────────
+   결과가 나오기 전 오른쪽 칸이 비어 카드 하나만 떠 있었다.
+   계산 결과가 들어설 자리를 사용법·수수료 정보로 미리 채운다. */
+.pre-result{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-l);
+  padding:28px 26px}
+.pre-result h2{font-size:15px;font-weight:700;color:var(--ink-3);margin-bottom:18px;
+  letter-spacing:.02em;text-transform:uppercase;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.pre-sub{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.03em;
+  text-transform:uppercase;margin:24px 0 10px}
+.pre-steps{list-style:none;counter-reset:s;margin:0;padding:0}
+.pre-steps li{counter-increment:s;position:relative;padding-left:30px;margin-bottom:13px;
+  font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.pre-steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:20px;height:20px;
+  border-radius:50%;background:var(--ink);color:#fff;font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+.pre-steps b{color:var(--ink);font-weight:700}
+.pre-fee-table{width:100%;border-collapse:collapse;font-size:13px}
+.pre-fee-table td{padding:7px 0;border-bottom:1px solid var(--paper-3);color:var(--ink-2)}
+.pre-fee-table td:nth-child(2),.pre-fee-table td:nth-child(4){font-weight:700;color:var(--ink);
+  text-align:right;font-variant-numeric:tabular-nums;padding-right:14px}
+.pre-fee-table td:nth-child(3){padding-left:14px}
+.pre-fee-table tr:last-child td{border-bottom:none}
+.pre-fee-note{font-size:11px;color:var(--ink-4);text-align:right!important;font-weight:400!important}
+.pre-chips{display:flex;flex-wrap:wrap;gap:6px}
+.pre-chips span{font-size:12px;color:var(--ink-2);background:var(--paper-3);
+  border-radius:20px;padding:5px 11px}
+.pre-chips span.pos{background:var(--pos-wash);color:var(--pos);font-weight:600}
+
+@media(max-width:1024px){
+  .header-content{grid-template-columns:1fr;gap:28px}
+  .hero-rates{position:static;max-width:420px}
+}
+@media(max-width:768px){
+  .pre-result{padding:22px 18px}
+  .hero-rates{max-width:none}
+}
+
+/* 광고 슬롯을 감싼 인라인 스타일 div 까지 접는다.
+   AdSense 가 응답하기 전/차단된 경우 ins 는 비어 있으므로 :has 로 걸러낸다. */
+div:has(> ins.adsbygoogle[data-ad-status="unfilled"]){display:none!important}
+ins.adsbygoogle:not([data-ad-status="filled"]){min-height:0!important}
