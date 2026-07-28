@@ -98,7 +98,7 @@
         #tool-hs     .tool-card { border-left-color: #84cc16; } #tool-hs     .tool-icon { background: #ecfccb; color: #65a30d; }
         #tool-settlement .tool-card { border-left-color: #f97316; } #tool-settlement .tool-icon { background: #ffedd5; color: #ea580c; }
         #tool-fba    .tool-card { border-left-color: #ff9900; } #tool-fba    .tool-icon { background: #fff7ed; color: #c2410c; }
-        #tool-volweight .tool-card { border-left-color: #14b8a6; } #tool-volweight .tool-icon { background: #ccfbf1; color: #0d9488; }
+        #tool-volweight .tool-card { border-left-color: #14b8a6; } #tool-volweight .tool-icon { background: #ccfbf1; color: #0B6B62; }
         #tool-sourcing .tool-card { border-left-color: var(--neg); } #tool-sourcing .tool-icon { background: #fee2e2; color: var(--neg); }
         #tool-minprice .tool-card { border-left-color: #6366f1; } #tool-minprice .tool-icon { background: #e0e7ff; color: #4f46e5; }
         #tool-reverse-source .tool-card { border-left-color: #a855f7; } #tool-reverse-source .tool-icon { background: #f3e8ff; color: #9333ea; }
@@ -235,7 +235,7 @@
 
         /* ===== 부피무게 강조 ===== */
         .vw-verdict { display: none; margin-top: 16px; border-radius: 12px; padding: 18px 20px; border: 2px solid #14b8a6; background: #f0fdfa; }
-        .vw-verdict-label { font-size: 12px; font-weight: 700; color: #0d9488; letter-spacing: 0.6px; margin-bottom: 6px; }
+        .vw-verdict-label { font-size: 12px; font-weight: 700; color: #0B6B62; letter-spacing: 0.6px; margin-bottom: 6px; }
         .vw-verdict-value { font-size: 24px; font-weight: 800; color: #0f766e; }
         .vw-verdict-note { font-size: 13px; color: var(--ink-2); margin-top: 8px; line-height: 1.7; }
 
@@ -429,7 +429,7 @@
                         <div class="result-value" style="color:#b45309;" id="dutyTotal">-</div>
                     </div>
                 </div>
-                <p style="font-size:12px;color:#9ca3af;margin-top:12px;"><i class="fas fa-exclamation-circle"></i> 참고용 계산기입니다. 실제 세율은 수입국 세관 기준에 따라 다릅니다.</p>
+                <p style="font-size:12px;color:var(--ink-4);margin-top:12px;"><i class="fas fa-exclamation-circle"></i> 참고용 계산기입니다. 실제 세율은 수입국 세관 기준에 따라 다릅니다.</p>
             </div>
         </section>
 
@@ -571,7 +571,7 @@
                     </div>
                 </div>
                 <button class="tool-btn" onclick="calcPriceSuggestion()"><i class="fas fa-lightbulb"></i> 판매가 계산</button>
-                <div class="ps-cta-label" id="psCTALabel" style="display:none;margin-top:16px;"><i class="fas fa-check-circle" style="color:#059669;"></i> 플랫폼별 권장 판매가 (목표 마진 달성 기준)</div>
+                <div class="ps-cta-label" id="psCTALabel" style="display:none;margin-top:16px;"><i class="fas fa-check-circle" style="color:var(--pos);"></i> 플랫폼별 권장 판매가 (목표 마진 달성 기준)</div>
                 <div class="ps-platform-table" id="psPlatformTable"></div>
             </div>
         </section>
@@ -672,7 +672,7 @@
                         <tbody id="hsTableBody"></tbody>
                     </table>
                 </div>
-                <p style="font-size:12px;color:#9ca3af;margin-top:10px;"><i class="fas fa-exclamation-circle"></i> 참고용 데이터입니다. FTA 협정·품목 세부사항에 따라 세율이 달라질 수 있습니다.</p>
+                <p style="font-size:12px;color:var(--ink-4);margin-top:10px;"><i class="fas fa-exclamation-circle"></i> 참고용 데이터입니다. FTA 협정·품목 세부사항에 따라 세율이 달라질 수 있습니다.</p>
             </div>
         </section>
 
@@ -695,7 +695,7 @@
                 </div>
                 <button class="tool-btn" onclick="calcSettlement()"><i class="fas fa-calendar-check"></i> 정산 계산하기</button>
                 <div class="settlement-grid" id="settlementGrid" style="display:none;"></div>
-                <p style="font-size:12px;color:#9ca3af;margin-top:12px;"><i class="fas fa-info-circle"></i> 정산 주기는 플랫폼 정책에 따라 변경될 수 있습니다. 최신 정보는 각 플랫폼 셀러센터에서 확인하세요.</p>
+                <p style="font-size:12px;color:var(--ink-4);margin-top:12px;"><i class="fas fa-info-circle"></i> 정산 주기는 플랫폼 정책에 따라 변경될 수 있습니다. 최신 정보는 각 플랫폼 셀러센터에서 확인하세요.</p>
             </div>
         </section>
 
@@ -750,7 +750,7 @@
                         <tbody id="shippingBody"></tbody>
                     </table>
                 </div>
-                <p style="font-size:12px;color:#9ca3af;margin-top:12px;"><i class="fas fa-info-circle"></i> 실제 요금은 부피무게·유류할증료·계약 요율에 따라 달라집니다. 참고용 추정치입니다.</p>
+                <p style="font-size:12px;color:var(--ink-4);margin-top:12px;"><i class="fas fa-info-circle"></i> 실제 요금은 부피무게·유류할증료·계약 요율에 따라 달라집니다. 참고용 추정치입니다.</p>
             </div>
         </section>
 
@@ -1030,7 +1030,7 @@
                     <div class="result-item"><div class="result-label">실수령액</div><div class="result-value" id="fba-net">-</div></div>
                     <div class="result-item"><div class="result-label">수수료율</div><div class="result-value" id="fba-ratio">-</div></div>
                 </div>
-                <p style="font-size:12px;color:#9ca3af;margin-top:12px;"><i class="fas fa-info-circle"></i> 아마존 미국(US) 기준 참고 요율입니다. 실제 요금은 아마존 셀러센트럴 정책 개정에 따라 달라집니다.</p>
+                <p style="font-size:12px;color:var(--ink-4);margin-top:12px;"><i class="fas fa-info-circle"></i> 아마존 미국(US) 기준 참고 요율입니다. 실제 요금은 아마존 셀러센트럴 정책 개정에 따라 달라집니다.</p>
             </div>
         </section>
 
@@ -1173,7 +1173,7 @@
                     <div class="result-item"><div class="result-label">전체 투자금</div><div class="result-value" id="sr-invest">-</div></div>
                     <div class="result-item"><div class="result-label">전체 예상 순익</div><div class="result-value" id="sr-total">-</div></div>
                 </div>
-                <p style="font-size:12px;color:#9ca3af;margin-top:12px;"><i class="fas fa-exclamation-circle"></i> 과세가격은 물품가+운임(CIF) 기준으로 계산합니다. 실제 통관 세액은 세관 심사 결과에 따릅니다.</p>
+                <p style="font-size:12px;color:var(--ink-4);margin-top:12px;"><i class="fas fa-exclamation-circle"></i> 과세가격은 물품가+운임(CIF) 기준으로 계산합니다. 실제 통관 세액은 세관 심사 결과에 따릅니다.</p>
             </div>
         </section>
 
@@ -1380,7 +1380,7 @@
                     </table>
                 </div>
                 <div class="tool-msg" id="poSummary"></div>
-                <p style="font-size:12px;color:#9ca3af;margin-top:12px;"><i class="fas fa-info-circle"></i> 참고용 표준 요율입니다. 실제 수수료는 통화·거래량·계정 등급에 따라 달라집니다.</p>
+                <p style="font-size:12px;color:var(--ink-4);margin-top:12px;"><i class="fas fa-info-circle"></i> 참고용 표준 요율입니다. 실제 수수료는 통화·거래량·계정 등급에 따라 달라집니다.</p>
             </div>
         </section>
 
@@ -1433,7 +1433,7 @@
                     <div class="result-item"><div class="result-label" id="vat-verdictLabel">환급 예상액</div><div class="result-value" id="vat-verdict">-</div></div>
                 </div>
                 <div class="vat-checklist" id="vatChecklist">
-                    <h3><i class="fas fa-clipboard-check" style="color:#059669;"></i> <span id="vat-quarterLabel">신고</span> 필요 서류 체크리스트</h3>
+                    <h3><i class="fas fa-clipboard-check" style="color:var(--pos);"></i> <span id="vat-quarterLabel">신고</span> 필요 서류 체크리스트</h3>
                     <ul id="vatDocs"></ul>
                 </div>
                 <div class="disclaimer-box">
@@ -1445,7 +1445,7 @@
 
         <!-- 마진 계산기 CTA -->
         <div style="text-align:center;margin-top:40px;">
-            <p style="font-size:14px;color:#6b7280;margin-bottom:12px;">더 정밀한 계산이 필요하다면 메인 마진 계산기를 사용하세요.</p>
+            <p style="font-size:14px;color:var(--ink-3);margin-bottom:12px;">더 정밀한 계산이 필요하다면 메인 마진 계산기를 사용하세요.</p>
             <a href="/" class="back-to-calc"><i class="fas fa-calculator"></i> 마진 계산기로 이동</a>
         </div>
 
@@ -1739,7 +1739,7 @@
             const idx = tbody.children.length + 1;
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td style="text-align:center;color:#9ca3af;font-size:12px;">${idx}</td>
+                <td style="text-align:center;color:var(--ink-4);font-size:12px;">${idx}</td>
                 <td><input type="text" placeholder="상품 ${idx}" aria-label="${idx}행 상품명"></td>
                 <td><input type="number" placeholder="10000" class="b-purchase" min="0" aria-label="${idx}행 매입가(원)"></td>
                 <td><input type="number" placeholder="15" step="0.01" class="b-selling" min="0" aria-label="${idx}행 판매가"></td>
@@ -1822,7 +1822,7 @@
                 const rev   = fixedCost / (1 - totalRate);
                 const price = rev / rate;
                 const earn  = rev * margin / 100;
-                tableHtml += `<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:8px 12px;">${names[key]}</td><td style="padding:8px 12px;text-align:right;color:#6b7280;">${fee}%</td><td style="padding:8px 12px;text-align:right;font-weight:800;color:var(--accent);">$ ${price.toFixed(2)}</td><td style="padding:8px 12px;text-align:right;color:#059669;font-weight:600;">₩${Math.round(earn).toLocaleString('ko-KR')}</td></tr>`;
+                tableHtml += `<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:8px 12px;">${names[key]}</td><td style="padding:8px 12px;text-align:right;color:var(--ink-3);">${fee}%</td><td style="padding:8px 12px;text-align:right;font-weight:800;color:var(--accent);">$ ${price.toFixed(2)}</td><td style="padding:8px 12px;text-align:right;color:var(--pos);font-weight:600;">₩${Math.round(earn).toLocaleString('ko-KR')}</td></tr>`;
             });
             tableHtml += '</tbody></table>';
 
@@ -1896,16 +1896,16 @@
             const filtered = hsData.filter(r => (cat === 'all' || r.cat === cat) && (country === 'all' || r.country === country));
             const tbody = document.getElementById('hsTableBody');
             if (!filtered.length) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#9ca3af;padding:20px;">해당 조건 데이터 없음</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--ink-4);padding:20px;">해당 조건 데이터 없음</td></tr>';
                 return;
             }
             tbody.innerHTML = filtered.map(r => `
                 <tr>
                     <td>${r.cat}</td><td>${r.country}</td>
-                    <td style="font-family:monospace;font-weight:700;color:#374151;">${r.hs}</td>
+                    <td style="font-family:monospace;font-weight:700;color:var(--ink-2);">${r.hs}</td>
                     <td>${r.desc}</td>
                     <td class="rate-cell">${r.rate}</td>
-                    <td style="font-size:12px;color:#6b7280;">${r.note}</td>
+                    <td style="font-size:12px;color:var(--ink-3);">${r.note}</td>
                 </tr>`).join('');
         }
 
@@ -1988,14 +1988,14 @@
 
             document.getElementById('shippingBody').innerHTML = rows.map(r => {
                 if (r.cost === null) {
-                    return `<tr><td>${r.name}</td><td style="color:#9ca3af;">해당 없음</td><td>-</td><td style="font-size:12px;color:#9ca3af;">${r.note}</td></tr>`;
+                    return `<tr><td>${r.name}</td><td style="color:var(--ink-4);">해당 없음</td><td>-</td><td style="font-size:12px;color:var(--ink-4);">${r.note}</td></tr>`;
                 }
                 const best = r.cost === min;
                 return `<tr${best ? ' class="best-row"' : ''}>
                     <td>${r.name}</td>
                     <td${best ? ' class="c-positive"' : ''}>₩ ${r.cost.toLocaleString('ko-KR')}</td>
                     <td>${r.days}</td>
-                    <td style="font-size:12px;color:#6b7280;">${best ? '최저가' : ''}${r.note ? (best ? ' · ' : '') + r.note : ''}</td>
+                    <td style="font-size:12px;color:var(--ink-3);">${best ? '최저가' : ''}${r.note ? (best ? ' · ' : '') + r.note : ''}</td>
                 </tr>`;
             }).join('');
             document.getElementById('shippingWrap').style.display = 'block';
@@ -2213,12 +2213,12 @@
             document.getElementById('fbaBody').innerHTML = rows.map(([name, basis, amt]) => `
                 <tr>
                     <td><strong>${name}</strong></td>
-                    <td style="font-size:12px;color:#6b7280;">${basis}</td>
+                    <td style="font-size:12px;color:var(--ink-3);">${basis}</td>
                     <td class="num c-negative">${usd(amt)}</td>
                 </tr>`).join('') + `
                 <tr class="best-row">
                     <td><strong>총 수수료</strong></td>
-                    <td style="font-size:12px;color:#6b7280;">판매가 대비 ${feeRatio.toFixed(1)}%</td>
+                    <td style="font-size:12px;color:var(--ink-3);">판매가 대비 ${feeRatio.toFixed(1)}%</td>
                     <td class="num">${usd(totalFee)}</td>
                 </tr>`;
 
@@ -2535,7 +2535,7 @@
                 const extraYear = (r.feeUsd - minFee) * 12 * cur.usdTo * cur.krw;
                 return `<tr${isBest ? ' class="best-row"' : ''}>
                     <td><div class="platform-cell"><i class="${r.icon}"></i>${isBest ? '🏆 ' : ''}${r.name}</div></td>
-                    <td style="font-size:12px;color:#6b7280;">${r.desc}</td>
+                    <td style="font-size:12px;color:var(--ink-3);">${r.desc}</td>
                     <td class="num c-negative">${usd(r.feeUsd)}</td>
                     <td class="num c-positive">${won(r.netKrw)}</td>
                     <td class="num">${extraYear <= 0 ? '기준' : '+' + won(extraYear)}</td>
