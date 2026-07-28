@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="theme-color" content="#0F1115">
+    <meta name="theme-color" content="#0F1013">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LFJX1XVFNZ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -83,10 +83,10 @@
         .container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
 
         /* Tool card */
-        .tool-card { background: #fff; border-radius: 16px; border: 1px solid var(--line); border-left: 4px solid var(--accent); padding: 28px 28px 24px; margin-bottom: 28px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); transition: box-shadow 0.2s; }
+        .tool-card { background: var(--paper); border-radius: 16px; border: 1px solid var(--line); border-left: 4px solid var(--accent); padding: 28px 28px 24px; margin-bottom: 28px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); transition: box-shadow 0.2s; }
         .tool-card:hover { box-shadow: 0 4px 20px rgba(0,102,255,0.1); }
         .tool-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-        .tool-icon { width: 44px; height: 44px; border-radius: 10px; background: #eff6ff; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--accent); flex-shrink: 0; position: relative; }
+        .tool-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--accent-wash); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--accent-text); flex-shrink: 0; position: relative; }
         .tool-card h2 { font-size: 18px; font-weight: 700; color: var(--ink); }
         .tool-card .tool-desc { font-size: 13px; color: var(--ink-3); margin-bottom: 20px; line-height: 1.6; }
         /* Color accents per tool */
@@ -98,7 +98,7 @@
         #tool-hs     .tool-card { border-left-color: #84cc16; } #tool-hs     .tool-icon { background: #ecfccb; color: #65a30d; }
         #tool-settlement .tool-card { border-left-color: #f97316; } #tool-settlement .tool-icon { background: #ffedd5; color: #ea580c; }
         #tool-fba    .tool-card { border-left-color: #ff9900; } #tool-fba    .tool-icon { background: #fff7ed; color: #c2410c; }
-        #tool-volweight .tool-card { border-left-color: #14b8a6; } #tool-volweight .tool-icon { background: #ccfbf1; color: #0B6B62; }
+        #tool-volweight .tool-card { border-left-color: #14b8a6; } #tool-volweight .tool-icon { background: #ccfbf1; color: var(--pos); }
         #tool-sourcing .tool-card { border-left-color: var(--neg); } #tool-sourcing .tool-icon { background: #fee2e2; color: var(--neg); }
         #tool-minprice .tool-card { border-left-color: #6366f1; } #tool-minprice .tool-icon { background: #e0e7ff; color: #4f46e5; }
         #tool-reverse-source .tool-card { border-left-color: #a855f7; } #tool-reverse-source .tool-icon { background: #f3e8ff; color: #9333ea; }
@@ -107,12 +107,12 @@
         #tool-vat    .tool-card { border-left-color: #64748b; } #tool-vat    .tool-icon { background: #f1f5f9; color: #475569; }
 
         /* Excel/CSV upload */
-        .upload-zone { border: 2px dashed var(--line-2); border-radius: 12px; padding: 24px 20px; text-align: center; background: #fafbfc; margin-bottom: 16px; transition: all .18s ease; }
-        .upload-zone.dragover { border-color: var(--accent); background: #eff6ff; }
+        .upload-zone { border: 2px dashed var(--line-2); border-radius: 12px; padding: 24px 20px; text-align: center; background: var(--paper-2); margin-bottom: 16px; transition: all .18s ease; }
+        .upload-zone.dragover { border-color: var(--accent-text); background: var(--accent-wash); }
         .upload-zone > i { font-size: 28px; color: var(--ink-4); margin-bottom: 10px; display: block; }
-        .upload-zone.dragover > i { color: var(--accent); }
+        .upload-zone.dragover > i { color: var(--accent-text); }
         .upload-title { font-size: 14px; font-weight: 600; color: var(--ink-2); margin-bottom: 8px; }
-        .upload-link { background: none; border: none; color: var(--accent); font: inherit; font-weight: 700; cursor: pointer; text-decoration: underline; padding: 0; }
+        .upload-link { background: none; border: none; color: var(--accent-text); font: inherit; font-weight: 700; cursor: pointer; text-decoration: underline; padding: 0; }
         .upload-hint { font-size: 12px; color: var(--ink-3); line-height: 1.7; }
         .upload-privacy { font-size: 11.5px; color: var(--pos); margin-top: 10px; font-weight: 600; }
         .upload-status { font-size: 13px; font-weight: 600; margin-top: 10px; min-height: 18px; }
@@ -122,17 +122,17 @@
         /* Form elements */
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 16px; }
         .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
-        .input-with-unit { display: flex; align-items: center; border: 1.5px solid var(--line-2); border-radius: 8px; overflow: hidden; background: #fff; }
+        .input-with-unit { display: flex; align-items: center; border: 1.5px solid var(--line-2); border-radius: 8px; overflow: hidden; background: var(--paper); }
         .input-with-unit input { flex: 1; border: none; outline: none; padding: 10px 12px; font-size: 15px; font-family: inherit; min-width: 0; }
         .input-with-unit .unit { padding: 0 12px; background: var(--paper-3); color: var(--ink-3); font-size: 13px; white-space: nowrap; align-self: stretch; display: flex; align-items: center; border-left: 1px solid var(--line); }
-        .input-with-unit:focus-within { border-color: var(--accent); }
+        .input-with-unit:focus-within { border-color: var(--accent-text); }
 
         /* Slider */
         .slider-wrap { margin-bottom: 16px; }
         .slider-wrap label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-2); margin-bottom: 8px; }
         .slider { width: 100%; -webkit-appearance: none; height: 6px; border-radius: 3px; background: var(--line); outline: none; cursor: pointer; }
         .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); cursor: pointer; }
-        .slider-value { text-align: center; font-size: 15px; font-weight: 700; color: var(--accent); margin-top: 8px; }
+        .slider-value { text-align: center; font-size: 15px; font-weight: 700; color: var(--accent-text); margin-top: 8px; }
 
         /* Calc button */
         .tool-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.15s; }
@@ -142,7 +142,7 @@
         .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 16px; }
         .result-item { background: var(--paper-3); border: 1px solid #dbeafe; border-radius: 10px; padding: 14px 16px; text-align: center; }
         .result-label { font-size: 12px; color: var(--ink-3); margin-bottom: 4px; }
-        .result-value { font-size: 18px; font-weight: 800; color: var(--accent); }
+        .result-value { font-size: 18px; font-weight: 800; color: var(--accent-text); }
         .result-value.positive { color: var(--pos); }
         .result-value.negative { color: var(--neg); }
 
@@ -152,11 +152,11 @@
         .comp-table th { background: var(--accent); color: #fff; padding: 10px 14px; text-align: left; }
         .comp-table td { padding: 10px 14px; border-bottom: 1px solid var(--paper-3); }
         .comp-table tr:last-child td { border-bottom: none; }
-        .comp-table tr.best-row td { background: #ecfdf5; font-weight: 700; }
+        .comp-table tr.best-row td { background: var(--pos-wash); font-weight: 700; }
         .comp-table .c-positive { color: var(--pos); font-weight: 700; }
         .comp-table .c-negative { color: var(--neg); }
         .platform-cell { display: flex; align-items: center; gap: 8px; }
-        .platform-cell i { color: var(--accent); width: 16px; text-align: center; }
+        .platform-cell i { color: var(--accent-text); width: 16px; text-align: center; }
 
         @media (max-width: 600px) {
             .tool-card { padding: 20px 16px; }
@@ -169,25 +169,25 @@
         .batch-table th { background: var(--accent); color: #fff; padding: 10px 12px; text-align: left; white-space: nowrap; }
         .batch-table td { padding: 7px 8px; border-bottom: 1px solid var(--paper-3); vertical-align: middle; }
         .batch-table td input { width: 100%; border: 1px solid var(--line-2); border-radius: 6px; padding: 6px 8px; font-size: 12px; font-family: inherit; outline: none; box-sizing: border-box; }
-        .batch-table td input:focus { border-color: var(--accent); }
+        .batch-table td input:focus { border-color: var(--accent-text); }
         .batch-row-result.pos { color: var(--pos); font-weight: 700; }
         .batch-row-result.neg { color: var(--neg); font-weight: 700; }
         .batch-actions { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
-        .batch-add-btn { background: #fff; border: 1.5px solid var(--accent); color: var(--accent); border-radius: 7px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
-        .batch-add-btn:hover { background: #eff6ff; }
+        .batch-add-btn { background: var(--paper); border: 1.5px solid var(--accent); color: var(--accent-text); border-radius: 7px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+        .batch-add-btn:hover { background: var(--accent-wash); }
         .batch-summary { display: none; font-size: 15px; font-weight: 700; padding: 12px 16px; border-radius: 8px; background: var(--paper-2); border: 1px solid var(--line); margin-top: 12px; }
 
         /* ===== 수익 시나리오 비교 ===== */
         .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
         .scenario-card { border-radius: 12px; padding: 18px; text-align: center; border: 2px solid transparent; }
-        .scenario-card.pessimistic { background: #fef2f2; border-color: #fca5a5; }
-        .scenario-card.base { background: #eff6ff; border-color: #93c5fd; }
-        .scenario-card.optimistic { background: #f0fdf4; border-color: #86efac; }
+        .scenario-card.pessimistic { background: var(--neg-wash); border-color: #fca5a5; }
+        .scenario-card.base { background: var(--accent-wash); border-color: #93c5fd; }
+        .scenario-card.optimistic { background: var(--pos-wash); border-color: #86efac; }
         .scenario-label { font-size: 11px; font-weight: 700; color: var(--ink-3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
         .scenario-rate { font-size: 13px; color: var(--ink-2); margin-bottom: 8px; font-weight: 600; }
         .scenario-profit { font-size: 20px; font-weight: 800; }
         .pessimistic .scenario-profit { color: var(--neg); }
-        .base .scenario-profit { color: var(--accent); }
+        .base .scenario-profit { color: var(--accent-text); }
         .optimistic .scenario-profit { color: var(--pos); }
         .scenario-margin { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
         @media (max-width: 600px) { .scenario-grid { grid-template-columns: 1fr; } }
@@ -195,48 +195,48 @@
         /* ===== 관세/HS코드 참고표 ===== */
         .hs-filter-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
         .hs-filter-row select { flex: 1; min-width: 140px; border: 1.5px solid var(--line-2); border-radius: 8px; padding: 8px 12px; font-size: 13px; font-family: inherit; outline: none; }
-        .hs-filter-row select:focus { border-color: var(--accent); }
+        .hs-filter-row select:focus { border-color: var(--accent-text); }
         .hs-table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--line); }
         .hs-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
         .hs-table th { background: var(--accent); color: #fff; padding: 10px 14px; text-align: left; white-space: nowrap; }
         .hs-table td { padding: 9px 14px; border-bottom: 1px solid var(--paper-3); }
         .hs-table tr:last-child td { border-bottom: none; }
-        .hs-table .rate-cell { font-weight: 700; color: var(--accent); }
+        .hs-table .rate-cell { font-weight: 700; color: var(--accent-text); }
 
         /* ===== 정산 캘린더 ===== */
         .settlement-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 16px; }
-        .settlement-card { background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 16px; }
+        .settlement-card { background: var(--paper); border: 1.5px solid var(--line); border-radius: 12px; padding: 16px; }
         .settlement-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-        .settlement-card-header i { color: var(--accent); font-size: 16px; }
+        .settlement-card-header i { color: var(--accent-text); font-size: 16px; }
         .settlement-card-header strong { font-size: 14px; font-weight: 700; color: var(--ink); }
         .settlement-cycle { font-size: 12px; color: var(--ink-3); margin-bottom: 6px; }
-        .settlement-amount { font-size: 18px; font-weight: 800; color: var(--accent); }
+        .settlement-amount { font-size: 18px; font-weight: 800; color: var(--accent-text); }
         .settlement-date { font-size: 12px; color: var(--pos); font-weight: 600; margin-top: 4px; }
 
         /* ===== 판매가 자동 제안 ===== */
         .ps-platform-table { display: none; margin-top: 12px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
-        .tool-select { width: 100%; border: 1.5px solid var(--line-2); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; background: #fff; color: var(--ink); outline: none; cursor: pointer; }
-        .tool-select:focus { border-color: var(--accent); }
+        .tool-select { width: 100%; border: 1.5px solid var(--line-2); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; background: var(--paper); color: var(--ink); outline: none; cursor: pointer; }
+        .tool-select:focus { border-color: var(--accent-text); }
         .cf-neg { color: var(--neg); font-weight: 700; }
         .cf-pos { color: var(--pos); font-weight: 700; }
         .ps-cta-label { font-size: 13px; color: #3b82f6; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
 
         /* ===== 도구 13~20 공통 ===== */
         .check-inline { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); padding-top: 26px; }
-        .check-inline input { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
+        .check-inline input { width: 17px; height: 17px; accent-color: var(--accent-text); cursor: pointer; }
         .tool-msg { display: none; font-size: 14px; font-weight: 700; padding: 12px 16px; border-radius: 8px; margin-top: 16px; line-height: 1.7; }
-        .tool-msg.ok   { background: #ecfdf5; color: var(--pos); border: 1px solid #a7f3d0; }
-        .tool-msg.warn { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
-        .tool-msg.bad  { background: #fef2f2; color: var(--neg); border: 1px solid #fecaca; }
-        .tool-msg.info { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-        .comp-table tr.danger-row td { background: #fef2f2; }
-        .comp-table tr.current-row td { background: #eff6ff; font-weight: 700; }
+        .tool-msg.ok   { background: var(--pos-wash); color: var(--pos); border: 1px solid #a7f3d0; }
+        .tool-msg.warn { background: var(--warn-wash); color: var(--warn); border: 1px solid var(--warn); }
+        .tool-msg.bad  { background: var(--neg-wash); color: var(--neg); border: 1px solid #fecaca; }
+        .tool-msg.info { background: var(--accent-wash); color: #1d4ed8; border: 1px solid var(--line-2); }
+        .comp-table tr.danger-row td { background: var(--neg-wash); }
+        .comp-table tr.current-row td { background: var(--accent-wash); font-weight: 700; }
         .comp-table td.num, .comp-table th.num { text-align: right; }
 
         /* ===== 부피무게 강조 ===== */
-        .vw-verdict { display: none; margin-top: 16px; border-radius: 12px; padding: 18px 20px; border: 2px solid #14b8a6; background: #f0fdfa; }
-        .vw-verdict-label { font-size: 12px; font-weight: 700; color: #0B6B62; letter-spacing: 0.6px; margin-bottom: 6px; }
-        .vw-verdict-value { font-size: 24px; font-weight: 800; color: #0f766e; }
+        .vw-verdict { display: none; margin-top: 16px; border-radius: 12px; padding: 18px 20px; border: 2px solid #14b8a6; background: var(--pos-wash); }
+        .vw-verdict-label { font-size: 12px; font-weight: 700; color: var(--pos); letter-spacing: 0.6px; margin-bottom: 6px; }
+        .vw-verdict-value { font-size: 24px; font-weight: 800; color: var(--pos); }
         .vw-verdict-note { font-size: 13px; color: var(--ink-2); margin-top: 8px; line-height: 1.7; }
 
         /* ===== 부가세 신고 요약 ===== */
@@ -245,7 +245,7 @@
         .vat-checklist ul { list-style: none; }
         .vat-checklist li { font-size: 13px; color: var(--ink-2); padding: 5px 0 5px 24px; position: relative; line-height: 1.7; }
         .vat-checklist li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--pos); position: absolute; left: 0; top: 5px; font-size: 12px; }
-        .disclaimer-box { margin-top: 16px; border: 1px solid #fecaca; background: #fef2f2; border-radius: 10px; padding: 14px 16px; font-size: 13px; color: #b91c1c; font-weight: 600; line-height: 1.7; display: flex; gap: 10px; align-items: flex-start; }
+        .disclaimer-box { margin-top: 16px; border: 1px solid #fecaca; background: var(--neg-wash); border-radius: 10px; padding: 14px 16px; font-size: 13px; color: var(--neg); font-weight: 600; line-height: 1.7; display: flex; gap: 10px; align-items: flex-start; }
         .disclaimer-box i { margin-top: 3px; flex-shrink: 0; }
     </style>
 </head>
@@ -345,7 +345,7 @@
                     </div>
                 </div>
                 <div class="slider-wrap">
-                    <label for="simSlider">환율 변동폭 <span id="simAdjLabel" style="color:var(--accent);font-weight:700;">±0%</span></label>
+                    <label for="simSlider">환율 변동폭 <span id="simAdjLabel" style="color: var(--accent-text);font-weight:700;">±0%</span></label>
                     <input type="range" class="slider" id="simSlider" min="-30" max="30" value="0" oninput="runSimulation()">
                     <div class="slider-value" id="simRateDisplay">기준 환율을 입력하세요</div>
                 </div>
@@ -424,9 +424,9 @@
                         <div class="result-label">수입 부가세</div>
                         <div class="result-value" id="dutyVatAmt">-</div>
                     </div>
-                    <div class="result-item" style="background:#fff3cd;border-color:#ffc107;">
+                    <div class="result-item" style="background:var(--warn-wash);border-color:#ffc107;">
                         <div class="result-label">총 수입세 부담</div>
-                        <div class="result-value" style="color:#b45309;" id="dutyTotal">-</div>
+                        <div class="result-value" style="color:var(--warn);" id="dutyTotal">-</div>
                     </div>
                 </div>
                 <p style="font-size:12px;color:var(--ink-4);margin-top:12px;"><i class="fas fa-exclamation-circle"></i> 참고용 계산기입니다. 실제 세율은 수입국 세관 기준에 따라 다릅니다.</p>
@@ -1747,7 +1747,7 @@
                 <td><input type="number" placeholder="5" step="0.1" class="b-fee" value="5" min="0" aria-label="${idx}행 수수료(%)"></td>
                 <td><input type="number" placeholder="0" class="b-ship" value="0" min="0" aria-label="${idx}행 배송비(원)"></td>
                 <td class="batch-row-result" style="white-space:nowrap;font-size:13px;">-</td>
-                <td style="text-align:center;"><button onclick="this.closest('tr').remove();renumberBatch();" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:16px;line-height:1;">✕</button></td>
+                <td style="text-align:center;"><button onclick="this.closest('tr').remove();renumberBatch();" style="background:none;border:none;color:var(--neg);cursor:pointer;font-size:16px;line-height:1;">✕</button></td>
             `;
             tbody.appendChild(tr);
         }
@@ -1779,7 +1779,7 @@
             if (!validCount) { alert('매입가·판매가·환율을 입력한 행이 없습니다.'); return; }
             const el = document.getElementById('batchSummary');
             el.textContent = `📊 ${validCount}개 상품 총 예상 순이익: ₩${Math.round(totalProfit).toLocaleString('ko-KR')}`;
-            el.style.color = totalProfit >= 0 ? '#059669' : '#dc2626';
+            el.style.color = totalProfit >= 0 ? '#059669' : 'var(--neg)';
             el.style.display = 'block';
             if (typeof gtag !== 'undefined') gtag('event', 'tools_batch', { event_category: 'tools', value: validCount });
         }
@@ -1816,13 +1816,13 @@
             Object.entries(fees).forEach(([key, fee]) => {
                 const totalRate = (fee + margin) / 100;
                 if (totalRate >= 1) {
-                    tableHtml += `<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:8px 12px;">${names[key]}</td><td style="padding:8px 12px;text-align:right;">${fee}%</td><td colspan="2" style="padding:8px 12px;text-align:right;color:#dc2626;">수수료+마진 초과</td></tr>`;
+                    tableHtml += `<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:8px 12px;">${names[key]}</td><td style="padding:8px 12px;text-align:right;">${fee}%</td><td colspan="2" style="padding:8px 12px;text-align:right;color:var(--neg);">수수료+마진 초과</td></tr>`;
                     return;
                 }
                 const rev   = fixedCost / (1 - totalRate);
                 const price = rev / rate;
                 const earn  = rev * margin / 100;
-                tableHtml += `<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:8px 12px;">${names[key]}</td><td style="padding:8px 12px;text-align:right;color:var(--ink-3);">${fee}%</td><td style="padding:8px 12px;text-align:right;font-weight:800;color:var(--accent);">$ ${price.toFixed(2)}</td><td style="padding:8px 12px;text-align:right;color:var(--pos);font-weight:600;">₩${Math.round(earn).toLocaleString('ko-KR')}</td></tr>`;
+                tableHtml += `<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:8px 12px;">${names[key]}</td><td style="padding:8px 12px;text-align:right;color:var(--ink-3);">${fee}%</td><td style="padding:8px 12px;text-align:right;font-weight:800;color: var(--accent-text);">$ ${price.toFixed(2)}</td><td style="padding:8px 12px;text-align:right;color:var(--pos);font-weight:600;">₩${Math.round(earn).toLocaleString('ko-KR')}</td></tr>`;
             });
             tableHtml += '</tbody></table>';
 
@@ -2028,7 +2028,7 @@
             const breakeven   = Math.max(0, (baseProfit - returnLoss) * qty);
             const roas        = adPerUnit > 0 ? revenue / adPerUnit : 0;
 
-            const color = m => m > 15 ? '#059669' : m >= 5 ? '#d97706' : '#dc2626';
+            const color = m => m > 15 ? '#059669' : m >= 5 ? '#d97706' : 'var(--neg)';
             const set = (id, txt, c) => {
                 const el = document.getElementById(id);
                 el.textContent = txt;
@@ -2037,8 +2037,8 @@
 
             set('am-baseMargin', baseMargin.toFixed(1) + ' %', color(baseMargin));
             set('am-netMargin',  netMargin.toFixed(1) + ' %',  color(netMargin));
-            set('am-unitProfit', '₩ ' + Math.round(netProfit).toLocaleString('ko-KR'), netProfit >= 0 ? '#059669' : '#dc2626');
-            set('am-monthProfit','₩ ' + Math.round(monthProfit).toLocaleString('ko-KR'), monthProfit >= 0 ? '#059669' : '#dc2626');
+            set('am-unitProfit', '₩ ' + Math.round(netProfit).toLocaleString('ko-KR'), netProfit >= 0 ? '#059669' : 'var(--neg)');
+            set('am-monthProfit','₩ ' + Math.round(monthProfit).toLocaleString('ko-KR'), monthProfit >= 0 ? '#059669' : 'var(--neg)');
             set('am-breakeven',  '₩ ' + Math.round(breakeven).toLocaleString('ko-KR'), '#0066FF');
             set('am-roas',       roas > 0 ? roas.toFixed(2) + ' 배' : '-', '#0066FF');
 
@@ -2133,11 +2133,11 @@
             const breakMonth = rows.find(r => r.cum >= 0 && r.label !== '초기 투자');
             const msg = document.getElementById('cashflowMsg');
             if (breakMonth) {
-                msg.style.cssText = 'display:block;font-size:14px;font-weight:700;padding:12px 16px;border-radius:8px;margin-top:16px;background:#ecfdf5;color:#059669;border:1px solid #a7f3d0;';
+                msg.style.cssText = 'display:block;font-size:14px;font-weight:700;padding:12px 16px;border-radius:8px;margin-top:16px;background:var(--pos-wash);color:#059669;border:1px solid #a7f3d0;';
                 msg.innerHTML = `<i class="fas fa-circle-check"></i> 흑자 전환 예상: <strong>${breakMonth.label}</strong> (누적 ${fmt(breakMonth.cum)})`;
             } else {
                 const last = rows[rows.length - 1];
-                msg.style.cssText = 'display:block;font-size:14px;font-weight:700;padding:12px 16px;border-radius:8px;margin-top:16px;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;';
+                msg.style.cssText = 'display:block;font-size:14px;font-weight:700;padding:12px 16px;border-radius:8px;margin-top:16px;background:var(--neg-wash);color:var(--neg);border:1px solid #fecaca;';
                 msg.innerHTML = `<i class="fas fa-triangle-exclamation"></i> 6개월 내 흑자 전환이 어렵습니다. 6개월차 누적 ${fmt(last.cum)} — 판매량 증대 또는 고정비 절감이 필요합니다.`;
             }
             document.getElementById('cashflowWrap').style.display = 'block';

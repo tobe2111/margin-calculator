@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="format-detection" content="telephone=no">
-    <meta name="theme-color" content="#0F1115">
+    <meta name="theme-color" content="#0F1013">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LFJX1XVFNZ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -229,6 +229,14 @@
     <main class="main-content" role="main" id="calculator">
         <div class="container">
             <div class="calculator-container">
+                <div class="restored-notice" id="restoredNotice" role="status">
+                    <span>지난 방문에 입력하신 값을 그대로 불러왔습니다.</span>
+                    <div class="restored-actions">
+                        <button type="button" onclick="clearRestored()">새로 입력</button>
+                        <button type="button" class="ghost" onclick="dismissRestored()">계속 사용</button>
+                    </div>
+                </div>
+
                 <section class="input-section" aria-label="상품 정보 입력">
                     <h2><i class="fas fa-edit"></i> 상품 정보 입력</h2>
                     <div class="preset-section">
@@ -484,7 +492,7 @@
                         <div class="summary-row"><span>손익분기점 판매가</span><strong id="breakEvenPrice">0</strong></div>
                     </div>
                     <div class="chart-section" id="chartSection" style="display:none;">
-                        <p class="chart-title"><i class="fas fa-chart-pie" style="color:var(--accent);"></i> 비용 구성 비율</p>
+                        <p class="chart-title"><i class="fas fa-chart-pie" style="color: var(--accent-text);"></i> 비용 구성 비율</p>
                         <div class="chart-canvas-wrapper"><canvas id="marginChart"></canvas></div>
                     </div>
                     <div class="share-section" id="shareSection" style="display:none;">
@@ -570,7 +578,7 @@
 
             <!-- 북마크/프로젝트 관리 -->
             <section class="projects-section" id="projectsSection">
-                <h2><i class="fas fa-bookmark" style="color:var(--accent);"></i> 저장된 프로젝트</h2>
+                <h2><i class="fas fa-bookmark" style="color: var(--accent-text);"></i> 저장된 프로젝트</h2>
                 <p style="font-size:13px;color:var(--ink-3);margin-bottom:14px;">계산 결과를 이름을 붙여 저장하고 언제든지 불러올 수 있습니다.</p>
                 <div class="projects-grid" id="projectsGrid"></div>
                 <div class="backup-row">
@@ -588,7 +596,7 @@
 
             <!-- 해외판매 셀러 필수 도구 (쿠팡파트너스) -->
             <section class="seller-tools-section" aria-label="해외판매 셀러 추천 상품">
-                <h2><i class="fab fa-shopify" style="color:#C00;"></i> 해외판매 셀러 필수 도구 모음</h2>
+                <h2><i class="fab fa-shopify" style="color:var(--neg);"></i> 해외판매 셀러 필수 도구 모음</h2>
                 <p class="seller-tools-subtitle">해외 이커머스 셀러라면 꼭 필요한 포장재·업무 장비를 쿠팡에서 빠르게 구매하세요.</p>
                 <div class="seller-tools-grid">
                     <a href="https://link.coupang.com/a/eoXgGp" target="_blank" referrerpolicy="unsafe-url" class="seller-tool-card"
@@ -640,8 +648,8 @@
 
             <!-- 서브페이지 탐색 안내 -->
             <section style="margin-top:32px;">
-                <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0 0 16px;padding-bottom:10px;border-bottom:2px solid #eff6ff;">
-                    <i class="fas fa-compass" style="color:var(--accent);"></i> 더 알아보기
+                <h2 style="font-size:18px;font-weight:700;color:var(--ink);margin:0 0 16px;padding-bottom:10px;border-bottom:2px solid var(--accent-wash);">
+                    <i class="fas fa-compass" style="color: var(--accent-text);"></i> 더 알아보기
                 </h2>
                 <div class="nav-teaser-grid">
                     <a href="/platforms/" class="nav-teaser-card">
@@ -669,7 +677,7 @@
 
     <footer class="footer" role="contentinfo">
         <div class="container">
-            <p>&copy; <span id="copyright-year">2024</span> <strong>유어팀 글로벌 마진 계산기</strong> - <a href="#calculator" style="color:var(--accent);">라자다/틱톡샵/이베이/아마존/쇼피/큐텐 셀러</a>를 위한 무료 해외판매 수익 계산 도구. All rights reserved.</p>
+            <p>&copy; <span id="copyright-year">2024</span> <strong>유어팀 글로벌 마진 계산기</strong> - <a href="#calculator" style="color: var(--accent-text);">라자다/틱톡샵/이베이/아마존/쇼피/큐텐 셀러</a>를 위한 무료 해외판매 수익 계산 도구. All rights reserved.</p>
             <p class="footer-note" data-i18n="ft.note">본 계산기는 참고용이며, 실제 수수료는 플랫폼 정책에 따라 달라질 수 있습니다.</p>
             <div class="footer-links">
                 <a href="/">마진 계산기</a> |
@@ -680,7 +688,7 @@
                 <a href="/privacy/">개인정보처리방침</a> |
                 <a href="/terms/">이용약관</a>
             </div>
-            <p class="footer-contact" data-i18n="ft.contact">협업 및 제휴 문의 : <a href="mailto:contact@ur-team.com" style="color:var(--accent);text-decoration:none;font-weight:600;">contact@ur-team.com</a></p>
+            <p class="footer-contact" data-i18n="ft.contact">협업 및 제휴 문의 : <a href="mailto:contact@ur-team.com" style="color: var(--accent-text);text-decoration:none;font-weight:600;">contact@ur-team.com</a></p>
         </div>
     </footer>
 
