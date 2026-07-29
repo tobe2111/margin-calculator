@@ -168,6 +168,74 @@ async function fetchCustomsRate(env, currency) {
   return { available: true, rates };
 }
 
+
+/**
+ * robots.txt 를 워커가 직접 생성한다.
+ *
+ * Cloudflare 의 관리형 robots.txt(AI Crawl Control) 가 원본 파일 앞에
+ * GPTBot·ClaudeBot·Google-Extended 등을 Disallow 하는 블록을 끼워 넣고
+ * 있었다. 이 서비스는 AI 검색에서 인용되는 것이 목표이므로
+ * (llms.txt 를 두는 이유와 같다) 해당 크롤러를 명시적으로 허용한다.
+ *
+ * 워커 응답으로도 관리형 블록이 계속 붙는다면 그것은 존 설정이므로
+ * 대시보드에서 꺼야 한다. 이 경로는 그 여부를 판별하는 역할도 한다.
+ */
+const ROBOTS = `User-agent: *
+Allow: /
+Disallow: /cdn-cgi/
+Disallow: /api/
+
+# 검색 엔진
+User-agent: Googlebot
+Allow: /
+User-agent: Yeti
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: NaverBot
+Allow: /
+User-agent: Daum
+Allow: /
+
+# AI 검색·인용 크롤러 — 명시적 허용
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: meta-externalagent
+Allow: /
+User-agent: Amazonbot
+Allow: /
+User-agent: cohere-ai
+Allow: /
+User-agent: YouBot
+Allow: /
+
+Sitemap: https://margin.ur-team.com/sitemap.xml
+`;
+
 const api = {
   '/api/rates': async (env) => {
     const { data, cache } = await cached(env, 'rates:krw', RATE_TTL, fetchRates);
@@ -201,6 +269,16 @@ const api = {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    // robots.txt 는 워커가 직접 생성한다 (아래 ROBOTS 주석 참고)
+    if (url.pathname === '/robots.txt') {
+      return new Response(ROBOTS, {
+        headers: {
+          'content-type': 'text/plain; charset=utf-8',
+          'cache-control': 'public, max-age=3600',
+        },
+      });
+    }
 
     if (!url.pathname.startsWith('/api/')) {
       return env.ASSETS.fetch(request); // 정적 자산
