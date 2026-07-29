@@ -74,7 +74,7 @@ URL: https://margin.ur-team.com/
 
 ## 지원 통화
 
-USD, SGD, EUR, GBP, JPY, CNY, AUD, CAD, CHF, HKD, IDR, MYR, PHP, THB, TWD, VND, BRL, KRW (총 18개)
+USD, SGD, EUR, GBP, JPY, CNY, AUD, CAD, CHF, HKD, IDR, MYR, PHP, THB, TWD, VND, BRL, KRW (총 120개)
 
 ---
 
