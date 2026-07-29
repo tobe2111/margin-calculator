@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <script>try{if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -212,6 +213,17 @@
     <main class="main-content" role="main" id="calculator">
         <div class="container">
             <div class="calculator-container">
+                <div class="onboarding" id="onboarding">
+                    <div class="ob-text">
+                        <strong>처음이신가요?</strong>
+                        <span>매입가와 해외 판매가만 넣으면 순이익이 바로 나옵니다. 플랫폼을 고르면 수수료는 자동으로 채워집니다.</span>
+                    </div>
+                    <div class="ob-actions">
+                        <button type="button" onclick="startOnboarding()">시작하기</button>
+                        <button type="button" class="ghost" onclick="dismissOnboarding()">닫기</button>
+                    </div>
+                </div>
+
                 <div class="restored-notice" id="restoredNotice" role="status">
                     <span>지난 방문에 입력하신 값을 그대로 불러왔습니다.</span>
                     <div class="restored-actions">
@@ -484,6 +496,7 @@
                         <button class="share-btn url-btn" onclick="shareURL()"><i class="fas fa-link"></i> <span>URL 복사</span></button>
                         <button class="share-btn share-native-btn" onclick="shareResult()"><i class="fas fa-share-alt"></i> <span>공유</span></button>
                         <button class="share-btn image-btn" onclick="saveAsImage()"><i class="fas fa-image"></i> <span>이미지 저장</span></button>
+                        <button class="share-btn" onclick="printReport()"><i class="fas fa-file-pdf"></i> <span>PDF 리포트</span></button>
                     </div>
                     <div class="tool-handoff" id="toolHandoff" style="display:none;">
                         <span>이 값으로 계속:</span>

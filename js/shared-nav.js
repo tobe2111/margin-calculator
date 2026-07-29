@@ -53,6 +53,10 @@
           </div>
         </div>
 
+        <button type="button" class="theme-toggle" id="themeToggle" aria-pressed="false">
+          <i class="fas fa-moon" aria-hidden="true"></i><span>다크 모드</span>
+        </button>
+
         <div class="sb-foot">
           <a href="/privacy/">개인정보처리방침</a>
           <a href="/terms/">이용약관</a>
@@ -97,6 +101,30 @@
     scrim.addEventListener('click', close);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
     sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+
+    /**
+     * 테마 토글.
+     * 시스템 설정을 자동 추종하지 않는다. 사용자가 명시적으로 고른 값만
+     * 적용하고 localStorage 에 남긴다. (환율 표시처럼 밝은 화면을 기대하고
+     * 온 사용자가 갑자기 어두운 화면을 보는 편이 더 혼란스럽다)
+     */
+    const themeBtn = document.getElementById('themeToggle');
+    const applyTheme = (t) => {
+        document.documentElement.setAttribute('data-theme', t);
+        const dark = t === 'dark';
+        themeBtn.setAttribute('aria-pressed', String(dark));
+        themeBtn.querySelector('i').className = dark ? 'fas fa-sun' : 'fas fa-moon';
+        themeBtn.querySelector('span').textContent = dark ? '라이트 모드' : '다크 모드';
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', dark ? '#0F1013' : '#FFFFFF');
+    };
+    applyTheme(localStorage.getItem('theme') === 'dark' ? 'dark' : 'light');
+    themeBtn.addEventListener('click', () => {
+        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', next);
+        applyTheme(next);
+        if (typeof gtag === 'function') gtag('event', 'theme_toggle', { event_label: next });
+    });
 
     /**
      * 사이드바 환율 표시.
