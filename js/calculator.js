@@ -174,24 +174,26 @@ async function fetchRealTimeExchangeRates() {
         const data = await fetchRatesPayload();
         if (data && data.rates) {
             const rates = data.rates;
+            // 통화마다 1원당 단위가 크게 달라(엔 ~9원, 동 ~0.05원) 고정 소수점을
+            // 쓰면 저가 통화에서 오차가 커진다. 값의 크기에 따라 자릿수를 정한다.
+            // 예: 엔을 소수 1자리로 반올림하면 5만 엔 거래에서 1,400원이 어긋난다.
+            const conv = (v, fb) => {
+                if (!v) return fb;
+                const r = 1 / v;
+                if (r >= 100) return Math.round(r);           // 달러·유로 등
+                if (r >= 1)   return Math.round(r * 100) / 100; // 엔·위안·바트 등
+                return Math.round(r * 100000) / 100000;        // 동·루피아 등
+            };
             defaultExchangeRates = {
-                USD: rates.USD ? Math.round(1 / rates.USD) : 1300,
-                SGD: rates.SGD ? Math.round(1 / rates.SGD) : 980,
-                EUR: rates.EUR ? Math.round(1 / rates.EUR) : 1420,
-                GBP: rates.GBP ? Math.round(1 / rates.GBP) : 1650,
-                JPY: rates.JPY ? Math.round(1 / rates.JPY * 10) / 10 : 9.5,
-                CNY: rates.CNY ? Math.round(1 / rates.CNY) : 180,
-                AUD: rates.AUD ? Math.round(1 / rates.AUD) : 870,
-                CAD: rates.CAD ? Math.round(1 / rates.CAD) : 960,
-                CHF: rates.CHF ? Math.round(1 / rates.CHF) : 1480,
-                HKD: rates.HKD ? Math.round(1 / rates.HKD) : 165,
-                IDR: rates.IDR ? Math.round(1 / rates.IDR * 1000) / 1000 : 0.085,
-                MYR: rates.MYR ? Math.round(1 / rates.MYR) : 290,
-                PHP: rates.PHP ? Math.round(1 / rates.PHP) : 23,
-                THB: rates.THB ? Math.round(1 / rates.THB) : 37,
-                TWD: rates.TWD ? Math.round(1 / rates.TWD) : 42,
-                VND: rates.VND ? Math.round(1 / rates.VND * 1000) / 1000 : 0.053,
-                BRL: rates.BRL ? Math.round(1 / rates.BRL) : 260,
+                USD: conv(rates.USD, 1300), SGD: conv(rates.SGD, 980),
+                EUR: conv(rates.EUR, 1420), GBP: conv(rates.GBP, 1650),
+                JPY: conv(rates.JPY, 9.5),  CNY: conv(rates.CNY, 180),
+                AUD: conv(rates.AUD, 870),  CAD: conv(rates.CAD, 960),
+                CHF: conv(rates.CHF, 1480), HKD: conv(rates.HKD, 165),
+                IDR: conv(rates.IDR, 0.085), MYR: conv(rates.MYR, 290),
+                PHP: conv(rates.PHP, 23),   THB: conv(rates.THB, 37),
+                TWD: conv(rates.TWD, 42),   VND: conv(rates.VND, 0.053),
+                BRL: conv(rates.BRL, 260),
                 KRW: 1
             };
             currentExchangeRate = defaultExchangeRates[currentCurrency];
