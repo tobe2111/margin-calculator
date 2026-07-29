@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <script>try{if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="theme-color" content="#FFFFFF">
@@ -118,6 +119,33 @@
         .upload-status { font-size: 13px; font-weight: 600; margin-top: 10px; min-height: 18px; }
         .upload-status.ok { color: var(--pos); }
         .upload-status.err { color: var(--neg); }
+
+
+        /* 도구 접기 */
+        .tool-card-header.foldable { cursor: pointer; user-select: none; }
+        .fold-caret { margin-left: auto; font-size: 12px; color: var(--ink-4); transition: transform .2s; }
+        section[id^="tool-"].folded .fold-caret { transform: rotate(-90deg); }
+        section[id^="tool-"].folded .tool-desc,
+        section[id^="tool-"].folded .form-row,
+        section[id^="tool-"].folded .tool-btn,
+        section[id^="tool-"].folded .tool-result,
+        section[id^="tool-"].folded .comp-table,
+        section[id^="tool-"].folded .batch-actions,
+        section[id^="tool-"].folded .batch-table-wrap,
+        section[id^="tool-"].folded .upload-zone,
+        section[id^="tool-"].folded .tool-msg,
+        section[id^="tool-"].folded .check-inline,
+        section[id^="tool-"].folded .disclaimer-box,
+        section[id^="tool-"].folded .sim-slider-wrapper,
+        section[id^="tool-"].folded .hs-controls,
+        section[id^="tool-"].folded table { display: none !important; }
+        section[id^="tool-"].folded .tool-card { padding-bottom: 14px; }
+        section[id^="tool-"].folded .tool-card-header { margin-bottom: 0; }
+        .tools-foldbar { display: flex; gap: 6px; justify-content: flex-end; margin-bottom: 8px; }
+        .tools-foldbar button { background: none; border: 1px solid var(--line-2); border-radius: 6px;
+            padding: 5px 11px; font-size: 12px; font-weight: 600; color: var(--ink-2);
+            cursor: pointer; font-family: inherit; min-height: 28px; }
+        .tools-foldbar button:hover { border-color: var(--ink-4); color: var(--ink); }
 
         /* Form elements */
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 16px; }
@@ -278,6 +306,10 @@
 
         <!-- 빠른 이동 -->
         <div class="tools-search-wrap">
+        <div class="tools-foldbar">
+            <button type="button" onclick="toggleAllTools(true)">전체 펼치기</button>
+            <button type="button" onclick="toggleAllTools(false)">전체 접기</button>
+        </div>
         <input type="search" id="toolSearch" class="tools-search" placeholder="도구 검색 — 예: 배송비, 관세, 환율, FBA" aria-label="도구 검색" oninput="filterTools(this.value)">
         <p class="tools-search-empty" id="toolSearchEmpty" hidden>일치하는 도구가 없습니다.</p>
     </div>
@@ -2610,7 +2642,8 @@
                 const text = (sec.textContent || '').toLowerCase();
                 const hit = !term || text.includes(term);
                 sec.hidden = !hit;
-                if (hit) shown++;
+                // 검색으로 걸러낸 도구는 바로 볼 수 있게 펼친다
+                if (hit) { shown++; if (term) sec.classList.remove('folded'); }
             });
             links.forEach(a => {
                 const id = (a.getAttribute('href') || '').replace('#', '');
@@ -2658,6 +2691,59 @@
                 const nav = document.querySelector('.tools-search-wrap');
                 if (nav) nav.appendChild(note);
             }
+        })();
+
+    
+        // ===== 도구 접기/펼치기 =====
+        // 20개를 모두 펼쳐두면 원하는 도구까지 스크롤이 지나치게 길다.
+        // 제목 줄을 눌러 여닫고, 첫 도구만 열어둔다.
+        // 검색·앵커 이동 시에는 해당 도구를 자동으로 펼친다.
+        (function setupToolFold(){
+            const secs = [...document.querySelectorAll('section[id^="tool-"]')];
+            secs.forEach((sec, i) => {
+                const head = sec.querySelector('.tool-card-header');
+                const card = sec.querySelector('.tool-card');
+                if (!head || !card) return;
+                head.setAttribute('role','button');
+                head.setAttribute('tabindex','0');
+                head.classList.add('foldable');
+                const caret = document.createElement('i');
+                caret.className = 'fas fa-chevron-down fold-caret';
+                head.appendChild(caret);
+                if (i > 0) sec.classList.add('folded');
+                head.setAttribute('aria-expanded', String(i === 0));
+                const toggle = () => {
+                    const folded = sec.classList.toggle('folded');
+                    head.setAttribute('aria-expanded', String(!folded));
+                };
+                head.addEventListener('click', toggle);
+                head.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+                });
+            });
+            // 앵커로 들어오면 해당 도구를 펼친다
+            const openByHash = () => {
+                const id = location.hash.replace('#','');
+                if (!id) return;
+                const sec = document.getElementById(id);
+                if (sec && sec.classList.contains('folded')) {
+                    sec.classList.remove('folded');
+                    sec.querySelector('.tool-card-header')?.setAttribute('aria-expanded','true');
+                }
+            };
+            openByHash();
+            window.addEventListener('hashchange', openByHash);
+            // 퀵내비 클릭 시에도 펼친다
+            document.querySelectorAll('.tools-quick-link').forEach(a => {
+                a.addEventListener('click', () => setTimeout(openByHash, 0));
+            });
+            // 전체 펼치기/접기
+            window.toggleAllTools = (open) => {
+                secs.forEach(sec => {
+                    sec.classList.toggle('folded', !open);
+                    sec.querySelector('.tool-card-header')?.setAttribute('aria-expanded', String(open));
+                });
+            };
         })();
 
     </script>

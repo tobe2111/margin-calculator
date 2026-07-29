@@ -384,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
     registerServiceWorker();
     loadExchangeRateChart();
     setupMobileCalcButton();
+    setupOnboarding();
     // Auto-save on any input change
     document.querySelectorAll('#productName,#purchasePrice,#currency,#sellingPrice,#platformFee,#fxSpread,#domesticShipping,#intlShipping,#vatRefund,#targetMargin,#adCostPerUnit,#returnRate').forEach(el => {
         el.addEventListener('change', saveInputsToLocalStorage);
@@ -701,4 +702,114 @@ function openToolsWithValues(hash) {
     if (typeof currentExchangeRate === 'number' && currentExchangeRate > 0) q.set('r', Math.round(currentExchangeRate));
     if (typeof currentCurrency === 'string') q.set('c', currentCurrency);
     location.href = '/tools/?' + q.toString() + (hash || '');
+}
+
+// ===== 결과 PDF 리포트 =====
+// 이미지 저장은 화면 캡처라 인쇄·공유용으로 쓰기 어렵다.
+// 브라우저 인쇄 기능으로 A4 한 장짜리 분석서를 만든다.
+// (별도 라이브러리 없이 동작하고, 사용자가 'PDF로 저장'을 고를 수 있다)
+function printReport() {
+    const g = (id) => document.getElementById(id)?.textContent?.trim() || '-';
+    const v = (id) => document.getElementById(id)?.value?.trim() || '';
+    const name = v('productName') || '상품명 없음';
+    const cur = (typeof currentCurrency === 'string') ? currentCurrency : 'USD';
+    const rows = [
+        ['매입가', g('costPurchase')],
+        ['플랫폼 수수료', g('costPlatformFee')],
+        ['환전 수수료', g('costFxSpread')],
+        ['국내배송비', g('costDomesticShipping')],
+        ['해외배송비', g('costIntlShipping')],
+    ];
+    const ad = document.getElementById('rowAdCost');
+    if (ad && ad.style.display !== 'none') rows.push(['광고비(개당)', g('costAdSpend')]);
+    const rt = document.getElementById('rowReturnRisk');
+    if (rt && rt.style.display !== 'none') rows.push(['반품 손실(기대값)', g('costReturnRisk')]);
+    rows.push(['부가세 환급', g('vatRefundAmount')]);
+
+    const esc = (t) => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    const now = new Date().toLocaleString('ko-KR');
+
+    const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<title>${esc(name)} — 마진 분석서</title>
+<style>
+@page{size:A4;margin:16mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:#14161A;
+  font-size:11pt;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1{font-size:19pt;font-weight:800;letter-spacing:-.02em;margin-bottom:2mm}
+.meta{font-size:9pt;color:#656C75;padding-bottom:4mm;border-bottom:1.5px solid #14161A;margin-bottom:6mm}
+.big{display:flex;justify-content:space-between;align-items:baseline;
+  padding:4mm 0;border-bottom:1px solid #E3E6EB}
+.big .l{font-size:10pt;color:#464D57}
+.big .v{font-size:20pt;font-weight:800;letter-spacing:-.02em}
+.sub{font-size:9pt;color:#656C75;text-align:right}
+h2{font-size:9pt;font-weight:700;color:#656C75;letter-spacing:.06em;
+  text-transform:uppercase;margin:7mm 0 2mm}
+table{width:100%;border-collapse:collapse;font-size:10pt}
+td{padding:2.2mm 0;border-bottom:1px solid #EDEFF3}
+td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+.sum{margin-top:4mm;padding:3mm 4mm;background:#F7F8FA;border:1px solid #E3E6EB;border-radius:2mm}
+.sum div{display:flex;justify-content:space-between;padding:1mm 0;font-size:10pt}
+.sum b{font-variant-numeric:tabular-nums}
+.note{margin-top:8mm;padding-top:3mm;border-top:1px solid #E3E6EB;font-size:8pt;color:#656C75;line-height:1.5}
+</style></head><body>
+<h1>${esc(name)}</h1>
+<div class="meta">해외판매 마진 분석서 · ${esc(now)} · margin.ur-team.com</div>
+
+<div class="big"><div class="l">순이익 (마진)</div>
+  <div><div class="v">${esc(g('netProfitLocal'))}</div><div class="sub">${esc(g('netProfitKRW'))}</div></div></div>
+<div class="big"><div class="l">마진율</div><div class="v">${esc(g('marginRate'))}</div></div>
+<div class="big"><div class="l">판매 수익</div>
+  <div><div class="v" style="font-size:14pt">${esc(g('revenueLocal'))}</div>
+  <div class="sub">${esc(g('revenueKRW'))}</div></div></div>
+<div class="big"><div class="l">총 비용</div><div class="v" style="font-size:14pt">${esc(g('totalCost'))}</div></div>
+
+<h2>비용 상세내역</h2>
+<table><tbody>
+${rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}
+</tbody></table>
+
+<div class="sum">
+  <div><span>ROI (투자 수익률)</span><b>${esc(g('roi'))}</b></div>
+  <div><span>손익분기점 판매가</span><b>${esc(g('breakEvenPrice'))}</b></div>
+  <div><span>적용 환율</span><b>${esc(v('exchangeRate'))}</b></div>
+  <div><span>판매 통화</span><b>${esc(cur)}</b></div>
+</div>
+
+<div class="note">
+본 분석서의 모든 수치는 입력값에 근거한 <b>참고용 추정치</b>이며 실제 발생하는 수익·비용·세금을 보증하지 않습니다.
+플랫폼 수수료는 카테고리·프로모션·판매 지역에 따라 달라질 수 있고, 환율은 실제 정산·환전 시점의 적용 환율과 차이가 납니다.
+관세·세금에 관한 내용은 세무 자문이 아니므로 구체적인 사안은 세무 전문가에게 확인하시기 바랍니다.
+</div>
+</body></html>`;
+
+    const w = window.open('', '_blank');
+    if (!w) { showToast('팝업이 차단되어 리포트를 열 수 없습니다'); return; }
+    w.document.write(html);
+    w.document.close();
+    w.focus();
+    setTimeout(() => w.print(), 400);
+    if (typeof gtag === 'function') gtag('event', 'print_report', { event_category: 'result' });
+}
+
+// ===== 첫 방문 안내 =====
+// 계산기를 처음 여는 사람은 어디부터 채워야 할지 모른다.
+// 한 번만 보여주고 닫으면 다시 뜨지 않는다.
+function setupOnboarding() {
+    const bar = document.getElementById('onboarding');
+    if (!bar) return;
+    if (localStorage.getItem('onboardingSeen')) return;
+    // 이미 입력값이 있으면(재방문 복원) 안내가 필요 없다
+    if ((document.getElementById('purchasePrice')?.value || '').trim()) return;
+    bar.classList.add('show');
+}
+function dismissOnboarding() {
+    localStorage.setItem('onboardingSeen', '1');
+    document.getElementById('onboarding')?.classList.remove('show');
+}
+function startOnboarding() {
+    dismissOnboarding();
+    const el = document.getElementById('purchasePrice');
+    if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
 }

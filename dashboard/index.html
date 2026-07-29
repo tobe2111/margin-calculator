@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <script>try{if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="theme-color" content="#FFFFFF">
@@ -128,6 +129,17 @@
         .progress-fill.low { background: linear-gradient(90deg, var(--warn), var(--neg)); }
 
         /* Empty state */
+
+        .sample-bar { display: flex; align-items: center; justify-content: space-between; gap: 14px;
+            flex-wrap: wrap; background: var(--accent-wash); border: 1px solid var(--line-2);
+            border-radius: 10px; padding: 12px 16px; margin-top: 18px; }
+        .sample-bar span { font-size: 13px; color: var(--ink-2); }
+        .sample-bar button { background: var(--accent); color: #fff; border: none; border-radius: 6px;
+            padding: 8px 15px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+            font-family: inherit; white-space: nowrap; min-height: 34px; }
+        .sample-bar button:hover { background: var(--accent-ink); }
+        .sample-note { display: none; font-size: 12px; color: var(--warn); background: var(--warn-wash);
+            border-radius: 6px; padding: 8px 12px; margin-top: 10px; font-weight: 600; }
         .empty-state { text-align: center; padding: 38px 20px; background: var(--paper); border: 1px dashed var(--line-2); border-radius: 14px; margin-top: 16px; }
         .empty-state .empty-icon { font-size: 34px; color: #cbd5e1; margin-bottom: 12px; display: block; }
         .empty-state h3 { font-size: 15.5px; font-weight: 700; color: var(--ink-2); margin-bottom: 6px; }
@@ -155,6 +167,7 @@
 
     <main class="subpage-main">
         <div class="container">
+        <p class="sample-note" id="sampleNote">예시 데이터를 보고 있습니다. 실제 저장된 계산은 변경되지 않았습니다.</p>
 
             <div class="privacy-note">
                 <i class="fas fa-lock"></i>
@@ -1060,10 +1073,63 @@
             }
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', renderAll);
-        } else {
+        /**
+         * 샘플로 미리보기.
+         * 저장 데이터가 없으면 화면이 통째로 비어 대시보드가 무엇을 해주는지
+         * 알 수 없다. 실제 저장은 건드리지 않고 메모리에만 예시를 채워
+         * 한 번 그려 보여준다. '내 데이터로 돌아가기'로 원래 상태로 되돌린다.
+         */
+        var SAMPLE_ON = false;
+        window.toggleSample = function () {
+            if (!SAMPLE_ON) {
+                var now = new Date();
+                var mk = function (n, pp, sp, np, mr, mAgo) {
+                    var d = new Date(now.getFullYear(), now.getMonth() - mAgo, 12).toISOString();
+                    return { id: 's' + n, name: n, productName: n, purchasePrice: pp,
+                             currency: 'USD', sellingPrice: sp, exchangeRate: 1450,
+                             domesticShipping: 2000, intlShipping: 5000,
+                             platformFeeRate: 15, fxSpreadRate: 1, vatRefund: true,
+                             netProfit: np, marginRate: mr, savedAt: d, timestamp: d };
+                };
+                products = [
+                    mk('무선 이어폰', 15000, 29.9, 12800, 31.7, 0),
+                    mk('보조배터리', 22000, 34.5, 9100, 19.5, 0),
+                    mk('폰케이스', 4000, 9.9, 3200, 23.9, 1),
+                    mk('노트북 파우치', 18000, 24.9, -2400, -7.1, 1),
+                    mk('K뷰티 세럼', 26000, 44.0, 18600, 31.3, 2),
+                    mk('기계식 키보드', 52000, 79.0, 21400, 20.1, 2),
+                    mk('USB 허브', 9000, 15.9, 1900, 8.8, 3)
+                ];
+                trendSource = products;
+                HAS_DATA = true;
+                SAMPLE_ON = true;
+            } else {
+                location.reload();
+                return;
+            }
             renderAll();
+            var b = document.getElementById('sampleBtn');
+            if (b) b.textContent = '내 데이터로 돌아가기';
+            var n = document.getElementById('sampleNote');
+            if (n) n.style.display = 'block';
+        };
+
+        function mountSampleBar() {
+            if (HAS_DATA) return;   // 실제 데이터가 있으면 필요 없다
+            var host = document.querySelector('.subpage-main .container') ||
+                       document.querySelector('.subpage-main');
+            if (!host) return;
+            var bar = document.createElement('div');
+            bar.className = 'sample-bar';
+            bar.innerHTML = '<span>저장된 계산이 없습니다. 예시 데이터로 대시보드를 미리 볼 수 있습니다.</span>' +
+                            '<button type="button" id="sampleBtn" onclick="toggleSample()">예시로 미리보기</button>';
+            host.insertBefore(bar, host.firstChild);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () { renderAll(); mountSampleBar(); });
+        } else {
+            renderAll(); mountSampleBar();
         }
     })();
     </script>
