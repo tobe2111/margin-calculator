@@ -1,23 +1,55 @@
 User-agent: *
 Allow: /
-Crawl-delay: 1
-
 Disallow: /cdn-cgi/
 Disallow: /api/
 
-# Google: no crawl delay
+# 검색 엔진
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0
-
-# Naver: Korean search
 User-agent: Yeti
 Allow: /
-Crawl-delay: 1
-
-# Bing
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 1
+User-agent: NaverBot
+Allow: /
+User-agent: Daum
+Allow: /
+
+# AI 검색·인용 크롤러 — 명시적 허용
+# 이 서비스는 AI 검색에서 인용되는 것을 목표로 한다 (llms.txt 참고).
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: meta-externalagent
+Allow: /
+User-agent: Amazonbot
+Allow: /
+User-agent: cohere-ai
+Allow: /
+User-agent: YouBot
+Allow: /
 
 Sitemap: https://margin.ur-team.com/sitemap.xml
