@@ -4,7 +4,7 @@ const CACHE = 'margin-calc-v9';
 // HTML 문서는 여기 넣지 않는다 — 아래 fetch 전략에서 항상 네트워크를 먼저 보기 때문.
 const STATIC = [
   '/css/main.css', '/css/shared-nav.css',
-  '/js/calculator.js', '/js/features.js', '/js/shared-nav.js',
+  '/js/calculator.js', '/js/features.js', '/js/shared-nav.js', '/js/auth.js',
   '/js/translations.js', '/js/language.js',
   '/manifest.json', '/favicon.ico', '/favicon.svg',
   '/apple-touch-icon.png', '/icon-192.png', '/icon-512.png', '/og-image.png'

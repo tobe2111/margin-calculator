@@ -302,6 +302,19 @@ async function readJson(request) {
   return JSON.parse(text);
 }
 
+/**
+ * 계정 응답은 json() 의 기본값(public, max-age=300 + CORS 와일드카드)을 쓰면 안 된다.
+ * 쿠키로 인증하는 개인 데이터이고, 로그인 응답에는 Set-Cookie 까지 실린다.
+ * 공유 캐시에 남거나 다른 출처에서 읽히지 않도록 나가는 길목에서 헤더를 고쳐 준다.
+ */
+function privateHeaders(res) {
+  const h = new Headers(res.headers);
+  h.set('cache-control', 'private, no-store');
+  h.set('vary', 'Cookie');
+  h.delete('access-control-allow-origin');
+  return new Response(res.body, { status: res.status, headers: h });
+}
+
 const needAuth = () => json({ error: '로그인이 필요합니다', code: 'unauthorized' }, 401);
 const noDb = () =>
   json(
@@ -618,23 +631,24 @@ export default {
       if (request.method !== 'GET') {
         const origin = request.headers.get('origin');
         if (origin && new URL(origin).host !== url.host) {
-          return json({ error: '허용되지 않은 요청입니다' }, 403);
+          return privateHeaders(json({ error: '허용되지 않은 요청입니다' }, 403));
         }
       }
-      if (!env.DB) return noDb();
+      if (!env.DB) return privateHeaders(noDb());
+      let res;
       try {
-        return await authRoute(env, url, request, ctx);
+        res = await authRoute(env, url, request, ctx);
       } catch (err) {
         const msg = String(err);
-        if (msg.includes('bad content-type') || msg.includes('JSON')) {
-          return json({ error: '요청 형식이 올바르지 않습니다' }, 400);
-        }
-        return json({ error: '처리 중 오류가 발생했습니다' }, 500);
+        res = (msg.includes('bad content-type') || msg.includes('JSON'))
+          ? json({ error: '요청 형식이 올바르지 않습니다' }, 400)
+          : json({ error: '처리 중 오류가 발생했습니다' }, 500);
       }
+      return privateHeaders(res);
     }
     // 계정 기능 자체가 꺼져 있는지 프런트엔드가 알 수 있게 한다.
     if (url.pathname.startsWith('/api/auth/') || url.pathname === '/api/records') {
-      return env.DB ? json({ error: 'not found' }, 404) : noDb();
+      return privateHeaders(env.DB ? json({ error: 'not found' }, 404) : noDb());
     }
 
     if (request.method !== 'GET') return json({ error: 'GET만 지원합니다' }, 405);
