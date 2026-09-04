@@ -875,3 +875,120 @@ html[data-theme="dark"] .install-text span{color:var(--ink-2)}
 html[data-theme="dark"] .install-btn.ghost{color:var(--ink-2);border-color:var(--line-2)}
 html[data-theme="dark"] .install-btn.ghost:hover{color:var(--ink);border-color:var(--ink-4)}
 html[data-theme="dark"] .result-pro-cta{background:linear-gradient(135deg,#1B2436,#141A26)}
+
+/* ══════════════════════════════════════════════════════════════
+   계정 — 사이드바 블록 · 로그인 모달 · 저장 목록
+   ══════════════════════════════════════════════════════════════ */
+
+.sb-account{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:11px 8px;margin-bottom:12px}
+.sb-login-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;
+  min-height:36px;padding:9px 10px;border:0;border-radius:8px;background:var(--accent);
+  color:#fff;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.sb-login-btn:hover{background:var(--accent-ink)}
+.sb-acc-hint{margin:7px 2px 0;font-size:10.5px;line-height:1.45;color:var(--ink-4);
+  word-break:keep-all}
+.sb-acc-in{display:flex;align-items:center;gap:8px;margin-bottom:8px;min-width:0}
+.sb-avatar{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent-wash);
+  color:var(--accent-text);display:grid;place-items:center;font-size:12px;font-weight:800}
+.sb-acc-name{font-size:12.5px;font-weight:700;color:var(--ink);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.sb-acc-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sb-acc-actions button{min-height:30px;padding:6px 4px;border:1px solid var(--line-2);
+  border-radius:7px;background:none;color:var(--ink-2);font-family:inherit;font-size:11.5px;
+  font-weight:600;cursor:pointer}
+.sb-acc-actions button:hover{border-color:var(--ink-4);color:var(--ink)}
+
+.auth-modal[hidden]{display:none}
+.auth-modal{position:fixed;inset:0;z-index:900;display:grid;place-items:center;padding:20px}
+.auth-scrim{position:absolute;inset:0;background:rgba(10,12,16,.5)}
+.auth-panel{position:relative;width:100%;max-width:400px;max-height:88vh;overflow-y:auto;
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:26px 26px 22px;box-shadow:0 18px 48px rgba(10,12,16,.22)}
+.auth-panel h2{font-size:18px;font-weight:800;color:var(--ink);margin:0 0 16px}
+.auth-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border:0;
+  border-radius:8px;background:none;color:var(--ink-3);font-size:15px;cursor:pointer}
+.auth-close:hover{background:var(--paper-3);color:var(--ink)}
+body.auth-open{overflow:hidden}
+
+.auth-form{display:flex;flex-direction:column}
+.auth-form label{font-size:12.5px;font-weight:700;color:var(--ink-2);margin:12px 0 5px}
+.auth-form label:first-of-type{margin-top:0}
+.auth-opt{font-weight:500;color:var(--ink-4)}
+.auth-form input{width:100%;min-height:42px;padding:10px 12px;border:1px solid var(--line-2);
+  border-radius:9px;background:var(--paper);color:var(--ink);font-family:inherit;font-size:14px}
+.auth-form input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:var(--accent)}
+.auth-submit{margin-top:18px;min-height:44px;border:0;border-radius:9px;background:var(--accent);
+  color:#fff;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer}
+.auth-submit:hover{background:var(--accent-ink)}
+.auth-submit:disabled{opacity:.6;cursor:progress}
+.auth-submit.secondary{background:none;border:1px solid var(--line-2);color:var(--ink-2);
+  font-size:13px;min-height:38px;margin-top:14px}
+.auth-submit.secondary:hover{border-color:var(--ink-4);color:var(--ink);background:none}
+.auth-err{background:var(--neg-wash);color:var(--neg);border-radius:8px;padding:10px 12px;
+  font-size:13px;margin-bottom:14px;word-break:keep-all}
+.auth-err[hidden]{display:none}
+.auth-alt{margin-top:16px;text-align:center;font-size:12.5px;color:var(--ink-3)}
+.auth-alt button{border:0;background:none;color:var(--accent-text);font-family:inherit;
+  font-size:12.5px;font-weight:700;cursor:pointer;text-decoration:underline;padding:4px}
+.auth-note{margin-top:14px;font-size:11.5px;line-height:1.55;color:var(--ink-4);word-break:keep-all}
+.auth-note a{color:var(--ink-3)}
+.auth-loading,.auth-empty{text-align:center;font-size:13.5px;color:var(--ink-3);
+  padding:26px 0;line-height:1.7}
+
+.saved-toolbar{display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:var(--ink-3);padding-bottom:9px;border-bottom:1px solid var(--line)}
+.saved-toolbar button{border:1px solid var(--line-2);background:none;color:var(--ink-2);
+  border-radius:7px;padding:5px 10px;min-height:28px;font-family:inherit;font-size:11.5px;
+  font-weight:600;cursor:pointer}
+.saved-toolbar button:hover{border-color:var(--ink-4);color:var(--ink)}
+.saved-list{list-style:none;margin:0;padding:0}
+.saved-list li{display:flex;align-items:center;gap:10px;justify-content:space-between;
+  padding:11px 0;border-bottom:1px solid var(--line)}
+.saved-main{min-width:0;display:flex;flex-direction:column;gap:3px}
+.saved-main strong{font-size:13.5px;font-weight:700;color:var(--ink);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.saved-main em{font-style:normal;font-size:11px;color:var(--ink-4)}
+.saved-kind{align-self:flex-start;font-size:10px;font-weight:700;padding:2px 6px;
+  border-radius:5px;background:var(--paper-3);color:var(--ink-3)}
+.saved-kind.k-shopee{background:var(--accent-wash);color:var(--accent-text)}
+.saved-kind.k-qoo10{background:var(--warn-wash);color:var(--warn)}
+.saved-side{flex:none;display:flex;align-items:center;gap:8px}
+.saved-num{font-size:12.5px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.saved-num.pos{color:var(--pos)}
+.saved-num.neg{color:var(--neg)}
+.saved-del{width:30px;height:30px;border:1px solid var(--line-2);border-radius:7px;
+  background:none;color:var(--ink-4);font-size:11px;cursor:pointer}
+.saved-del:hover{border-color:var(--neg);color:var(--neg)}
+.saved-del:disabled{opacity:.5}
+
+.acc-info{margin-bottom:6px}
+.acc-info div{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.acc-info dt{flex:0 0 62px;color:var(--ink-3);font-weight:600}
+.acc-info dd{margin:0;color:var(--ink);overflow:hidden;text-overflow:ellipsis}
+.acc-danger{display:flex;gap:8px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.acc-logout,.acc-delete{flex:1;min-height:38px;border-radius:9px;font-family:inherit;
+  font-size:13px;font-weight:700;cursor:pointer}
+.acc-logout{border:1px solid var(--line-2);background:none;color:var(--ink-2)}
+.acc-logout:hover{border-color:var(--ink-4);color:var(--ink)}
+.acc-delete{border:1px solid var(--neg);background:none;color:var(--neg)}
+.acc-delete:hover{background:var(--neg-wash)}
+
+/* 계산기 페이지 밖에서 쓰는 토스트 (features.js 가 없는 페이지용) */
+.auth-toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);
+  background:var(--ink);color:var(--paper);padding:12px 20px;border-radius:10px;
+  font-size:13.5px;font-weight:600;z-index:950;opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;max-width:min(92vw,420px);text-align:center}
+.auth-toast.show{opacity:1;transform:translate(-50%,0)}
+html[data-theme="dark"] .auth-toast{background:var(--paper-3);color:var(--ink);
+  border:1px solid var(--line-2)}
+
+@media(max-width:480px){
+  .auth-panel{padding:22px 18px 18px}
+  .acc-danger{flex-direction:column}
+}
+
+/* hidden 속성은 UA 기본값이 display:none 이지만, 클래스에 display 가 걸려 있으면
+   그쪽이 이겨서 요소가 그대로 보인다 (.share-btn 이 실제로 그랬다).
+   hidden 을 쓰는 곳이 늘었으니 전역에서 확실히 눌러 둔다. */
+[hidden]{display:none!important}

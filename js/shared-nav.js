@@ -8,6 +8,7 @@
         { href: '/tools/',     label: '도구 모음',     icon: 'fa-toolbox' },
         { href: '/dashboard/', label: '셀러 대시보드', icon: 'fa-chart-pie' },
         { href: '/platforms/', label: '플랫폼 비교',   icon: 'fa-scale-balanced' },
+        { href: '/downloads/', label: '엑셀 다운로드', icon: 'fa-file-excel' },
         { href: '/guide/',     label: '셀러 가이드',   icon: 'fa-book-open' },
     ];
 
@@ -28,6 +29,9 @@
           <img src="/favicon.svg" alt="" width="22" height="22" onerror="this.style.display='none'">
           <span>유어팀 마진 계산기</span>
         </a>
+
+        <!-- 계정 블록 — js/auth.js 가 채운다. D1 미설정이면 비워 둔다. -->
+        <div class="sb-account" id="sbAccount" hidden></div>
 
         <nav class="sb-nav" aria-label="메인 네비게이션">
           ${links.map(l => `

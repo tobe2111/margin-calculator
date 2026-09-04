@@ -1,4 +1,4 @@
-const CACHE = 'margin-calc-v8';
+const CACHE = 'margin-calc-v9';
 
 // 오프라인 대비로 미리 담아두는 정적 자산.
 // HTML 문서는 여기 넣지 않는다 — 아래 fetch 전략에서 항상 네트워크를 먼저 보기 때문.

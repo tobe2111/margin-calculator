@@ -813,3 +813,39 @@ function startOnboarding() {
     const el = document.getElementById('purchasePrice');
     if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
 }
+
+/**
+ * '계정에 저장' 버튼.
+ * 계산 결과가 나온 뒤에만, 그리고 계정 기능이 켜져 있을 때만 보인다.
+ * 히스토리는 계산할 때마다 자동으로 올라가므로 이 버튼은 '지금 이 결과를
+ * 확실히 남기고 싶다'는 경우를 위한 명시적 저장이다.
+ */
+function saveToAccount() {
+    if (!window.Auth) return;
+    if (!calculationHistory.length) {
+        showToast('먼저 계산을 실행해주세요');
+        return;
+    }
+    const d = calculationHistory[calculationHistory.length - 1];
+    window.Auth.save('calc', d.productName || '이름 없는 계산',
+        { ...d, timestamp: d.timestamp.toISOString() });
+}
+
+// 계정 기능이 켜져 있고 로그인한 사용자에게만 버튼을 노출한다.
+document.addEventListener('DOMContentLoaded', () => {
+    const bind = () => {
+        if (!window.Auth) return;
+        window.Auth.onChange((s) => {
+            const btn = document.getElementById('saveToAccountBtn');
+            if (btn) btn.hidden = !(s.available && s.user);
+        });
+    };
+    // auth.js 는 defer 로 늦게 뜰 수 있다. 준비될 때까지 짧게 기다린다.
+    if (window.Auth) bind();
+    else {
+        let tries = 0;
+        const t = setInterval(() => {
+            if (window.Auth || ++tries > 40) { clearInterval(t); bind(); }
+        }, 100);
+    }
+});

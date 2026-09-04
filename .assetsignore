@@ -1,0 +1,19 @@
+# 정적 자산으로 배포하지 않을 파일.
+# (이 목록이 없으면 저장소의 모든 파일이 그대로 공개된다 —
+#  실제로 /worker.js 와 /wrangler.jsonc 가 내려받아지고 있었다)
+
+# Worker 소스와 설정
+worker.js
+wrangler.jsonc
+wrangler.test.jsonc
+
+# 서버 스키마·빌드 스크립트 (다운로드용 .xlsx 는 downloads/ 에 이미 생성돼 있다)
+db/
+scripts/
+
+# 개발 부산물
+node_modules/
+.wrangler/
+package.json
+package-lock.json
+README.md
