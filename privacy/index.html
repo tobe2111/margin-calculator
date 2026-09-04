@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#FFFFFF">
     <title>개인정보처리방침 | 유어팀 마진 계산기</title>
-    <meta name="description" content="유어팀 마진 계산기의 개인정보 처리 기준. 수집 항목, 브라우저 로컬 저장 방식, 쿠키·광고 이용, 이용자 권리와 행사 방법을 안내합니다.">
+    <meta name="description" content="유어팀 마진 계산기의 개인정보 처리 기준. 회원가입 시 수집 항목, 비로그인 시 브라우저 로컬 저장 방식, 쿠키·광고 이용, 열람·삭제·탈퇴 등 이용자 권리와 행사 방법을 안내합니다.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://margin.ur-team.com/privacy/">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://margin.ur-team.com/privacy/">
     <meta property="og:title" content="개인정보처리방침 | 유어팀 마진 계산기">
-    <meta property="og:description" content="유어팀 마진 계산기의 개인정보 처리 기준. 수집 항목, 브라우저 로컬 저장 방식, 쿠키·광고 이용, 이용자 권리와 행사 방법을 안내합니다.">
+    <meta property="og:description" content="유어팀 마진 계산기의 개인정보 처리 기준. 회원가입 시 수집 항목, 비로그인 시 브라우저 로컬 저장 방식, 쿠키·광고 이용, 열람·삭제·탈퇴 등 이용자 권리와 행사 방법을 안내합니다.">
     <meta property="og:image" content="https://margin.ur-team.com/og-image.png">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="유어팀 글로벌 마진 계산기">
@@ -63,12 +63,22 @@
             </div>
 
             <div class="highlight-box">
-                <p><strong>요약:</strong> 본 서비스는 회원가입이 없으며, 이용자가 입력한 계산 데이터는 <strong>서버로 전송되지 않고 이용자 브라우저에만 저장</strong>됩니다. 다만 광고·분석을 위해 제3자 서비스(Google 등)의 쿠키가 사용됩니다.</p>
+                <p><strong>요약:</strong> 회원가입은 <strong>선택</strong>입니다. 가입하지 않고 쓰면 계산 데이터는 서버로 전송되지 않고 이용자 브라우저에만 저장됩니다. 가입하면 이메일 주소와, 이용자가 저장하기로 한 계산 내용만 서버에 보관되어 다른 기기에서도 이어 볼 수 있습니다. 광고·분석을 위해 제3자 서비스(Google 등)의 쿠키가 사용됩니다.</p>
             </div>
 
             <h2>1. 수집하는 개인정보 항목</h2>
-            <p>회사는 회원가입 절차를 두고 있지 않으며, 이름·연락처·이메일 등 <strong>이용자를 직접 식별할 수 있는 개인정보를 수집하지 않습니다.</strong></p>
-            <p>다만 서비스 이용 과정에서 아래 정보가 자동으로 생성·수집될 수 있습니다.</p>
+            <p>회원가입은 <strong>선택 사항</strong>입니다. 가입하지 않아도 모든 계산 기능을 그대로 사용할 수 있으며, 이 경우 회사는 이용자를 식별할 수 있는 정보를 수집하지 않습니다.</p>
+            <p><strong>회원가입 시 수집 항목</strong>은 다음과 같습니다. 필수 항목은 이메일 주소와 비밀번호뿐이며, 이름은 표시용으로 입력하지 않아도 됩니다.</p>
+            <table class="legal-table">
+                <thead><tr><th style="width:26%;">구분</th><th>항목</th><th style="width:26%;">비고</th></tr></thead>
+                <tbody>
+                    <tr><td>계정 정보 (필수)</td><td>이메일 주소, 비밀번호</td><td>비밀번호는 PBKDF2-SHA256 방식으로 단방향 암호화하여 저장하므로 회사도 원문을 알 수 없습니다</td></tr>
+                    <tr><td>계정 정보 (선택)</td><td>이름(별칭)</td><td>화면 표시용</td></tr>
+                    <tr><td>이용자 저장 데이터</td><td>계산 히스토리, 저장한 계산·프로젝트의 입력값과 결과</td><td>이용자가 저장하거나 로그인 상태에서 계산한 내용에 한함</td></tr>
+                    <tr><td>세션 정보</td><td>로그인 세션 식별자(해시), 접속 시각, 브라우저 종류</td><td>로그인 유지 및 부정 접근 확인 목적</td></tr>
+                </tbody>
+            </table>
+            <p>이 밖에 서비스 이용 과정에서 아래 정보가 자동으로 생성·수집될 수 있습니다.</p>
             <table class="legal-table">
                 <thead><tr><th style="width:26%;">구분</th><th>항목</th><th style="width:26%;">수집 주체</th></tr></thead>
                 <tbody>
@@ -80,6 +90,7 @@
             </table>
 
             <h2>2. 이용자 입력 데이터의 처리</h2>
+            <h3 style="font-size:15px;font-weight:700;margin:18px 0 8px;">가. 로그인하지 않은 경우</h3>
             <p>매입가·판매가·수수료율·상품명 등 계산기에 입력하는 값과 계산 이력, 저장한 프리셋·프로젝트는 <strong>이용자 브라우저의 로컬 저장소(localStorage)에만 보관</strong>되며 회사 서버로 전송되거나 저장되지 않습니다.</p>
             <p>따라서 회사는 해당 데이터의 내용을 알 수 없습니다. 저장되는 항목은 다음과 같습니다.</p>
             <ul>
@@ -93,6 +104,11 @@
             </ul>
             <p>이 데이터는 이용자가 브라우저의 인터넷 사용 기록·사이트 데이터를 삭제하거나, 계산기 화면의 <strong>초기화</strong> 기능을 사용하면 즉시 삭제됩니다.</p>
 
+            <h3 style="font-size:15px;font-weight:700;margin:18px 0 8px;">나. 로그인한 경우</h3>
+            <p>로그인 상태에서 실행한 계산과 <strong>계정에 저장</strong>을 누른 내용은 계정에 연결되어 회사 서버(Cloudflare D1, 데이터 위치: 미국)에 보관됩니다. 기기를 바꿔도 같은 계정으로 로그인하면 이어서 볼 수 있게 하기 위함입니다.</p>
+            <p>서버에 저장되는 내용은 <strong>계산기에 입력한 값과 그 계산 결과</strong>이며, 상품명처럼 이용자가 직접 적은 텍스트가 포함될 수 있습니다. 결제 정보나 연락처는 수집하지 않습니다. 계정당 최대 500건까지 보관하며, 초과분은 오래된 것부터 자동으로 삭제됩니다.</p>
+            <p>로그인 상태를 유지하기 위해 <code>sid</code> 세션 쿠키를 사용합니다. 이 쿠키는 HttpOnly·Secure 속성이 적용되어 스크립트가 읽을 수 없고, 광고나 추적 목적으로 쓰이지 않으며, 30일이 지나면 만료됩니다.</p>
+
             <h2>3. 개인정보의 처리 목적</h2>
             <ul>
                 <li>서비스 제공 및 기능 개선</li>
@@ -102,8 +118,10 @@
             </ul>
 
             <h2>4. 보유 및 이용 기간</h2>
-            <p>회사는 이용자 식별 정보를 직접 보유하지 않습니다. 자동 수집 정보의 보유 기간은 각 서비스 제공자의 정책을 따릅니다.</p>
+            <p>회원 정보와 저장 데이터는 <strong>회원 탈퇴 시 지체 없이 파기</strong>합니다. 별도의 보관 기간을 두지 않으며, 백업본에도 남기지 않습니다. 자동 수집 정보의 보유 기간은 각 서비스 제공자의 정책을 따릅니다.</p>
             <ul>
+                <li>계정 정보 및 저장한 계산: 회원 탈퇴 시까지 (탈퇴 즉시 삭제)</li>
+                <li>로그인 세션: 최대 30일, 로그아웃 또는 비밀번호 변경 시 즉시 만료</li>
                 <li>Google Analytics 이용 기록: Google 정책에 따름 (기본 14개월)</li>
                 <li>Cloudflare 접속 로그: Cloudflare 정책에 따름</li>
                 <li>브라우저 로컬 저장 데이터: 이용자가 삭제할 때까지 (이용자 기기에만 존재)</li>
@@ -132,6 +150,9 @@
             <p>이용자는 언제든지 다음 권리를 행사할 수 있습니다.</p>
             <ul>
                 <li><strong>로컬 저장 데이터 삭제</strong> — 계산기의 초기화 기능 또는 브라우저의 사이트 데이터 삭제</li>
+                <li><strong>계정 정보 열람·정정</strong> — 사이드바의 <strong>계정</strong> 메뉴에서 확인 및 비밀번호 변경</li>
+                <li><strong>저장 데이터 열람·삭제·내보내기</strong> — <strong>저장한 계산</strong> 메뉴에서 건별 삭제 및 JSON 내려받기</li>
+                <li><strong>회원 탈퇴(파기 요구)</strong> — <strong>계정 → 계정 삭제</strong>. 계정과 저장한 계산이 즉시 함께 삭제되며 되돌릴 수 없습니다</li>
                 <li><strong>맞춤형 광고 거부</strong> — Google 광고 설정에서 해제</li>
                 <li><strong>분석 수집 거부</strong> — 브라우저 확장 프로그램 또는 쿠키 차단 설정 이용</li>
                 <li><strong>문의 및 이의 제기</strong> — 아래 연락처로 요청</li>
@@ -167,6 +188,7 @@
                 <a href="/">마진 계산기</a>
                 <a href="/platforms/">플랫폼 비교</a>
                 <a href="/tools/">도구 모음</a>
+                <a href="/downloads/">엑셀 다운로드</a>
                 <a href="/dashboard/">셀러 대시보드</a>
                 <a href="/guide/">셀러 가이드</a>
                 <a href="/privacy/">개인정보처리방침</a>
@@ -177,6 +199,7 @@
     </footer>
 
     <script src="/js/shared-nav.js"></script>
+    <script src="/js/auth.js" defer></script>
     <script>document.getElementById('copyright-year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

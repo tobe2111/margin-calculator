@@ -34,6 +34,14 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://margin.ur-team.com/tools/"/>
   </url>
   <url>
+    <loc>https://margin.ur-team.com/downloads/</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://margin.ur-team.com/downloads/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://margin.ur-team.com/downloads/"/>
+  </url>
+  <url>
     <loc>https://margin.ur-team.com/dashboard/</loc>
     <lastmod>2026-07-28</lastmod>
     <changefreq>weekly</changefreq>

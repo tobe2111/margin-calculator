@@ -457,6 +457,26 @@ function addToHistory(data) {
     historyTableBody.appendChild(row);
     if (historySection) historySection.style.display = 'block';
     saveHistoryToLocalStorage();
+    syncHistoryRecord(data);
+}
+
+/**
+ * 로그인한 사용자의 계산을 계정에도 남긴다.
+ * 로컬 저장은 이미 끝난 뒤이므로, 실패해도 사용자에게 알리지 않고 넘어간다.
+ * 올린 항목은 timestamp 로 기억해 로그인 시 중복 업로드를 막는다.
+ */
+function syncHistoryRecord(data) {
+    if (!window.Auth || !window.Auth.isLoggedIn()) return;
+    const payload = { ...data, timestamp: data.timestamp.toISOString() };
+    window.Auth.saveSilent('calc', data.productName || '이름 없는 계산', payload)
+        .then(id => {
+            if (!id) return;
+            try {
+                const synced = JSON.parse(localStorage.getItem('syncedHistory') || '[]');
+                synced.push(payload.timestamp);
+                localStorage.setItem('syncedHistory', JSON.stringify(synced.slice(-500)));
+            } catch (e) { /* 저장소 접근 실패는 무시 */ }
+        });
 }
 
 function saveHistoryToLocalStorage() {

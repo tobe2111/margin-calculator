@@ -30,7 +30,18 @@
   //   { "binding": "CACHE", "id": "여기에_발급받은_ID" }
   // ]
   //
-  // [2] 관세청 UNIPASS 키 (HS코드·고시환율 조회)
+  // [2] D1 데이터베이스 (계정 · 계산 히스토리 저장)
+  //     $ npx wrangler d1 create margin-calculator
+  //     $ npx wrangler d1 execute margin-calculator --remote --file=db/schema.sql
+  //     출력된 database_id를 넣고 아래 블록의 주석을 해제한다.
+  //     ※ 설정 전까지 계정 API는 503(auth_unavailable)로 응답하고
+  //       프런트엔드는 로그인 UI를 자동으로 숨긴다. 계산기는 그대로 동작한다.
+  //
+  // ,"d1_databases": [
+  //   { "binding": "DB", "database_name": "margin-calculator", "database_id": "여기에_발급받은_ID" }
+  // ]
+  //
+  // [3] 관세청 UNIPASS 키 (HS코드·고시환율 조회)
   //     https://unipass.customs.go.kr 에서 무료 발급 후:
   //     $ npx wrangler secret put UNIPASS_KEY
   //     시크릿이므로 이 파일에 적지 않는다.
