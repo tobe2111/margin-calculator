@@ -17,3 +17,6 @@ node_modules/
 package.json
 package-lock.json
 README.md
+
+# 공룡 키트 인수인계 파일 (배포·공개 대상 아님, 25 MiB 자산 한도 초과)
+dino_handoff/
